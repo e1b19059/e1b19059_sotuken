@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Runtime.InteropServices;
 using TMPro;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
+using System.Reflection;
 
 public class NewBehaviourScript : MonoBehaviour
 {
@@ -39,7 +42,31 @@ public class NewBehaviourScript : MonoBehaviour
 
     public void DoCode()
     {
-        Debug.Log("実行");        
+        Debug.Log("実行");
+        const string scriptText =
+@"using UnityEngine;
+Debug.Log(""doCode() が実行されました。"");
+";
+
+        try
+        {
+            var scriptOptions = ScriptOptions.Default.WithReferences(
+                Assembly.Load("netstandard"),
+                typeof(Debug).Assembly
+            );
+
+            CSharpScript.RunAsync(scriptText, scriptOptions).Wait();
+        }
+        catch (CompilationErrorException)
+        {
+            Debug.LogError("コンパイルエラー");
+            throw;
+        }
+        catch
+        {
+            Debug.LogError("その他のエラー");
+            throw;
+        }
     }
 
 }
