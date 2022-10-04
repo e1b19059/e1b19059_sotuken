@@ -8,6 +8,12 @@ public class NewBehaviourScript : MonoBehaviour
     [DllImport("__Internal")]
     private static extern void JavaScriptAlert(string str);
 
+    [DllImport("__Internal")]
+    private static extern void doCode();
+
+    [DllImport("__Internal")]
+    private static extern void setTargetObject(string str);
+
     public TMP_InputField inputField;
 
     public void OnClick()
@@ -39,7 +45,11 @@ public class NewBehaviourScript : MonoBehaviour
 
     public void DoCode()
     {
-        Debug.Log("é¿çs");        
+        Debug.Log("é¿çs");
+#if !UNITY_EDITOR && UNITY_WEBGL
+        setTargetObject("Circle");
+        doCode();
+#endif
     }
 
 }
