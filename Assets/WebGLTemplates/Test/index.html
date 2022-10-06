@@ -15,18 +15,17 @@
 </head>
 
 <body>
-	<button type="button" onclick="unitySendBlockly()">ブロック送信</button>
 	<div class="flex">
 		<div id="blocklyDiv" style="width: 600px; height: 640px;"></div> <!-- ワークスペースを用意 -->
 		<xml id="toolbox" style="display: none">
-			<block type="go_left"></block>
-			<block type="go_right"></block>
-			<block type="go_up"></block>
-			<block type="go_down"></block>
+			<block type="move_left"></block>
+			<block type="move_right"></block>
+			<block type="move_forward"></block>
+			<block type="move_back"></block>
 			<block type="get_left"></block>
 			<block type="get_right"></block>
-			<block type="get_up"></block>
-			<block type="get_down"></block>
+			<block type="get_forward"></block>
+			<block type="get_back"></block>
 			<block type="check_point"></block>
 			<block type="obstacle"></block>
 			<block type="controls_if"></block>
@@ -67,68 +66,62 @@
 				unityInstance.SendMessage("Button", "FocusCanvas", "0");
 			}
 		});
-		function unitySendBlockly() {
-			let code = Blockly.JavaScript.workspaceToCode(workspace);
-			unityInstance.SendMessage("Button", "SetInputFieldText", code);
-		}
 	
 		const initFunc = function (interpreter, scope) {
-			let go_left_wrapper = function () {
-				return go_left_function();
+			let move_left_wrapper = function () {
+				return move_left_function();
 			};
-			let go_right_wrapper = function () {
-				return go_right_function();
+			let move_right_wrapper = function () {
+				return move_right_function();
 			};
-			let go_up_wrapper = function () {
-				return go_up_function();
+			let move_forward_wrapper = function () {
+				return move_forward_function();
 			};
-			let go_down_wrapper = function () {
-				return go_down_function();
+			let move_back_wrapper = function () {
+				return move_back_function();
 			};
 			let check_wrapper = function (direction, object) {
 				return check_point_function(direction, object);
 			};
-			interpreter.setProperty(scope, 'go_left', interpreter.createNativeFunction(go_left_wrapper));
-			interpreter.setProperty(scope, 'go_right', interpreter.createNativeFunction(go_right_wrapper));
-			interpreter.setProperty(scope, 'go_up', interpreter.createNativeFunction(go_up_wrapper));
-			interpreter.setProperty(scope, 'go_down', interpreter.createNativeFunction(go_down_wrapper));
+			interpreter.setProperty(scope, 'move_left', interpreter.createNativeFunction(move_left_wrapper));
+			interpreter.setProperty(scope, 'move_right', interpreter.createNativeFunction(move_right_wrapper));
+			interpreter.setProperty(scope, 'move_forward', interpreter.createNativeFunction(move_forward_wrapper));
+			interpreter.setProperty(scope, 'move_back', interpreter.createNativeFunction(move_back_wrapper));
 			interpreter.setProperty(scope, 'check_point', interpreter.createNativeFunction(check_wrapper));
 		}
 
-		function go_left_function() {
-			unityInstance.SendMessage(target_object, "go_left");
+		function move_left_function() {
+			unityInstance.SendMessage(target_object, "MoveLeft");
 		}
-		function go_right_function() {
-			unityInstance.SendMessage(target_object, "go_right");
+		function move_right_function() {
+			unityInstance.SendMessage(target_object, "MoveRight");
 		}
-		function go_up_function() {
-			unityInstance.SendMessage(target_object, "go_up");
+		function move_forward_function() {
+			unityInstance.SendMessage(target_object, "MoveForward");
 		}
-		function go_down_function() {
-			unityInstance.SendMessage(target_object, "go_down");
+		function move_back_function() {
+			unityInstance.SendMessage(target_object, "MoveBack");
 		}
 		function check_point_function(direction, object){			
 			let check_point;
-			let player = data_json.objectData.find(object => object.name == "Circle");
+			let player = data_json.objectData.find(object => object.name == "Sphere");
 			switch(direction){
 				case 'left':
-					check_point = {x: player.x - 1, y: player.y};
+					check_point = {x: -player.direction.z + player.position.x, y: 0, z: player.direction.x + player.position.z};
 					break;
 				case 'right':
-					check_point = {x: player.x + 1, y: player.y};
+					check_point = {x: player.direction.z + player.position.x, y: 0, z: -player.direction.x + player.position.z};
 					break;
-				case 'up':
-					check_point = {x: player.x, y: player.y - 1};
+				case 'forward':
+					check_point = {x: player.direction.x + player.position.x, y: 0, z: player.direction.z + player.position.z};
 					break;
-				case 'down':
-					check_point = {x: player.x, y: player.y + 1};
+				case 'back':
+					check_point = {x: -player.direction.x + player.position.x, y: 0, z: -player.direction.z + player.position.z};
 					break;
 			}
-			if(data_json.objectData.find(object => object.x == check_point.x && object.y == check_point.y)){
-				console.log("true");
+			if(data_json.objectData.find(object => object.position.x == check_point.x && object.position.z == check_point.z)){
 				return true;
 			}else{
-				console.log("false");
 				return false;
 			}
 		}

@@ -4,59 +4,57 @@ using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour
 {
-    private int speed = 5;
-    private float distance;
-    private Vector3 move;
-    private Vector3 targetPos;
+    private int speed = 3;
+    private Vector3 targetPosition;
 
     void Start()
     {
-        distance = 1f;
-        targetPos = transform.position;
+        targetPosition = transform.position;
+        Debug.Log(transform.forward);
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        if (move != Vector3.zero && transform.position == targetPos)
+        if (targetPosition != transform.position)
         {
-            targetPos += new Vector3(move.x * distance, move.y * distance, 0);
-        }
-        Move(targetPos);
-        move.x = 0;
-        move.y = 0;
-    }
-
-    public void Move(Vector3 targetPosition)
-    {
-        if (Physics.OverlapSphere(targetPosition, 0).Length > 0)
-        {
-            // targetPos‚ªCollider‚ÉG‚ê‚Ä‚¢‚éê‡
-            targetPos = transform.position;
-        }
-        else
-        {
-            // targetPos‚ªCollider‚ÉG‚ê‚Ä‚¢‚È‚¢ê‡
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
         }
     }
 
-    public void go_left()
+    public void MoveLeft()
     {
-        move.x = -1;
+        if (Physics.OverlapSphere(transform.position - transform.right, 0).Length <= 0)
+        {
+            targetPosition -= transform.right;
+            Debug.Log(targetPosition);
+        }
     }
 
-    public void go_right()
+    public void MoveRight()
     {
-        move.x = 1;
+
+        if (Physics.OverlapSphere(transform.position + transform.right, 0).Length <= 0)
+        {
+            targetPosition += transform.right;
+            Debug.Log(targetPosition);
+        }
     }
 
-    public void go_up()
+    public void MoveForward()
     {
-        move.y = 1;
+        if (Physics.OverlapSphere(transform.position + transform.forward, 0).Length <= 0)
+        {
+            targetPosition += transform.forward;
+            Debug.Log(targetPosition);
+        }
     }
 
-    public void go_down()
+    public void MoveBack()
     {
-        move.y = -1;
+        if (Physics.OverlapSphere(transform.position  -  transform.forward, 0).Length <= 0)
+        {
+            targetPosition -= transform.forward;
+            Debug.Log(targetPosition);
+        }
     }
 }

@@ -1,5 +1,5 @@
-const go_left = {
-    "type": "go_left",
+const move_left = {
+    "type": "move_left",
     "message0": "左に進む",
     "inputsInline": true,
     "previousStatement": null,
@@ -9,8 +9,8 @@ const go_left = {
     "helpUrl": ""
 };
 
-const go_right = {
-    "type": "go_right",
+const move_right = {
+    "type": "move_right",
     "message0": "右に進む",
     "inputsInline": true,
     "previousStatement": null,
@@ -20,9 +20,9 @@ const go_right = {
     "helpUrl": ""
 };
 
-const go_up = {
-    "type": "go_up",
-    "message0": "上に進む",
+const move_forward = {
+    "type": "move_forward",
+    "message0": "前に進む",
     "inputsInline": true,
     "previousStatement": null,
     "nextStatement": null,
@@ -31,9 +31,9 @@ const go_up = {
     "helpUrl": ""
 };
 
-const go_down = {
-    "type": "go_down",
-    "message0": "下に進む",
+const move_back = {
+    "type": "move_back",
+    "message0": "後ろに下がる",
     "inputsInline": true,
     "previousStatement": null,
     "nextStatement": null,
@@ -62,9 +62,9 @@ const get_right = {
     "helpUrl": ""
 }
 
-const get_up = {
-    "type": "get_up",
-    "message0": "上",
+const get_forward = {
+    "type": "get_forward",
+    "message0": "前",
     "inputsInline": true,
     "output": "direction",
     "colour": 230,
@@ -72,9 +72,9 @@ const get_up = {
     "helpUrl": ""
 }
 
-const get_down = {
-    "type": "get_down",
-    "message0": "下",
+const get_back = {
+    "type": "get_back",
+    "message0": "後ろ",
     "inputsInline": true,
     "output": "direction",
     "colour": 230,
@@ -132,27 +132,27 @@ const put_obstacle = {
   "helpUrl": ""
 };
 
-Blockly.Blocks['go_left'] = {
+Blockly.Blocks['move_left'] = {
     init: function () {
-        this.jsonInit(go_left);
+        this.jsonInit(move_left);
     }
 };
 
-Blockly.Blocks['go_right'] = {
+Blockly.Blocks['move_right'] = {
     init: function () {
-        this.jsonInit(go_right);
+        this.jsonInit(move_right);
     }
 };
 
-Blockly.Blocks['go_up'] = {
+Blockly.Blocks['move_forward'] = {
     init: function () {
-        this.jsonInit(go_up);
+        this.jsonInit(move_forward);
     }
 };
 
-Blockly.Blocks['go_down'] = {
+Blockly.Blocks['move_back'] = {
     init: function () {
-        this.jsonInit(go_down);
+        this.jsonInit(move_back);
     }
 };
 
@@ -168,15 +168,15 @@ Blockly.Blocks['get_right'] = {
     }
 };
 
-Blockly.Blocks['get_up'] = {
+Blockly.Blocks['get_forward'] = {
     init: function () {
-        this.jsonInit(get_up);
+        this.jsonInit(get_forward);
     }
 };
 
-Blockly.Blocks['get_down'] = {
+Blockly.Blocks['get_back'] = {
     init: function () {
-        this.jsonInit(get_down);
+        this.jsonInit(get_back);
     }
 };
 
@@ -198,23 +198,23 @@ Blockly.Blocks['put_obstacle'] = {
   }
 };
 
-Blockly.JavaScript['go_left'] = function() {
-    let code = 'go_left();\n';
+Blockly.JavaScript['move_left'] = function() {
+    let code = 'move_left();\n';
     return code;
 };
 
-Blockly.JavaScript['go_right'] = function() {
-    let code = 'go_right();\n';
+Blockly.JavaScript['move_right'] = function() {
+    let code = 'move_right();\n';
     return code;
 };
 
-Blockly.JavaScript['go_up'] = function() {
-    let code = 'go_up();\n';
+Blockly.JavaScript['move_forward'] = function() {
+    let code = 'move_forward();\n';
     return code;
 };
 
-Blockly.JavaScript['go_down'] = function() {;
-    let code = 'go_down();\n';
+Blockly.JavaScript['move_back'] = function() {;
+    let code = 'move_back();\n';
     return code;
 }
 
@@ -228,13 +228,13 @@ Blockly.JavaScript['get_right'] = function () {
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['get_up'] = function () {
-    var code = '\'up\'';
+Blockly.JavaScript['get_forward'] = function () {
+    var code = '\'forward\'';
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['get_down'] = function () {
-    var code = '\'down\'';
+Blockly.JavaScript['get_back'] = function () {
+    var code = '\'back\'';
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 

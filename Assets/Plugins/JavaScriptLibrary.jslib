@@ -7,7 +7,7 @@ mergeInto(LibraryManager.library, {
 	let myInterpreter = new Interpreter(code, initFunc);
 	function stepCode() {
 		if (myInterpreter.step()) {
-			window.setTimeout(stepCode, 30);
+			window.setTimeout(stepCode, 50);
 		}
 	}
 	stepCode();
@@ -17,7 +17,5 @@ mergeInto(LibraryManager.library, {
   },
   setData: function(data){
 	data_json = JSON.parse(UTF8ToString(data));
-	//console.log(data_json);
-	//console.log(data_json.objectData[1]);
   },
 });
