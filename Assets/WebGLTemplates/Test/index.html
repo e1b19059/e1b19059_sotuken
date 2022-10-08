@@ -15,29 +15,35 @@
 </head>
 
 <body>
+	<button type="button" onclick="switchWorkspace()">切り替えテスト</button>
 	<div class="flex">
-		<div id="blocklyDiv" style="width: 600px; height: 640px;"></div> <!-- ワークスペースを用意 -->
-		<xml id="toolbox" style="display: none">
-			<block type="move_left"></block>
-			<block type="move_right"></block>
-			<block type="move_forward"></block>
-			<block type="move_back"></block>
-			<block type="get_left"></block>
-			<block type="get_right"></block>
-			<block type="get_forward"></block>
-			<block type="get_back"></block>
-			<block type="check_point"></block>
-			<block type="obstacle"></block>
-			<block type="controls_if"></block>
-			<block type="controls_repeat_ext"></block>
-			<block type="logic_compare"></block>
-			<block type="math_number"></block>
-			<block type="math_arithmetic"></block>
-			<block type="text"></block>
-			<block type="text_print"></block>
-		</xml>
+		<div class="middle">
+			<div id="blocklyDiv" style="width: 650px; height: 640px;"></div> <!-- ワークスペースを用意 -->
+			<xml id="toolbox" style="display: none">
+				<block type="move_left"></block>
+				<block type="move_right"></block>
+				<block type="move_forward"></block>
+				<block type="move_back"></block>
+				<block type="get_left"></block>
+				<block type="get_right"></block>
+				<block type="get_forward"></block>
+				<block type="get_back"></block>
+				<block type="check_point"></block>
+				<block type="obstacle"></block>
+				<block type="controls_if"></block>
+				<block type="controls_repeat_ext"></block>
+				<block type="logic_compare"></block>
+				<block type="math_number"></block>
+				<block type="math_arithmetic"></block>
+				<block type="text"></block>
+				<block type="text_print"></block>
+			</xml>
+		</div>
+		<div id="readOnlyParent" class="bottom">
+			<div id="blocklyDiv_readOnly" style="width: 650px; height: 640px;"></div>
+		</div>
 		<canvas class="border border-success" id="unity-canvas"
-		style="width: 600px; height: 640px; background: #FFFFFF"></canvas>
+		style="width: 600px; height: 640px; background: #FFFFFF; position: absolute; left: 650px"></canvas>
 	</div>
 	<script src="Build/web.loader.js"></script>
 	<script>
@@ -54,8 +60,18 @@
 	</script>
 	<script>
 		let workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox') });
+		let workspace_readOnly = Blockly.inject('blocklyDiv_readOnly', { readOnly:true });
 		let target_object;
 		let data_json;
+
+		function switchWorkspace(){
+			let elm = document.getElementById('readOnlyParent');
+			if(elm.className == 'bottom'){
+				elm.className = 'top';
+			}else{
+				elm.className = 'bottom';
+			}
+		}
 
 		document.addEventListener('click', function (e) {
 			if (e.target.id == "unity-canvas") {
@@ -130,7 +146,19 @@
 		.flex {
 			display: flex;
 		}
+		.top{
+			position: absolute;
+			z-index: 2;
+		}
+		.bottom{
+			position: absolute;
+			z-index: 0;
+		}
+		.middle{
+			position: absolute;
+			z-index: 1;
+		}
 	</style>
 </body>
 
-</ht
+</html>
