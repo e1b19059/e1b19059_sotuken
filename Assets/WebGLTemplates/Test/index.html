@@ -120,7 +120,7 @@
 		}
 		function check_point_function(direction, object){			
 			let check_point;
-			let player = data_json.objectData.find(object => object.name == "Sphere");
+			let player = data_json.objectData.find(object => object.name == target_object);
 			switch(direction){
 				case 'left':
 					check_point = {x: -player.direction.z + player.position.x, y: 0, z: player.direction.x + player.position.z};
