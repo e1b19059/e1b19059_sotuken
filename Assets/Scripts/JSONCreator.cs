@@ -57,7 +57,9 @@ public class Direction
 public class JSONCreator : MonoBehaviour
 {
     [DllImport("__Internal")]
-    private static extern void setData(string str);    
+    private static extern void setData(string str);
+
+    public ObjectContainer container;
 
     void Update()
     {
@@ -66,32 +68,18 @@ public class JSONCreator : MonoBehaviour
 
     public void CallSetData()
     {
-#if !UNITY_EDITOR && UNITY_WEBGL
+        var enumerator = container.GetEnumerator();
         Data datas = new Data();
         datas.objectData = new List<ObjectData>();
-        GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("GameObject");
-        GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
-        foreach (GameObject obj in gameObjects)
+        while (enumerator.MoveNext())
         {
-            // シーン上に存在するオブジェクトならば処理.
-            if (obj.activeInHierarchy)
-            {
-                Position pos = new Position((int)obj.transform.position.x, (int)obj.transform.position.y, (int)obj.transform.position.z);
-                Direction dir = new Direction(obj.transform.forward);
-                ObjectData tmp = new ObjectData(obj.name, pos, dir);
-                datas.objectData.Add(tmp);
-            }
+            Position pos = new Position((int)enumerator.Current.transform.position.x, (int)enumerator.Current.transform.position.y, (int)enumerator.Current.transform.position.z);
+            Direction dir = new Direction(enumerator.Current.transform.forward);
+            ObjectData tmp = new ObjectData(enumerator.Current.name, pos, dir);
+            datas.objectData.Add(tmp);
         }
-        foreach (GameObject obj in playerObjects)
-        {
-            if (obj.activeInHierarchy)
-            {
-                Position pos = new Position((int)obj.transform.position.x, (int)obj.transform.position.y, (int)obj.transform.position.z);
-                Direction dir = new Direction(obj.transform.forward);
-                ObjectData tmp = new ObjectData(obj.name, pos, dir);
-                datas.objectData.Add(tmp);
-            }
-        }
+        Debug.Log(JsonUtility.ToJson(datas));
+#if !UNITY_EDITOR && UNITY_WEBGL
         setData(JsonUtility.ToJson(datas));
 #endif
     }
