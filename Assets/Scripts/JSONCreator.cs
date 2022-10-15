@@ -60,13 +60,17 @@ public class JSONCreator : MonoBehaviour
     private static extern void setData(string str);
 
     public ObjectContainer container;
+    private bool updateFlag = false;
 
     void Update()
     {
-        CallSetData();
+        if (updateFlag)
+        {
+            CallSetData();
+        }
     }
 
-    public void CallSetData()
+    private void CallSetData()
     {
         var enumerator = container.GetEnumerator();
         Data datas = new Data();
@@ -82,5 +86,10 @@ public class JSONCreator : MonoBehaviour
 #if !UNITY_EDITOR && UNITY_WEBGL
         setData(JsonUtility.ToJson(datas));
 #endif
+    }
+
+    public void InvertUpdateFlag()
+    {
+        updateFlag = !updateFlag;
     }
 }

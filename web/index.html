@@ -72,16 +72,6 @@
 				elm.className = 'bottom';
 			}
 		}
-
-		document.addEventListener('click', function (e) {
-			if (e.target.id == "unity-canvas") {
-				// Clicked on canvas 
-				unityInstance.SendMessage("Button", "FocusCanvas", "1");
-			} else {
-				// Clicked outside of canvas 
-				unityInstance.SendMessage("Button", "FocusCanvas", "0");
-			}
-		});
 	
 		const initFunc = function (interpreter, scope) {
 			let move_left_wrapper = function () {
