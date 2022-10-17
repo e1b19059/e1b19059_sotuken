@@ -73,6 +73,16 @@
 			}
 		}
 	
+		document.addEventListener('click', function (e) {
+			if (e.target.id == "unity-canvas") {
+				// Clicked on canvas 
+				unityInstance.SendMessage("PhotonLogin", "FocusCanvas", "1");
+			} else {
+				// Clicked outside of canvas 
+				unityInstance.SendMessage("PhotonLogin", "FocusCanvas", "0");
+			}
+		});
+
 		const initFunc = function (interpreter, scope) {
 			let move_left_wrapper = function () {
 				return move_left_function();
@@ -89,11 +99,19 @@
 			let check_wrapper = function (direction, object) {
 				return check_point_function(direction, object);
 			};
+			let terminate_wrapper = function () {
+				return terminate();
+			};
+			let initiate_wrapper = function () {
+				return initiate();
+			};
 			interpreter.setProperty(scope, 'move_left', interpreter.createNativeFunction(move_left_wrapper));
 			interpreter.setProperty(scope, 'move_right', interpreter.createNativeFunction(move_right_wrapper));
 			interpreter.setProperty(scope, 'move_forward', interpreter.createNativeFunction(move_forward_wrapper));
 			interpreter.setProperty(scope, 'move_back', interpreter.createNativeFunction(move_back_wrapper));
 			interpreter.setProperty(scope, 'check_point', interpreter.createNativeFunction(check_wrapper));
+			interpreter.setProperty(scope, 'terminate', interpreter.createNativeFunction(terminate_wrapper));
+			interpreter.setProperty(scope, 'initiate', interpreter.createNativeFunction(initiate_wrapper));
 		}
 
 		function move_left_function() {
@@ -130,6 +148,12 @@
 			}else{
 				return false;
 			}
+		}
+		function initiate(){
+			unityInstance.SendMessage("PhotonLogin", "StartUpdate");
+		}
+		function terminate(){
+			unityInstance.SendMessage("PhotonLogin", "StopUpdate");
 		}
 	</script>
 	<style>

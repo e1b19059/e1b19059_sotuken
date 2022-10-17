@@ -4,7 +4,7 @@ mergeInto(LibraryManager.library, {
   },
 
   doCode: function(){
-	let code = Blockly.JavaScript.workspaceToCode(workspace);
+	let code = 'initiate();\n' + Blockly.JavaScript.workspaceToCode(workspace) + 'terminate();\n';
 	let myInterpreter = new Interpreter(code, initFunc);
 	function stepCode() {
 		if (myInterpreter.step()) {

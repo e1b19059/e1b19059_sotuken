@@ -88,8 +88,16 @@ public class JSONCreator : MonoBehaviour
 #endif
     }
 
-    public void InvertUpdateFlag()
+    public void StartUpdate()
     {
-        updateFlag = !updateFlag;
+        Debug.Log("start!");
+        updateFlag = true;
     }
+
+    public void StopUpdate()
+    {
+        Debug.Log("stop!");
+        updateFlag = false;
+    }
+
 }
