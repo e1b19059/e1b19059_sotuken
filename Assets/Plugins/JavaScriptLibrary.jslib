@@ -2,6 +2,7 @@ mergeInto(LibraryManager.library, {
   JavaScriptAlert: function (str) {
 	window.alert(UTF8ToString(str));
   },
+
   doCode: function(){
 	let code = Blockly.JavaScript.workspaceToCode(workspace);
 	let myInterpreter = new Interpreter(code, initFunc);
@@ -12,12 +13,15 @@ mergeInto(LibraryManager.library, {
 	}
 	stepCode();
   },
+
   setTargetObject: function(obj){
 	target_object = UTF8ToString(obj);
   },
+
   setData: function(data){
 	data_json = JSON.parse(UTF8ToString(data));
   },
+
   getBlockFromWorkspace: function(){
 	let xml = Blockly.Xml.workspaceToDom(workspace);
 	let ret = Blockly.Xml.domToText(xml);
@@ -26,9 +30,11 @@ mergeInto(LibraryManager.library, {
     stringToUTF8(ret, ptr, size);
     return ptr;
   },
+
   setBlockToWorkspace: function(xmlText){
 	let xml = Blockly.Xml.textToDom(UTF8ToString(xmlText));
 	workspace.clear();
 	Blockly.Xml.domToWorkspace(xml, workspace);
-  }
+  },
+
 });

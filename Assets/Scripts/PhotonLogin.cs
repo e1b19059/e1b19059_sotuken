@@ -3,7 +3,6 @@ using Photon.Realtime;
 using UnityEngine;
 using System.Runtime.InteropServices;
 
-// MonoBehaviourPunCallbacksを継承して、PUNのコールバックを受け取れるようにする
 public class PhotonLogin : MonoBehaviourPunCallbacks
 {
     [DllImport("__Internal")]
@@ -11,6 +10,12 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
 
     [DllImport("__Internal")]
     private static extern void setTargetObject(string str);
+
+    [DllImport("__Internal")]
+    private static extern string getBlockFromWorkspace();
+    
+    [DllImport("__Internal")]
+    private static extern void setBlockToWorkspace(string block);
 
     public GameObject obstacle;
 
@@ -32,7 +37,6 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinLobby();
     }
 
-    
     // ゲームサーバーへの接続が成功した時に呼ばれるコールバック
     public override void OnJoinedRoom()
     {
@@ -61,4 +65,34 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
         doCode();
 #endif
     }
+
+    public void SendMyBlock()
+    {
+#if !UNITY_EDITOR && UNITY_WEBGL
+        photonView.RPC(nameof(SetOthersBlock), RpcTarget.Others, getBlockFromWorkspace());
+#endif
+    }
+
+    [PunRPC]
+    public void SetOthersBlock(string block)
+    {
+        Debug.Log("setOthersBlock実行");
+#if !UNITY_EDITOR && UNITY_WEBGL
+        setBlockToWorkspace(block);
+#endif
+    }
+
+    private void Update()
+    { 
+        if (PhotonNetwork.CurrentRoom != null)//ルーム内である
+        {
+            GameObject obj = GameObject.FindGameObjectWithTag("Player");
+            PhotonView photonView = obj.GetComponent<PhotonView>();
+            if (photonView.IsMine)
+            {
+                SendMyBlock();
+            }
+        }   
+    }
+
 }
