@@ -19,6 +19,16 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
 
     public GameObject obstacle;
 
+    public static PhotonLogin instance;
+
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+        }
+    }
+
     private void Start()
     {
         // プレイヤー自身の名前を"Player"に設定する
