@@ -29,13 +29,6 @@ public class TeamSelect : MonoBehaviour
         }   
     }
 
-    public void GameStart()
-    {
-        // ルーム内のメンバー全員が準備完了状態のときのみ押せるようにする
-        Debug.Log("ゲーム開始");
-        transform.localScale = Vector3.zero;
-    }
-
     public void Ready()
     {
         

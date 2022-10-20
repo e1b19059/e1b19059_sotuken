@@ -156,6 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obstacle: {fileID: 1567631149051705942, guid: 3fadd302adccb894193b00d77754bb82, type: 3}
+  TeamSelectPanel: {fileID: 1543005630}
 --- !u!4 &172302009
 Transform:
   m_ObjectHideFlags: 0
@@ -510,7 +511,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Start
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4009,7 +4010,7 @@ GameObject:
   - component: {fileID: 1879941822}
   - component: {fileID: 1879941821}
   m_Layer: 5
-  m_Name: Button
+  m_Name: StartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4080,8 +4081,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1543005635}
-        m_TargetAssemblyTypeName: TeamSelect, Assembly-CSharp
+      - m_Target: {fileID: 172302008}
+        m_TargetAssemblyTypeName: PhotonLogin, Assembly-CSharp
         m_MethodName: GameStart
         m_Mode: 1
         m_Arguments:

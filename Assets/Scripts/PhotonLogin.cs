@@ -18,6 +18,7 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
     private static extern void setBlockToWorkspace(string block);
 
     public GameObject obstacle;
+    [SerializeField] private GameObject TeamSelectPanel; 
 
     public static PhotonLogin instance;
 
@@ -118,5 +119,18 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
         }
 #endif
     }
-    
+
+    public void GameStart()
+    {
+        // ルーム内のメンバー全員が準備完了状態のときのみ押せるようにする
+        photonView.RPC(nameof(RPCGameStart), RpcTarget.AllViaServer);
+    }
+
+    [PunRPC]
+    public void RPCGameStart()
+    {
+        Debug.Log("ゲーム開始");
+        TeamSelectPanel.transform.localScale = Vector3.zero;
+    }
+
 }
