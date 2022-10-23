@@ -2,6 +2,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using System.Runtime.InteropServices;
+using TMPro;
 
 public class PhotonLogin : MonoBehaviourPunCallbacks
 {
@@ -18,7 +19,11 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
     private static extern void setBlockToWorkspace(string block);
 
     public GameObject obstacle;
-    [SerializeField] private GameObject TeamSelectPanel; 
+    [SerializeField] private GameObject TeamSelectPanel;
+    private bool PlayingFlag;
+
+    [SerializeField] private TextMeshProUGUI MyTeamLabel;
+    [SerializeField] private TextMeshProUGUI RivalTeamLabel;
 
     public static PhotonLogin instance;
 
@@ -28,6 +33,7 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
         {
             instance = this;
         }
+        PlayingFlag = false;
     }
 
     private void Start()
@@ -42,9 +48,6 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
     // マスターサーバーへの接続が成功した時に呼ばれるコールバック
     public override void OnConnectedToMaster()
     {
-        // "Room"という名前のルームに参加する（ルームが存在しなければ作成して参加する）
-        //PhotonNetwork.JoinOrCreateRoom("Room", new RoomOptions(), TypedLobby.Default);
-
         PhotonNetwork.JoinLobby();
     }
 
@@ -131,6 +134,29 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
     {
         Debug.Log("ゲーム開始");
         TeamSelectPanel.transform.localScale = Vector3.zero;
+        PlayingFlag = true;
     }
 
+    public void SetTeamLabel(string myTeam)
+    {
+        MyTeamLabel.text = myTeam;
+        if (MyTeamLabel.text == "A")
+        {
+            RivalTeamLabel.text = "B";
+        }
+        else
+        {
+            RivalTeamLabel.text = "A";
+        }
+    }
+
+    public bool GetPlayingFlag()
+    {
+        return PlayingFlag;
+    }
+
+    public string GetMyTeamLabel()
+    {
+        return MyTeamLabel.text;
+    }
 }
