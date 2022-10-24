@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
+using MyConstant;
 
 public class TurnManager : MonoBehaviourPunCallbacks
 {
@@ -15,9 +16,17 @@ public class TurnManager : MonoBehaviourPunCallbacks
     private float TurnDuration = 5f;
     private bool IsShowingResults;
     private bool TurnFlag;
+    private int TeamNumber;
+    [SerializeField] private TextMeshProUGUI Test;
+    [SerializeField] private TextMeshProUGUI Test2;
+    public static TurnManager instance;
 
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
         InitFillAmount = UIobj.fillAmount;
         TurnFlag = true;
     }
@@ -45,6 +54,22 @@ public class TurnManager : MonoBehaviourPunCallbacks
         TurnFlag = true;
         IsShowingResults = false;
         UIobj.fillAmount = InitFillAmount;
+        if (CheckMyTurn())
+        {
+            Test.text = "Your Turn";
+        }
+        else
+        {
+            Test.text = "Other's Turn";
+        }
+        if (CheckMyNextTurn())
+        {
+            Test2.text = "Next: Your Turn";
+        }
+        else
+        {
+            Test2.text = "Next: Other's Turn";
+        }
     }
 
     public void OnTurnEnds()// É^Å[ÉìèIóπéû
@@ -62,4 +87,90 @@ public class TurnManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public bool CheckTeamTurn()
+    {
+        if (TurnCount % 2 == TeamNumber)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool CheckMyTurn()
+    {
+        if (CheckTeamTurn())
+        {
+            int turn = TurnCount;
+            bool odd = turn % 2 == 1 ? true : false;
+            turn /= 2;
+            if (odd)
+            {
+                turn += 1;
+            }
+            if (PhotonNetwork.LocalPlayer.GetTeam() == "A")
+            {
+                int num = PhotonNetwork.CurrentRoom.GetANum();
+                if ((turn + num - 1) % num + 1 == PhotonNetwork.LocalPlayer.GetOrder())
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                int num = PhotonNetwork.CurrentRoom.GetANum();
+                if ((turn + num - 1) % num + 1 == PhotonNetwork.LocalPlayer.GetOrder())
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public bool CheckMyNextTurn()
+    {
+        if (!CheckTeamTurn())
+        {
+            int turn = TurnCount + 1;
+            bool odd = turn % 2 == 1 ? true : false;
+            turn /= 2;
+            if (odd)
+            {
+                turn += 1;
+            }
+            if (PhotonNetwork.LocalPlayer.GetTeam() == "A")
+            {
+                int num = PhotonNetwork.CurrentRoom.GetANum();
+                if ((turn + num - 1) % num + 1 == PhotonNetwork.LocalPlayer.GetOrder())
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                int num = PhotonNetwork.CurrentRoom.GetANum();
+                if ((turn + num - 1) % num + 1 == PhotonNetwork.LocalPlayer.GetOrder())
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void SetFirstToNum(string first)
+    {
+        if (first == PhotonNetwork.LocalPlayer.GetTeam())
+        {
+            TeamNumber = GrovalConst.FirstNum;
+        }
+        else
+        {
+            TeamNumber = GrovalConst.SecondNum;
+        }
+        Debug.Log("TeamNumber: " + TeamNumber);
+    }
 }

@@ -20,10 +20,10 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
 
     public GameObject obstacle;
     [SerializeField] private GameObject TeamSelectPanel;
-    private bool PlayingFlag;
-
     [SerializeField] private TextMeshProUGUI MyTeamLabel;
     [SerializeField] private TextMeshProUGUI RivalTeamLabel;
+    private bool PlayingFlag;
+    private float elapsedTime;
 
     public static PhotonLogin instance;
 
@@ -34,6 +34,7 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
             instance = this;
         }
         PlayingFlag = false;
+        elapsedTime = 0f;
     }
 
     private void Start()
@@ -97,14 +98,20 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
     }
 
     private void Update()
-    { 
+    {
         if (PhotonNetwork.CurrentRoom != null)//ルーム内である
         {
             GameObject obj = GameObject.FindGameObjectWithTag("Player");
             PhotonView photonView = obj.GetComponent<PhotonView>();
             if (photonView.IsMine)
             {
-                SendMyBlock();
+                // 0.5秒毎にテキストを更新する
+                elapsedTime += Time.deltaTime;
+                if (elapsedTime > 0.5f)
+                {
+                    elapsedTime = 0f;
+                    SendMyBlock();
+                }
             }
         }   
     }
@@ -126,7 +133,39 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
     public void GameStart()
     {
         // ルーム内のメンバー全員が準備完了状態のときのみ押せるようにする
-        photonView.RPC(nameof(RPCGameStart), RpcTarget.AllViaServer);
+        int Anum = 0, Bnum = 0;
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            if(player.GetTeam() == "A")
+            {
+                Anum++;
+                player.SetOrder(Anum);
+            }
+            else
+            {
+                Bnum++;
+                player.SetOrder(Bnum);
+            }
+        }
+        if(Anum == 0 || Bnum == 0)
+        {
+            Debug.Log("人数が足りていません");
+        }
+        else
+        {
+            // 乱数で先攻チームを決める
+            if (Random.Range(0, 2) == 0)
+            {
+                PhotonNetwork.CurrentRoom.SetFirst("A");
+            }
+            else
+            {
+                PhotonNetwork.CurrentRoom.SetFirst("B");
+            }
+            PhotonNetwork.CurrentRoom.SetANum(Anum);
+            PhotonNetwork.CurrentRoom.SetBNum(Bnum);
+            photonView.RPC(nameof(RPCGameStart), RpcTarget.AllViaServer);
+        }
     }
 
     [PunRPC]
@@ -135,6 +174,10 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
         Debug.Log("ゲーム開始");
         TeamSelectPanel.transform.localScale = Vector3.zero;
         PlayingFlag = true;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            TurnManager.instance.StartTurn();
+        }
     }
 
     public void SetTeamLabel(string myTeam)

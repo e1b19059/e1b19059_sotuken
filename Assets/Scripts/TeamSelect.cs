@@ -31,7 +31,6 @@ public class TeamSelect : MonoBehaviour
 
     public void Ready()
     {
-        
         Toggle[] toggles = toggleGroup.GetComponentsInChildren<Toggle>();
         if (readyToggle.isOn == true)
         {
