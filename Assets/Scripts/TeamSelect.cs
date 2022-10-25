@@ -44,7 +44,7 @@ public class TeamSelect : MonoBehaviour
                         string team = toggle.GetComponentsInChildren<Text>()
                             .First(t => t.name == "label").text.Substring(0, 1);
                         PhotonNetwork.LocalPlayer.SetTeam(team);
-                        PhotonLogin.instance.SetTeamLabel(team);
+                        TurnManager.instance.SetTeamLabel(team);
                     }
                     toggle.interactable = false;
                 }

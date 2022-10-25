@@ -293,8 +293,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   obstacle: {fileID: 1567631149051705942, guid: 3fadd302adccb894193b00d77754bb82, type: 3}
   TeamSelectPanel: {fileID: 1543005630}
-  MyTeamLabel: {fileID: 927715495}
-  RivalTeamLabel: {fileID: 7783670}
 --- !u!4 &172302009
 Transform:
   m_ObjectHideFlags: 0
@@ -371,6 +369,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TurnText: {fileID: 1076697838}
   UIobj: {fileID: 816975856}
+  MyTeamLabel: {fileID: 927715495}
+  RivalTeamLabel: {fileID: 7783670}
   Test: {fileID: 1666381176}
   Test2: {fileID: 990553285}
 --- !u!1 &245171018
@@ -4722,8 +4722,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 172302008}
-        m_TargetAssemblyTypeName: PhotonLogin, Assembly-CSharp
+      - m_Target: {fileID: 172302013}
+        m_TargetAssemblyTypeName: TurnManager, Assembly-CSharp
         m_MethodName: DoCode
         m_Mode: 1
         m_Arguments:
@@ -5506,8 +5506,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 172302008}
-        m_TargetAssemblyTypeName: PhotonLogin, Assembly-CSharp
+      - m_Target: {fileID: 172302013}
+        m_TargetAssemblyTypeName: TurnManager, Assembly-CSharp
         m_MethodName: GameStart
         m_Mode: 1
         m_Arguments:

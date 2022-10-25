@@ -41,7 +41,7 @@ public class ScoreBoard : MonoBehaviour
         RivalBuilder.Clear();
         foreach (var player in players)
         {
-            if (player.GetTeam() == PhotonLogin.instance.GetMyTeamLabel())
+            if (player.GetTeam() == TurnManager.instance.GetMyTeamLabel())
             {
                 MyBuilder.AppendLine($"{player.NickName}({player.ActorNumber})");
             }
