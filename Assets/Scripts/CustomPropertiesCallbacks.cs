@@ -2,14 +2,10 @@ using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
-using System.Runtime.InteropServices;
 using MyConstant;
 
 public class CustomPropertiesCallbacks : MonoBehaviourPunCallbacks
 {
-    [DllImport("__Internal")]
-    private static extern void setBlockToWorkspace(string block);
-
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
         // カスタムプロパティが更新されたプレイヤーのプレイヤー名とIDをコンソールに出力する

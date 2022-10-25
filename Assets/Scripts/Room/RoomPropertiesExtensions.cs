@@ -16,11 +16,6 @@ public static class RoomPropertiesExtensions
         return (room.CustomProperties[GrovalConst.BNumKey] is int number) ? number : 0;
     }
 
-    public static int GetTurnNum(this Room room)
-    {
-        return (room.CustomProperties[GrovalConst.TurnNumKey] is int number) ? number : 0;
-    }
-
     public static string GetFirst(this Room room)
     {
         return (room.CustomProperties[GrovalConst.FirstKey] is string first) ? first : string.Empty;
@@ -36,13 +31,6 @@ public static class RoomPropertiesExtensions
     public static void SetBNum(this Room room, int number)
     {
         propsToSet[GrovalConst.BNumKey] = number;
-        room.SetCustomProperties(propsToSet);
-        propsToSet.Clear();
-    }
-
-    public static void SetTurnNum(this Room room, int number)
-    {
-        propsToSet[GrovalConst.TurnNumKey] = number;
         room.SetCustomProperties(propsToSet);
         propsToSet.Clear();
     }

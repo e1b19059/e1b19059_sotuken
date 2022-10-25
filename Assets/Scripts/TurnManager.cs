@@ -54,7 +54,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
         TurnFlag = true;
         IsShowingResults = false;
         UIobj.fillAmount = InitFillAmount;
-        if (CheckMyTurn())
+        if (CheckMyTurn(0))
         {
             Test.text = "Your Turn";
         }
@@ -62,7 +62,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
         {
             Test.text = "Other's Turn";
         }
-        if (CheckMyNextTurn())
+        if (CheckMyTurn(1))
         {
             Test2.text = "Next: Your Turn";
         }
@@ -87,9 +87,9 @@ public class TurnManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public bool CheckTeamTurn()
+    public bool CheckTeamTurn(int turn)
     {
-        if (TurnCount % 2 == TeamNumber)
+        if (turn % 2 == TeamNumber)
         {
             return true;
         }
@@ -99,42 +99,11 @@ public class TurnManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public bool CheckMyTurn()
+    public bool CheckMyTurn(int next)
     {
-        if (CheckTeamTurn())
+        int turn = TurnCount + next;
+        if (CheckTeamTurn(turn))
         {
-            int turn = TurnCount;
-            bool odd = turn % 2 == 1 ? true : false;
-            turn /= 2;
-            if (odd)
-            {
-                turn += 1;
-            }
-            if (PhotonNetwork.LocalPlayer.GetTeam() == "A")
-            {
-                int num = PhotonNetwork.CurrentRoom.GetANum();
-                if ((turn + num - 1) % num + 1 == PhotonNetwork.LocalPlayer.GetOrder())
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                int num = PhotonNetwork.CurrentRoom.GetANum();
-                if ((turn + num - 1) % num + 1 == PhotonNetwork.LocalPlayer.GetOrder())
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public bool CheckMyNextTurn()
-    {
-        if (!CheckTeamTurn())
-        {
-            int turn = TurnCount + 1;
             bool odd = turn % 2 == 1 ? true : false;
             turn /= 2;
             if (odd)
@@ -171,6 +140,6 @@ public class TurnManager : MonoBehaviourPunCallbacks
         {
             TeamNumber = GrovalConst.SecondNum;
         }
-        Debug.Log("TeamNumber: " + TeamNumber);
     }
+
 }

@@ -14,9 +14,12 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
 
     [DllImport("__Internal")]
     private static extern string getBlockFromWorkspace();
-    
+
     [DllImport("__Internal")]
-    private static extern void setBlockToWorkspace(string block);
+    private static extern void setFriendBlock(string block);
+
+    [DllImport("__Internal")]
+    private static extern void setRivalBlock(string block);
 
     public GameObject obstacle;
     [SerializeField] private GameObject TeamSelectPanel;
@@ -89,12 +92,24 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void SetOthersBlock(string block)
+    public void SetOthersBlock(string block, PhotonMessageInfo info)
     {
-        Debug.Log("setOthersBlocké¿çs");
+        if (!TurnManager.instance.CheckMyTurn(1))
+        {
+            Debug.Log("setOthersBlocké¿çs");
+            if (MyTeamLabel.text == info.Sender.GetTeam())
+            {
 #if !UNITY_EDITOR && UNITY_WEBGL
-        setBlockToWorkspace(block);
+                setFriendBlock(block);
 #endif
+            }
+            else
+            {
+#if !UNITY_EDITOR && UNITY_WEBGL
+                setRivalBlock(block);
+#endif
+            }
+        }
     }
 
     private void Update()

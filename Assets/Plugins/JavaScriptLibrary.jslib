@@ -25,16 +25,28 @@ mergeInto(LibraryManager.library, {
   getBlockFromWorkspace: function(){
 	let xml = Blockly.Xml.workspaceToDom(workspace);
 	let ret = Blockly.Xml.domToText(xml);
-    let size = lengthBytesUTF8(ret) + 1;
-    let ptr = _malloc(size);
-    stringToUTF8(ret, ptr, size);
-    return ptr;
+	let size = lengthBytesUTF8(ret) + 1;
+	let ptr = _malloc(size);
+	stringToUTF8(ret, ptr, size);
+	return ptr;
   },
 
   setBlockToWorkspace: function(xmlText){
 	let xml = Blockly.Xml.textToDom(UTF8ToString(xmlText));
 	workspace.clear();
 	Blockly.Xml.domToWorkspace(xml, workspace);
+  },
+
+  setFriendBlock: function(xmlText){
+	let xml = Blockly.Xml.textToDom(UTF8ToString(xmlText));
+	workspace_readOnly.clear();
+	Blockly.Xml.domToWorkspace(xml, workspace_readOnly);
+  },
+
+  setRivalBlock: function(xmlText){
+	let xml = Blockly.Xml.textToDom(UTF8ToString(xmlText));
+	workspace_rival.clear();
+	Blockly.Xml.domToWorkspace(xml, workspace_rival);
   },
 
 });
