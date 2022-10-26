@@ -14,10 +14,11 @@ public class TurnManager : MonoBehaviourPunCallbacks
     [SerializeField] private Image UIobj;// 残り時間を示す画像
     [SerializeField] private TextMeshProUGUI MyTeamLabel;
     [SerializeField] private TextMeshProUGUI RivalTeamLabel;
+    [SerializeField] private Button DecideButton;
     private int TurnCount = 0;
     private int FirstOrSecond;
     private float InitFillAmount;
-    private float TurnDuration = 30f;
+    private float TurnDuration = 60f;
     private bool IsShowingResults;
     private bool MiddleOfTurn;
     private bool TurnFlag;
@@ -42,6 +43,15 @@ public class TurnManager : MonoBehaviourPunCallbacks
     [DllImport("__Internal")]
     private static extern void setRivalBlock(string block);
 
+    [DllImport("__Internal")]
+    private static extern void switchReadOnly();
+
+    [DllImport("__Internal")]
+    private static extern void replaceBlock();
+
+    [DllImport("__Internal")]
+    private static extern void clearRival();
+
     private void Awake()
     {
         if (instance == null)
@@ -52,6 +62,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
         MiddleOfTurn = true;
         TurnFlag = false;
         elapsedTime = 0f;
+        DecideButton.interactable = false;
     }
 
     private void Update()
@@ -81,7 +92,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
         }
     }
 
-    [PunRPC]// ＠＠＠＠＠＠＠＠要編集：この時にブロックを実行する(readOnlyワークスペースにある方)、DoCodeボタンは決定+ターン終了ボタンに変更する
+    [PunRPC]
     public void OnTurnBegins()// ターン開始時
     {
         Debug.Log("OnTurnBegins() turn: " + ++TurnCount);
@@ -92,15 +103,24 @@ public class TurnManager : MonoBehaviourPunCallbacks
         {
             Test.text = "Your Turn";
             TurnFlag = true;
+            DecideButton.interactable = true;
+            DoCode();
         }
         else
         {
             Test.text = "Other's Turn";
             TurnFlag = false;
+            DecideButton.interactable = false;
+#if !UNITY_EDITOR && UNITY_WEBGL
+            switchReadOnly();
+#endif
         }
         if (CheckMyTurn(1))
         {
             Test2.text = "Next: Your Turn";
+#if !UNITY_EDITOR && UNITY_WEBGL
+            clearRival();
+#endif
         }
         else
         {
@@ -108,10 +128,17 @@ public class TurnManager : MonoBehaviourPunCallbacks
         }
     }
 
+    [PunRPC]
     public void OnTurnEnds()// ターン終了時
     {
         Debug.Log("OnTurnEnds: " + TurnCount);
         MiddleOfTurn = false;
+        if (TurnFlag)
+        {
+#if !UNITY_EDITOR && UNITY_WEBGL
+            replaceBlock();
+#endif
+        }
         StartTurn();
     }
 
@@ -288,6 +315,12 @@ public class TurnManager : MonoBehaviourPunCallbacks
         setTargetObject(obj.name);
         doCode();
 #endif
+    }
+
+    // ブロックの編集を止め、ターンを終えるメソッド
+    public void DecideBlock()
+    {
+        photonView.RPC(nameof(OnTurnEnds), RpcTarget.AllViaServer);
     }
 
 }

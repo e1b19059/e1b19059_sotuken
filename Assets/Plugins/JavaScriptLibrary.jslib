@@ -4,7 +4,7 @@ mergeInto(LibraryManager.library, {
   },
 
   doCode: function(){
-	let code = 'initiate();\n' + Blockly.JavaScript.workspaceToCode(workspace) + 'terminate();\n';
+	let code = 'initiate();\n' + Blockly.JavaScript.workspaceToCode(workspace_readOnly) + 'terminate();\n';
 	let myInterpreter = new Interpreter(code, initFunc);
 	function stepCode() {
 		if (myInterpreter.step()) {
@@ -48,5 +48,20 @@ mergeInto(LibraryManager.library, {
 	workspace_rival.clear();
 	Blockly.Xml.domToWorkspace(xml, workspace_rival);
   },
+
+	switchReadOnly: function(){
+		let elm = document.getElementById('readOnlyParent');
+		elm.className = 'top';
+	},
+
+	replaceBlock: function(){
+		workspace_readOnly.clear();
+		Blockly.Xml.domToWorkspace(Blockly.Xml.workspaceToDom(workspace), workspace_readOnly);
+		workspace.clear();
+	},
+
+	clearRival: function(){
+		workspace_rival.clear();
+	},
 
 });

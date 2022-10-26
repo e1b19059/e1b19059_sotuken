@@ -371,6 +371,7 @@ MonoBehaviour:
   UIobj: {fileID: 816975856}
   MyTeamLabel: {fileID: 927715495}
   RivalTeamLabel: {fileID: 7783670}
+  DecideButton: {fileID: 1687529331}
   Test: {fileID: 1666381176}
   Test2: {fileID: 990553285}
 --- !u!1 &245171018
@@ -1192,7 +1193,7 @@ RectTransform:
   - {fileID: 858570364}
   - {fileID: 1434470132}
   m_Father: {fileID: 1167144209}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -1416,7 +1417,7 @@ RectTransform:
   - {fileID: 816975858}
   - {fileID: 1076697837}
   m_Father: {fileID: 1167144209}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -1992,7 +1993,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1167144209}
-  m_RootOrder: 6
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -2537,13 +2538,13 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1666381178}
+  - {fileID: 990553287}
   - {fileID: 1687529330}
   - {fileID: 648966585}
   - {fileID: 847629514}
   - {fileID: 1543005631}
   - {fileID: 1812115108}
-  - {fileID: 1666381178}
-  - {fileID: 990553287}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3337,7 +3338,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: DoCode
+  m_text: Turn End
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4048,7 +4049,7 @@ RectTransform:
   - {fileID: 1255527066}
   - {fileID: 1657708487}
   m_Father: {fileID: 1167144209}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -4630,7 +4631,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1167144209}
-  m_RootOrder: 5
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -4651,7 +4652,7 @@ GameObject:
   - component: {fileID: 1687529331}
   - component: {fileID: 1687529334}
   m_Layer: 5
-  m_Name: DoCodeButton
+  m_Name: TurnEndButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4671,7 +4672,7 @@ RectTransform:
   m_Children:
   - {fileID: 1393757610}
   m_Father: {fileID: 1167144209}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -4724,7 +4725,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 172302013}
         m_TargetAssemblyTypeName: TurnManager, Assembly-CSharp
-        m_MethodName: DoCode
+        m_MethodName: DecideBlock
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5327,7 +5328,7 @@ RectTransform:
   - {fileID: 1467325601}
   - {fileID: 1294433449}
   m_Father: {fileID: 1167144209}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
