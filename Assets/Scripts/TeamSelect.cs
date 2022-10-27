@@ -31,7 +31,6 @@ public class TeamSelect : MonoBehaviour
 
     public void Ready()
     {
-        
         Toggle[] toggles = toggleGroup.GetComponentsInChildren<Toggle>();
         if (readyToggle.isOn == true)
         {
@@ -42,8 +41,10 @@ public class TeamSelect : MonoBehaviour
                 {
                     if(toggle.isOn == true)
                     {
-                        PhotonNetwork.LocalPlayer.SetTeam(toggle.GetComponentsInChildren<Text>()
-                            .First(t => t.name == "label").text.Substring(0, 1));
+                        string team = toggle.GetComponentsInChildren<Text>()
+                            .First(t => t.name == "label").text.Substring(0, 1);
+                        PhotonNetwork.LocalPlayer.SetTeam(team);
+                        TurnManager.instance.SetTeamLabel(team);
                     }
                     toggle.interactable = false;
                 }

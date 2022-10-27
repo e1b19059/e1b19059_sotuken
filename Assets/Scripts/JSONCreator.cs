@@ -59,7 +59,7 @@ public class JSONCreator : MonoBehaviour
     [DllImport("__Internal")]
     private static extern void setData(string str);
 
-    public ObjectContainer container;
+    [SerializeField] private ObjectContainer container;
     private bool updateFlag = false;
 
     void Update()

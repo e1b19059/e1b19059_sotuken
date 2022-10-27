@@ -1,24 +1,12 @@
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
-using System.Runtime.InteropServices;
 
 public class PhotonLogin : MonoBehaviourPunCallbacks
 {
-    [DllImport("__Internal")]
-    private static extern void doCode();
-
-    [DllImport("__Internal")]
-    private static extern void setTargetObject(string str);
-
-    [DllImport("__Internal")]
-    private static extern string getBlockFromWorkspace();
-    
-    [DllImport("__Internal")]
-    private static extern void setBlockToWorkspace(string block);
-
     public GameObject obstacle;
-    [SerializeField] private GameObject TeamSelectPanel; 
+    [SerializeField] private GameObject TeamSelectPanel;
+    private bool PlayingFlag;
 
     public static PhotonLogin instance;
 
@@ -28,6 +16,7 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
         {
             instance = this;
         }
+        PlayingFlag = false;
     }
 
     private void Start()
@@ -42,9 +31,6 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
     // マスターサーバーへの接続が成功した時に呼ばれるコールバック
     public override void OnConnectedToMaster()
     {
-        // "Room"という名前のルームに参加する（ルームが存在しなければ作成して参加する）
-        //PhotonNetwork.JoinOrCreateRoom("Room", new RoomOptions(), TypedLobby.Default);
-
         PhotonNetwork.JoinLobby();
     }
 
@@ -53,57 +39,15 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            var position = new Vector3(0, 0, 0);
-            PhotonNetwork.InstantiateRoomObject("Player", position, Quaternion.identity);
+            var positionA = new Vector3(0, 0, 0);
+            var positionB = new Vector3(5, 0, 5);
+            PhotonNetwork.InstantiateRoomObject("PlayerA", positionA, Quaternion.identity);
+            PhotonNetwork.InstantiateRoomObject("PlayerB", positionB, Quaternion.identity);
 
             PhotonNetwork.InstantiateRoomObject(obstacle.name, new Vector3(-1f, 0, 1f), Quaternion.identity);
             PhotonNetwork.InstantiateRoomObject(obstacle.name, new Vector3(1f, 0, 1f), Quaternion.identity);
             PhotonNetwork.InstantiateRoomObject(obstacle.name, new Vector3(1f, 0, 2f), Quaternion.identity);
         }
-    }
-
-    public void DoCode()
-    {
-        Debug.Log("実行");
-        GameObject obj =  GameObject.FindGameObjectWithTag("Player");
-        PhotonView photonView = obj.GetComponent<PhotonView>();
-        if (!photonView.IsMine)
-        {
-            photonView.RequestOwnership();
-        }
-#if !UNITY_EDITOR && UNITY_WEBGL
-        setTargetObject(obj.name);
-        doCode();
-#endif
-    }
-
-    public void SendMyBlock()
-    {
-#if !UNITY_EDITOR && UNITY_WEBGL
-        photonView.RPC(nameof(SetOthersBlock), RpcTarget.Others, getBlockFromWorkspace());
-#endif
-    }
-
-    [PunRPC]
-    public void SetOthersBlock(string block)
-    {
-        Debug.Log("setOthersBlock実行");
-#if !UNITY_EDITOR && UNITY_WEBGL
-        setBlockToWorkspace(block);
-#endif
-    }
-
-    private void Update()
-    { 
-        if (PhotonNetwork.CurrentRoom != null)//ルーム内である
-        {
-            GameObject obj = GameObject.FindGameObjectWithTag("Player");
-            PhotonView photonView = obj.GetComponent<PhotonView>();
-            if (photonView.IsMine)
-            {
-                SendMyBlock();
-            }
-        }   
     }
 
     public void FocusCanvas(string p_focus)
@@ -120,17 +64,14 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
 #endif
     }
 
-    public void GameStart()
+    public bool GetPlayingFlag()
     {
-        // ルーム内のメンバー全員が準備完了状態のときのみ押せるようにする
-        photonView.RPC(nameof(RPCGameStart), RpcTarget.AllViaServer);
+        return PlayingFlag;
     }
 
-    [PunRPC]
-    public void RPCGameStart()
+    public void GameInit()
     {
-        Debug.Log("ゲーム開始");
+        PlayingFlag = true;
         TeamSelectPanel.transform.localScale = Vector3.zero;
     }
-
 }

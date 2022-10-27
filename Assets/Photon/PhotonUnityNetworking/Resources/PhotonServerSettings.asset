@@ -39,6 +39,9 @@ MonoBehaviour:
   - MoveBack
   - SetOthersBlock
   - RPCGameStart
+  - FinishTurn
+  - OnTurnBegins
+  - OnTurnEnds
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
