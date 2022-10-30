@@ -23,9 +23,21 @@ public class CustomPropertiesCallbacks : MonoBehaviourPunCallbacks
         // 更新されたルームのカスタムプロパティのペアをコンソールに出力する
         foreach (var prop in propertiesThatChanged)
         {
-            if(prop.Key.ToString() == GrovalConst.FirstKey)
+            if (prop.Key.ToString() == GrovalConst.FirstKey)
             {
                 TurnManager.instance.SetFirstToNum(prop.Value.ToString());
+            }
+            else if (prop.Key.ToString() == GrovalConst.ScoreAKey 
+                || prop.Key.ToString() == GrovalConst.ScoreBKey)
+            {     
+                if(prop.Key.ToString() == ScoreBoard.instance.GetMyTeam())
+                {
+                    ScoreBoard.instance.SetMyScore((int)prop.Value);
+                }
+                else
+                {
+                    ScoreBoard.instance.SetRivalScore((int)prop.Value);
+                }
             }
             Debug.Log($"{prop.Key}: {prop.Value}");
         }

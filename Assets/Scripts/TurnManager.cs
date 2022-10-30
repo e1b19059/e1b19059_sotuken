@@ -12,19 +12,17 @@ public class TurnManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private TextMeshProUGUI TurnText;//ターン数の表示テキスト
     [SerializeField] private Image UIobj;// 残り時間を示す画像
-    [SerializeField] private TextMeshProUGUI MyTeamLabel;
-    [SerializeField] private TextMeshProUGUI RivalTeamLabel;
     [SerializeField] private Button DecideButton;
     private int TurnCount = 0;
     private int FirstOrSecond;
     private float InitFillAmount;
     private float TurnDuration = 60f;
+    private float elapsedTime;
     private bool IsShowingResults;
     private bool MiddleOfTurn;
     private bool TurnFlag;
     [SerializeField] private TextMeshProUGUI Test;
     [SerializeField] private TextMeshProUGUI Test2;
-    private float elapsedTime;
 
     public static TurnManager instance;
 
@@ -168,7 +166,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
                 player.SetOrder(Bnum);
             }
         }
-        if (Anum == 0 || Bnum == 0)
+        if (Anum == 0 && Bnum == 0)
         {
             Debug.Log("人数が足りていません");
         }
@@ -194,10 +192,20 @@ public class TurnManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("ゲーム開始");
         PhotonLogin.instance.GameInit();
-        if (PhotonNetwork.IsMasterClient)
-        {
-            StartTurn();
-        }
+        StartTurn();
+        CreateCoin();
+    }
+
+    public void GameFinish()
+    {
+        photonView.RPC(nameof(RPCGameFinish), RpcTarget.AllViaServer);
+    }
+
+    [PunRPC]
+    public void RPCGameFinish()
+    {
+        Debug.Log("ゲーム終了");
+        IsShowingResults = true;
     }
 
     // turnが自分のチームのターンか確認するメソッド
@@ -235,7 +243,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
             }
             else
             {
-                int num = PhotonNetwork.CurrentRoom.GetANum();
+                int num = PhotonNetwork.CurrentRoom.GetBNum();
                 if ((turn + num - 1) % num + 1 == PhotonNetwork.LocalPlayer.GetOrder())
                 {
                     return true;
@@ -258,24 +266,6 @@ public class TurnManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public void SetTeamLabel(string myTeam)
-    {
-        MyTeamLabel.text = myTeam;
-        if (MyTeamLabel.text == "A")
-        {
-            RivalTeamLabel.text = "B";
-        }
-        else
-        {
-            RivalTeamLabel.text = "A";
-        }
-    }
-
-    public string GetMyTeamLabel()
-    {
-        return MyTeamLabel.text;
-    }
-
     public void SendMyBlock()
     {
 #if !UNITY_EDITOR && UNITY_WEBGL
@@ -290,7 +280,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
         {
 #if !UNITY_EDITOR && UNITY_WEBGL
             Debug.Log("ブロックをセット");
-            if (MyTeamLabel.text == info.Sender.GetTeam())
+            if (ScoreBoard.instance.GetMyTeam() == info.Sender.GetTeam())
             {
                 setFriendBlock(block);
             }
@@ -305,7 +295,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
     public void DoCode()
     {
         Debug.Log("実行");
-        GameObject obj = GameObject.FindGameObjectWithTag($"Player{MyTeamLabel.text}");
+        GameObject obj = GameObject.FindGameObjectWithTag($"Player{ScoreBoard.instance.GetMyTeam()}");
         PhotonView photonView = obj.GetComponent<PhotonView>();
         if (!photonView.IsMine)
         {
@@ -321,6 +311,18 @@ public class TurnManager : MonoBehaviourPunCallbacks
     public void DecideBlock()
     {
         photonView.RPC(nameof(OnTurnEnds), RpcTarget.AllViaServer);
+    }
+
+    [PunRPC]
+    public void CreateCoin()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            if (Physics.OverlapSphere(new Vector3(0, -0.2f, 1), 0).Length <= 0)
+            {
+                PhotonNetwork.InstantiateRoomObject("Coin", new Vector3(0, 0, 1), Quaternion.Euler(90, 0, 0));
+            }
+        }
     }
 
 }

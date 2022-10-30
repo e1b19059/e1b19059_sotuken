@@ -42,6 +42,9 @@ MonoBehaviour:
   - FinishTurn
   - OnTurnBegins
   - OnTurnEnds
+  - RPCGameFinish
+  - RPCDestroy
+  - CreateCoin
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

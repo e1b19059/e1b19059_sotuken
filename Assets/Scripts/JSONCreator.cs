@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using Photon.Pun;
 
 [System.Serializable]
 public class Data
@@ -54,7 +55,7 @@ public class Direction
     }
 }
 
-public class JSONCreator : MonoBehaviour
+public class JSONCreator : MonoBehaviourPunCallbacks
 {
     [DllImport("__Internal")]
     private static extern void setData(string str);
@@ -82,7 +83,6 @@ public class JSONCreator : MonoBehaviour
             ObjectData tmp = new ObjectData(enumerator.Current.name, pos, dir);
             datas.objectData.Add(tmp);
         }
-        Debug.Log(JsonUtility.ToJson(datas));
 #if !UNITY_EDITOR && UNITY_WEBGL
         setData(JsonUtility.ToJson(datas));
 #endif
@@ -98,6 +98,7 @@ public class JSONCreator : MonoBehaviour
     {
         Debug.Log("stop!");
         updateFlag = false;
+        photonView.RPC(nameof(TurnManager.instance.CreateCoin), RpcTarget.MasterClient);
     }
 
 }
