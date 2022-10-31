@@ -16,12 +16,14 @@ public class ScoreBoard : MonoBehaviour
     private StringBuilder MyBuilder;
     private StringBuilder RivalBuilder;
     private float elapsedTime;
+    private int MyScore;
+    private int RivalScore;
 
     public static ScoreBoard instance;
 
     private void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
         }
@@ -36,9 +38,8 @@ public class ScoreBoard : MonoBehaviour
 
     void Update()
     {
-        // まだルームに参加していない場合は更新しない
-        if (!PhotonNetwork.InRoom) { return; }
-        
+        // ゲーム中のみ更新する
+        if (!PhotonLogin.instance.GetPlayingFlag()) { return; }
         // 0.1秒毎にテキストを更新する
         elapsedTime += Time.deltaTime;
         if (elapsedTime > 0.1f)
@@ -70,11 +71,13 @@ public class ScoreBoard : MonoBehaviour
 
     public void SetMyScore(int score)
     {
+        MyScore = score;
         MyScoreLabel.text = "Score: " + score.ToString();
     }
 
     public void SetRivalScore(int score)
     {
+        RivalScore = score;
         RivalScoreLabel.text = "Score: " + score.ToString();
     }
 
@@ -98,6 +101,31 @@ public class ScoreBoard : MonoBehaviour
     public string GetMyTeam()
     {
         return MyTeamLabel.text;
+    }
+
+    public string GetRivalTeam()
+    {
+        return RivalTeamLabel.text;
+    }
+
+    public string GetMyTeamMember()
+    {
+        return MyTeamMember.text;
+    }
+
+    public string GetRivalTeamMember()
+    {
+        return RivalTeamMember.text;
+    }
+
+    public int GetMyScore()
+    {
+        return MyScore;
+    }
+
+    public int GetRivalScore()
+    {
+        return RivalScore;
     }
 
 }

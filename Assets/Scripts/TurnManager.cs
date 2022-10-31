@@ -195,7 +195,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
                 player.SetOrder(Bnum);
             }
         }
-        if (Anum == 0 && Bnum == 0)
+        if (Anum == 0 || Bnum == 0)
         {
             Debug.Log("l”‚ª‘«‚è‚Ä‚¢‚Ü‚¹‚ñ");
         }
