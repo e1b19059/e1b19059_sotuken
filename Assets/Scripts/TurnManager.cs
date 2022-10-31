@@ -10,10 +10,14 @@ using MyConstant;
 
 public class TurnManager : MonoBehaviourPunCallbacks
 {
+    public static TurnManager instance;
+
     [SerializeField] private TextMeshProUGUI TurnText;//ターン数の表示テキスト
-    [SerializeField] private Image UIobj;// 残り時間を示す画像
-    [SerializeField] private Button DecideButton;
+    [SerializeField] private Image MeterImg;// 残り時間を示す画像
+    [SerializeField] private Button FinishTurnButton;// 時間が残っていてもターンを終えるボタン
+    [SerializeField] private Button ShowResultButton;// 結果を表示するボタン
     private int TurnCount = 0;
+    private int MaxTurn;
     private int FirstOrSecond;
     private float InitFillAmount;
     private float TurnDuration = 60f;
@@ -21,10 +25,10 @@ public class TurnManager : MonoBehaviourPunCallbacks
     private bool IsShowingResults;
     private bool MiddleOfTurn;
     private bool TurnFlag;
+    private bool NextTurnFlag;
+    private bool LastRun;
     [SerializeField] private TextMeshProUGUI Test;
     [SerializeField] private TextMeshProUGUI Test2;
-
-    public static TurnManager instance;
 
     [DllImport("__Internal")]
     private static extern void doCode();
@@ -56,11 +60,13 @@ public class TurnManager : MonoBehaviourPunCallbacks
         {
             instance = this;
         }
-        InitFillAmount = UIobj.fillAmount;
-        MiddleOfTurn = true;
+        InitFillAmount = MeterImg.fillAmount;
+        LastRun = true;
         TurnFlag = false;
         elapsedTime = 0f;
-        DecideButton.interactable = false;
+        MaxTurn = 4;
+        FinishTurnButton.interactable = false;
+        ShowResultButton.transform.localScale = Vector3.zero;
     }
 
     private void Update()
@@ -70,11 +76,11 @@ public class TurnManager : MonoBehaviourPunCallbacks
         {
             this.TurnText.text = TurnCount.ToString();//何ターン目か表示
         }
-        if (this.TurnCount > 0 && this.UIobj != null && !IsShowingResults)
+        if (this.TurnCount > 0 && this.MeterImg != null && !IsShowingResults && MiddleOfTurn)
         {
-            UIobj.fillAmount -= InitFillAmount / this.TurnDuration * Time.deltaTime;
+            MeterImg.fillAmount -= InitFillAmount / this.TurnDuration * Time.deltaTime;
         }
-        if (TurnFlag)// 自分のターンならブロックを送信する
+        if (TurnFlag && MiddleOfTurn)// 自分のターンならブロックを送信する
         {
             // 0.5秒毎にブロックを送信する
             elapsedTime += Time.deltaTime;
@@ -84,7 +90,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
                 SendMyBlock();
             }
         }
-        if (MiddleOfTurn && UIobj.fillAmount == 0)// タイムアウト
+        if (MiddleOfTurn && MeterImg.fillAmount == 0)// タイムアウト
         {
             OnTurnEnds();
         }
@@ -96,33 +102,36 @@ public class TurnManager : MonoBehaviourPunCallbacks
         Debug.Log("OnTurnBegins() turn: " + ++TurnCount);
         MiddleOfTurn = true;
         IsShowingResults = false;
-        UIobj.fillAmount = InitFillAmount;
+        MeterImg.fillAmount = InitFillAmount;
         if (CheckMyTurn(0))
         {
             Test.text = "Your Turn";
+            Test2.text = "Next: Other's Turn";
             TurnFlag = true;
-            DecideButton.interactable = true;
-            DoCode();
+            NextTurnFlag = false;
+            FinishTurnButton.interactable = true;
         }
         else
         {
             Test.text = "Other's Turn";
             TurnFlag = false;
-            DecideButton.interactable = false;
+            FinishTurnButton.interactable = false;
 #if !UNITY_EDITOR && UNITY_WEBGL
             switchReadOnly();
 #endif
-        }
-        if (CheckMyTurn(1))
-        {
-            Test2.text = "Next: Your Turn";
+            if (CheckMyTurn(1))
+            {
+                Test2.text = "Next: Your Turn";
+                NextTurnFlag = true;
 #if !UNITY_EDITOR && UNITY_WEBGL
-            clearRival();
+                clearRival();
 #endif
-        }
-        else
-        {
-            Test2.text = "Next: Other's Turn";
+            }
+            else
+            {
+                Test2.text = "Next: Other's Turn";
+                NextTurnFlag = false;
+            }
         }
     }
 
@@ -137,14 +146,34 @@ public class TurnManager : MonoBehaviourPunCallbacks
             replaceBlock();
 #endif
         }
-        StartTurn();
+        else if (NextTurnFlag)
+        {
+            DoCode();
+        }
     }
 
+    // ブロック実行時、最後にJavaScriptから呼び出される関数内でRpcTarget.AllViaServerで呼ばれる
+    [PunRPC]
     public void StartTurn()// ターンを開始する
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (TurnCount >= MaxTurn)
         {
-            photonView.RPC(nameof(OnTurnBegins), RpcTarget.AllViaServer);
+            if (!LastRun)
+            {
+                GameFinish();
+            }
+            if (TurnFlag && LastRun)
+            {
+                LastRun = false;
+                DoCode();
+            }
+        }
+        else
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                photonView.RPC(nameof(OnTurnBegins), RpcTarget.AllViaServer);
+            }
         }
     }
 
@@ -183,6 +212,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
             }
             PhotonNetwork.CurrentRoom.SetANum(Anum);
             PhotonNetwork.CurrentRoom.SetBNum(Bnum);
+            CreateCoin();
             photonView.RPC(nameof(RPCGameStart), RpcTarget.AllViaServer);
         }
     }
@@ -193,7 +223,6 @@ public class TurnManager : MonoBehaviourPunCallbacks
         Debug.Log("ゲーム開始");
         PhotonLogin.instance.GameInit();
         StartTurn();
-        CreateCoin();
     }
 
     public void GameFinish()
@@ -205,7 +234,8 @@ public class TurnManager : MonoBehaviourPunCallbacks
     public void RPCGameFinish()
     {
         Debug.Log("ゲーム終了");
-        IsShowingResults = true;
+        PhotonLogin.instance.Finished();
+        ShowResultButton.transform.localScale = Vector3.one;
     }
 
     // turnが自分のチームのターンか確認するメソッド
@@ -276,7 +306,8 @@ public class TurnManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetOthersBlock(string block, PhotonMessageInfo info)
     {
-        if (!CheckMyTurn(1))
+        // 次のターンにドライバーになるプレイヤーにはブロックを共有しない
+        if (!NextTurnFlag)
         {
 #if !UNITY_EDITOR && UNITY_WEBGL
             Debug.Log("ブロックをセット");
@@ -308,7 +339,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
     }
 
     // ブロックの編集を止め、ターンを終えるメソッド
-    public void DecideBlock()
+    public void FinishTurn()
     {
         photonView.RPC(nameof(OnTurnEnds), RpcTarget.AllViaServer);
     }
@@ -323,6 +354,17 @@ public class TurnManager : MonoBehaviourPunCallbacks
                 PhotonNetwork.InstantiateRoomObject("Coin", new Vector3(0, 0, 1), Quaternion.Euler(90, 0, 0));
             }
         }
+    }
+
+    public bool GetShowingResults()
+    {
+        return IsShowingResults;
+    }
+
+    public void ShowResult()
+    {
+        IsShowingResults = true;
+        ShowResultButton.transform.localScale = Vector3.zero;
     }
 
 }

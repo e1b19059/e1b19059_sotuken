@@ -74,4 +74,10 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
         PlayingFlag = true;
         TeamSelectPanel.transform.localScale = Vector3.zero;
     }
+
+    public void Finished()
+    {
+        PlayingFlag = false;
+    }
+
 }

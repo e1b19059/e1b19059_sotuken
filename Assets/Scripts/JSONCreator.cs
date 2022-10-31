@@ -99,6 +99,7 @@ public class JSONCreator : MonoBehaviourPunCallbacks
         Debug.Log("stop!");
         updateFlag = false;
         photonView.RPC(nameof(TurnManager.instance.CreateCoin), RpcTarget.MasterClient);
+        photonView.RPC(nameof(TurnManager.instance.StartTurn), RpcTarget.AllViaServer);
     }
 
 }
