@@ -40,14 +40,15 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             var positionA = new Vector3(0, 0, 0);
-            var positionB = new Vector3(5, 0, 5);
+            var positionB = new Vector3(0, 0, 2);
             PhotonNetwork.InstantiateRoomObject("PlayerA", positionA, Quaternion.identity);
             PhotonNetwork.InstantiateRoomObject("PlayerB", positionB, Quaternion.identity);
-
-            PhotonNetwork.InstantiateRoomObject(obstacle.name, new Vector3(-1f, 0, 1f), Quaternion.identity);
-            PhotonNetwork.InstantiateRoomObject(obstacle.name, new Vector3(1f, 0, 1f), Quaternion.identity);
-            PhotonNetwork.InstantiateRoomObject(obstacle.name, new Vector3(1f, 0, 2f), Quaternion.identity);
         }
+    }
+
+    public void Leave()
+    {
+        PhotonNetwork.LeaveRoom();
     }
 
     public void FocusCanvas(string p_focus)

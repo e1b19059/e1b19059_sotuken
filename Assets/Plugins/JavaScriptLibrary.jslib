@@ -64,4 +64,9 @@ mergeInto(LibraryManager.library, {
 		workspace_rival.clear();
 	},
 
+	initWorkspace: function(){
+		workspace.clear();
+		workspace_readOnly.clear();
+		workspace_rival.clear();
+	},
 });

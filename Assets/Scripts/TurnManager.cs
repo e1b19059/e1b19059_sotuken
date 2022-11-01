@@ -54,6 +54,9 @@ public class TurnManager : MonoBehaviourPunCallbacks
     [DllImport("__Internal")]
     private static extern void clearRival();
 
+    [DllImport("__Internal")]
+    private static extern void initWorkspace();
+
     private void Awake()
     {
         if (instance == null)
@@ -212,6 +215,10 @@ public class TurnManager : MonoBehaviourPunCallbacks
             }
             PhotonNetwork.CurrentRoom.SetANum(Anum);
             PhotonNetwork.CurrentRoom.SetBNum(Bnum);
+            PhotonNetwork.CurrentRoom.SetScoreA(0);
+            PhotonNetwork.CurrentRoom.SetScoreB(0);
+
+            CreateObjects();
             CreateCoin();
             photonView.RPC(nameof(RPCGameStart), RpcTarget.AllViaServer);
         }
@@ -222,6 +229,12 @@ public class TurnManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("ゲーム開始");
         PhotonLogin.instance.GameInit();
+#if !UNITY_EDITOR && UNITY_WEBGL
+        initWorkspace();
+#endif
+        ShowResultButton.transform.localScale = Vector3.zero;
+        TurnCount = 0;
+        LastRun = true;
         StartTurn();
     }
 
@@ -284,6 +297,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
     }
 
     // 自分のチームが先攻か確認して定数を取得する
+    // firstのカスタムプロパティが更新されたときに呼ばれるようになっている
     public void SetFirstToNum(string first)
     {
         if (first == PhotonNetwork.LocalPlayer.GetTeam())
@@ -356,6 +370,16 @@ public class TurnManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public void CreateObjects()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.InstantiateRoomObject("Cube", new Vector3(-1f, 0, 1f), Quaternion.identity);
+            PhotonNetwork.InstantiateRoomObject("Cube", new Vector3(1f, 0, 1f), Quaternion.identity);
+            PhotonNetwork.InstantiateRoomObject("Cube", new Vector3(1f, 0, 2f), Quaternion.identity);
+        }
+    }
+
     public bool GetShowingResults()
     {
         return IsShowingResults;
@@ -365,6 +389,11 @@ public class TurnManager : MonoBehaviourPunCallbacks
     {
         IsShowingResults = true;
         ShowResultButton.transform.localScale = Vector3.zero;
+    }
+
+    public void HideResult()
+    {
+        IsShowingResults = false;
     }
 
 }

@@ -38,14 +38,14 @@ public class ResultView : MonoBehaviour
         int MyScore = ScoreBoard.instance.GetMyScore();
         int RivalScore = ScoreBoard.instance.GetRivalScore();
         MyBuilder.Clear();
-        MyBuilder.AppendLine($"team {ScoreBoard.instance.GetMyTeam()}");
+        MyBuilder.AppendLine($"Team {ScoreBoard.instance.GetMyTeam()}");
         MyBuilder.AppendLine($"{ScoreBoard.instance.GetMyTeamMember()}\n");
-        MyBuilder.AppendLine($"Score: {MyScore}");
+        MyBuilder.AppendLine($"Total Score: {MyScore}");
         MyResult.text = MyBuilder.ToString();
         RivalBuilder.Clear();
-        RivalBuilder.AppendLine($"team {ScoreBoard.instance.GetRivalTeam()}");
+        RivalBuilder.AppendLine($"Team {ScoreBoard.instance.GetRivalTeam()}");
         RivalBuilder.AppendLine($"{ScoreBoard.instance.GetRivalTeamMember()}\n");
-        RivalBuilder.AppendLine($"Score: {RivalScore}");
+        RivalBuilder.AppendLine($"Total Score: {RivalScore}");
         RivalResult.text = RivalBuilder.ToString();
         if (MyScore > RivalScore)
         {
@@ -59,6 +59,12 @@ public class ResultView : MonoBehaviour
         {
             WinORLose.text = "Your Team Lose";
         }
+    }
+
+    public void Leave()
+    {
+        TurnManager.instance.HideResult();
+        PhotonLogin.instance.Leave();
     }
 
 }

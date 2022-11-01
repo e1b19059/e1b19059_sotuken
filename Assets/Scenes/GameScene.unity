@@ -1356,7 +1356,7 @@ GameObject:
   - component: {fileID: 518349025}
   - component: {fileID: 518349027}
   m_Layer: 5
-  m_Name: Button
+  m_Name: ShowResultButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1376,11 +1376,11 @@ RectTransform:
   m_Children:
   - {fileID: 993180041}
   m_Father: {fileID: 1167144209}
-  m_RootOrder: 8
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -3.4, y: 0.0000076294}
+  m_AnchoredPosition: {x: -3.4, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &518349025
@@ -1585,8 +1585,9 @@ GameObject:
   - component: {fileID: 642994416}
   - component: {fileID: 642994415}
   - component: {fileID: 642994417}
+  - component: {fileID: 642994418}
   m_Layer: 5
-  m_Name: Button
+  m_Name: LeaveButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1694,7 +1695,43 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 642994415}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1543005635}
+        m_TargetAssemblyTypeName: TeamSelect, Assembly-CSharp
+        m_MethodName: Cancel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1206114051}
+        m_TargetAssemblyTypeName: ResultView, Assembly-CSharp
+        m_MethodName: Leave
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &642994418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642994413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bced0cb5322d4724f86b3cba370c998b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &648966584
 GameObject:
   m_ObjectHideFlags: 0
@@ -1728,7 +1765,7 @@ RectTransform:
   - {fileID: 858570364}
   - {fileID: 1434470132}
   m_Father: {fileID: 1167144209}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -2054,7 +2091,7 @@ RectTransform:
   - {fileID: 816975858}
   - {fileID: 1076697837}
   m_Father: {fileID: 1167144209}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -3583,13 +3620,13 @@ RectTransform:
   m_Children:
   - {fileID: 1666381178}
   - {fileID: 990553287}
+  - {fileID: 1206114048}
   - {fileID: 1687529330}
   - {fileID: 648966585}
   - {fileID: 847629514}
+  - {fileID: 518349024}
   - {fileID: 1543005631}
   - {fileID: 1812115108}
-  - {fileID: 1206114048}
-  - {fileID: 518349024}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3635,7 +3672,7 @@ RectTransform:
   - {fileID: 1608323081}
   - {fileID: 642994414}
   m_Father: {fileID: 1167144209}
-  m_RootOrder: 7
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -5423,7 +5460,7 @@ RectTransform:
   - {fileID: 1255527066}
   - {fileID: 1657708487}
   m_Father: {fileID: 1167144209}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -6277,7 +6314,7 @@ RectTransform:
   m_Children:
   - {fileID: 1393757610}
   m_Father: {fileID: 1167144209}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -6933,7 +6970,7 @@ RectTransform:
   - {fileID: 1467325601}
   - {fileID: 1294433449}
   m_Father: {fileID: 1167144209}
-  m_RootOrder: 6
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -7491,7 +7528,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Leave
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
