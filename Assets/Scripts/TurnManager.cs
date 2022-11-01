@@ -370,16 +370,6 @@ public class TurnManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public void CreateObjects()
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.InstantiateRoomObject("Cube", new Vector3(-1f, 0, 1f), Quaternion.identity);
-            PhotonNetwork.InstantiateRoomObject("Cube", new Vector3(1f, 0, 1f), Quaternion.identity);
-            PhotonNetwork.InstantiateRoomObject("Cube", new Vector3(1f, 0, 2f), Quaternion.identity);
-        }
-    }
-
     public bool GetShowingResults()
     {
         return IsShowingResults;

@@ -1551,6 +1551,7 @@ GameObject:
   - component: {fileID: 634389028}
   - component: {fileID: 634389027}
   - component: {fileID: 634389026}
+  - component: {fileID: 634389029}
   m_Layer: 0
   m_Name: "\u30E1\u30A4\u30F3\u30AB\u30E1\u30E9"
   m_TagString: MainCamera
@@ -1624,6 +1625,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &634389029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634389025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a58a21a6826943449b0ba42b48b4ac22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wheelSpeed: 2
+  moveSpeed: 0.3
+  rotateSpeed: 0.3
 --- !u!1 &642994413
 GameObject:
   m_ObjectHideFlags: 0
