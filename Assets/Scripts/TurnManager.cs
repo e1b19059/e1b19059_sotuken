@@ -218,7 +218,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.SetScoreA(0);
             PhotonNetwork.CurrentRoom.SetScoreB(0);
 
-            CreateObjects();
+            //CreateObjects();
             CreateCoin();
             photonView.RPC(nameof(RPCGameStart), RpcTarget.AllViaServer);
         }

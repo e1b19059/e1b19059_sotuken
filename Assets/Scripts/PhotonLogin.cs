@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class PhotonLogin : MonoBehaviourPunCallbacks
 {
-    public GameObject obstacle;
+    [SerializeField] private CreateField createField;
     [SerializeField] private GameObject TeamSelectPanel;
     private bool PlayingFlag;
+    private bool Joined;
 
     public static PhotonLogin instance;
 
@@ -17,6 +18,7 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
             instance = this;
         }
         PlayingFlag = false;
+        Joined = false;
     }
 
     private void Start()
@@ -37,12 +39,14 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
     // ゲームサーバーへの接続が成功した時に呼ばれるコールバック
     public override void OnJoinedRoom()
     {
+        if (!Joined)
+        {
+            createField.CreateFloor();
+            Joined = true;
+        }
         if (PhotonNetwork.IsMasterClient)
         {
-            var positionA = new Vector3(0, 0, 0);
-            var positionB = new Vector3(0, 0, 2);
-            PhotonNetwork.InstantiateRoomObject("PlayerA", positionA, Quaternion.identity);
-            PhotonNetwork.InstantiateRoomObject("PlayerB", positionB, Quaternion.identity);
+            createField.Create();
         }
     }
 
