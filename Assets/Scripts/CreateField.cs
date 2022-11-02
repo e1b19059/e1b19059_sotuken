@@ -34,7 +34,10 @@ public class CreateField : MonoBehaviourPunCallbacks
 
         //通路の生成
         //初回はゴール地点を設定する
-        PosB = MakeDungeonMap(PosA);
+        do
+        {
+            PosB = MakeDungeonMap(PosA);
+        } while (PosA == PosB);// PosAとPosBが一致しないように繰り返す
         //通路生成を繰り返して袋小路を減らす
         int[] tmpStart = PosB;
         for (int i = 0; i < max * 5; i++)
@@ -47,7 +50,7 @@ public class CreateField : MonoBehaviourPunCallbacks
         {
             for (int j = 0; j < max; j++)
             {
-                if (PosA[0] != i || PosA[1] != j || PosB[0] != i || PosB[1] != j)
+                if ((PosA[0] != i || PosA[1] != j) && (PosB[0] != i || PosB[1] != j))
                 {
                     // ランダムに壁を消す
                     if (Random.Range(0, 2) == 0) walls[i, j] = 1;
@@ -201,16 +204,7 @@ public class CreateField : MonoBehaviourPunCallbacks
             randx = Random.Range(0, max);
             randz = Random.Range(0, max);
         } while (Physics.OverlapSphere(new Vector3(randx, 0, randz), 0).Length > 0);
-        //photonView.RPC(nameof(RPCCreateCoin), RpcTarget.MasterClient, randx, randz);
-        Debug.Log("x: " + randx + ", z: " + randz);
         PhotonNetwork.InstantiateRoomObject(coin.name, new Vector3(randx, 0, randz), Quaternion.Euler(90, 0, 0));
     }
-    /*
-    // マスターをターゲットとしたRPCのみで使用
-    [PunRPC]
-    public void RPCCreateCoin(int PosX, int PosZ)
-    {
-        PhotonNetwork.InstantiateRoomObject(coin.name, new Vector3(PosX, 0, PosZ), Quaternion.Euler(90, 0, 0));
-    }*/
-
+    
 }

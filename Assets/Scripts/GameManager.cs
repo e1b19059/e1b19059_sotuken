@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] private PhotonLogin photonLogin;
     [SerializeField] private ScoreBoard scoreBoard;
     [SerializeField] private CreateField createField;
-
+    [SerializeField] private ObjectContainer container;
     [SerializeField] private TextMeshProUGUI TurnText;//ターン数の表示テキスト
     [SerializeField] private Image MeterImg;// 残り時間を示す画像
     [SerializeField] private Button FinishTurnButton;// 時間が残っていてもターンを終えるボタン
@@ -355,17 +355,36 @@ public class GameManager : MonoBehaviourPunCallbacks
         photonView.RPC(nameof(OnTurnEnds), RpcTarget.AllViaServer);
     }
 
-    /*[PunRPC]
-    public void CreateCoin()
+    public void DestroyObstacle(int direction)
     {
-        if (PhotonNetwork.IsMasterClient)
+        var enumerator = container.GetEnumerator();
+        GameObject obj = GameObject.FindWithTag($"Player{scoreBoard.GetMyTeam()}");
+        Vector3 targetPos = obj.transform.position;
+        switch (direction)
         {
-            if (Physics.OverlapSphere(new Vector3(0, -0.2f, 1), 0).Length <= 0)
+            case 0:
+                targetPos -= obj.transform.right;
+                break;
+            case 1:
+                targetPos += obj.transform.right;
+                break;
+            case 2:
+                targetPos += obj.transform.forward;
+                break;
+            case 3:
+                targetPos -= obj.transform.forward;
+                break;
+        }
+        while (enumerator.MoveNext())
+        {
+            if (enumerator.Current.gameObject.CompareTag("Destroyable") && enumerator.Current.transform.position == targetPos)
             {
-                PhotonNetwork.InstantiateRoomObject("Coin", new Vector3(0, 0, 1), Quaternion.Euler(90, 0, 0));
+                var _photonView = enumerator.Current.gameObject.GetComponent<PhotonView>();
+                _photonView.RPC("RPCDestroy", RpcTarget.MasterClient);
+                break;
             }
         }
-    }*/
+    }
 
     public bool GetShowingResults()
     {

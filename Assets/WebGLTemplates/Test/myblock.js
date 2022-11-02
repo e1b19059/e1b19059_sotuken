@@ -115,21 +115,39 @@ const obstacle = {
 }
 
 const put_obstacle = {
-  "type": "put_obstacle",
-  "message0": "%1 方向に障害物を設置",
-  "args0": [
-    {
-      "type": "input_value",
-      "name": "direction",
-      "check": "direction",
-    }
-  ],
-  "inputsInline": true,
-  "previousStatement": null,
-  "nextStatement": null,
-  "colour": 270,
-  "tooltip": "",
-  "helpUrl": ""
+    "type": "put_obstacle",
+    "message0": "%1 方向に障害物を設置",
+    "args0": [
+        {
+            "type": "input_value",
+            "name": "direction",
+            "check": "direction",
+        }
+    ],
+    "inputsInline": true,
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 270,
+    "tooltip": "",
+    "helpUrl": ""
+};
+
+const destroy_obstacle = {
+    "type": "destroy_obstacle",
+    "message0": "%1 方向の障害物を破壊する",
+    "args0": [
+        {
+            "type": "input_value",
+            "name": "direction",
+            "check": "direction",
+        }
+    ],
+    "inputsInline": true,
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 270,
+    "tooltip": "",
+    "helpUrl": ""
 };
 
 Blockly.Blocks['move_left'] = {
@@ -193,9 +211,15 @@ Blockly.Blocks['obstacle'] = {
 };
 
 Blockly.Blocks['put_obstacle'] = {
-  init: function () {
-    this.jsonInit(put_obstacle);
-  }
+    init: function () {
+        this.jsonInit(put_obstacle);
+    }
+};
+
+Blockly.Blocks['destroy_obstacle'] = {
+    init: function () {
+        this.jsonInit(destroy_obstacle);
+    }
 };
 
 Blockly.JavaScript['move_left'] = function() {
@@ -258,5 +282,11 @@ Blockly.JavaScript['obstacle'] = function () {
 Blockly.JavaScript['put_obstacle'] = function (block) {
     var value_name = Blockly.JavaScript.valueToCode(block, 'direction', Blockly.JavaScript.ORDER_ATOMIC);
     let code = 'put_obstacle(' + value_name + ');\n';
+    return code;
+};
+
+Blockly.JavaScript['destroy_obstacle'] = function (block) {
+    var value_name = Blockly.JavaScript.valueToCode(block, 'direction', Blockly.JavaScript.ORDER_ATOMIC);
+    let code = 'destroy_obstacle(' + value_name + ');\n';
     return code;
 };
