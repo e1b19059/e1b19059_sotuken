@@ -456,6 +456,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 172302013}
+  createField: {fileID: 364245644}
   container: {fileID: 812189750}
 --- !u!114 &172302011
 MonoBehaviour:
@@ -507,6 +508,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   photonLogin: {fileID: 172302008}
   scoreBoard: {fileID: 648966588}
+  createField: {fileID: 364245644}
   TurnText: {fileID: 1076697838}
   MeterImg: {fileID: 816975856}
   FinishTurnButton: {fileID: 1687529331}
@@ -1358,6 +1360,7 @@ GameObject:
   m_Component:
   - component: {fileID: 364245645}
   - component: {fileID: 364245644}
+  - component: {fileID: 364245646}
   m_Layer: 0
   m_Name: FloorContainer
   m_TagString: Untagged
@@ -1384,6 +1387,7 @@ MonoBehaviour:
   floor_white: {fileID: 6335002959016194241, guid: a8f9de1b4d9c63a4abc6c3f1c9eee558, type: 3}
   start: {fileID: 8248815905959517297, guid: a8795d3bef5270e42b2340d7b6bdca30, type: 3}
   goal: {fileID: 8248815905959517297, guid: 679875af552a4ea42b92343637b8fe4f, type: 3}
+  coin: {fileID: 833917923400658107, guid: 00a34844da16d904f81dc1646385fb4a, type: 3}
 --- !u!4 &364245645
 Transform:
   m_ObjectHideFlags: 0
@@ -1399,6 +1403,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &364245646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 364245643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 2
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &518349023
 GameObject:
   m_ObjectHideFlags: 0

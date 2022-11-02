@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private PhotonLogin photonLogin;
     [SerializeField] private ScoreBoard scoreBoard;
+    [SerializeField] private CreateField createField;
 
     [SerializeField] private TextMeshProUGUI TurnText;//ターン数の表示テキスト
     [SerializeField] private Image MeterImg;// 残り時間を示す画像
@@ -215,7 +216,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.SetScoreA(0);
             PhotonNetwork.CurrentRoom.SetScoreB(0);
 
-            CreateCoin();
+            createField.CreateCoin();
             photonView.RPC(nameof(RPCGameStart), RpcTarget.AllViaServer);
         }
     }
@@ -354,7 +355,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         photonView.RPC(nameof(OnTurnEnds), RpcTarget.AllViaServer);
     }
 
-    [PunRPC]
+    /*[PunRPC]
     public void CreateCoin()
     {
         if (PhotonNetwork.IsMasterClient)
@@ -364,7 +365,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 PhotonNetwork.InstantiateRoomObject("Coin", new Vector3(0, 0, 1), Quaternion.Euler(90, 0, 0));
             }
         }
-    }
+    }*/
 
     public bool GetShowingResults()
     {

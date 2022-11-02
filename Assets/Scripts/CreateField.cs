@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Photon.Pun;
 
-public class CreateField : MonoBehaviour
+public class CreateField : MonoBehaviourPunCallbacks
 {
     /*
     *設定する値
@@ -13,8 +13,9 @@ public class CreateField : MonoBehaviour
     public GameObject wall2;    //壁用オブジェクト
     public GameObject floor_black;    //床用オブジェクト
     public GameObject floor_white;    //床用オブジェクト
-    public GameObject start;   //スタート地点に配置するオブジェクト
-    public GameObject goal;    //ゴール地点に配置するオブジェクト
+    public GameObject start;   //プレイヤーA用オブジェクト
+    public GameObject goal;    //プレイヤーB用オブジェクト
+    public GameObject coin;     //コイン用オブジェクト
 
     /*
     *内部パラメータ
@@ -46,7 +47,7 @@ public class CreateField : MonoBehaviour
         {
             for (int j = 0; j < max; j++)
             {
-                if (PosA[0] != i || PosA[1] != j)
+                if (PosA[0] != i || PosA[1] != j || PosB[0] != i || PosB[1] != j)
                 {
                     // ランダムに壁を消す
                     if (Random.Range(0, 2) == 0) walls[i, j] = 1;
@@ -189,4 +190,27 @@ public class CreateField : MonoBehaviour
             }
         }
     }
+
+    [PunRPC]
+    public void CreateCoin()
+    {
+        int randx;
+        int randz;
+        do
+        {
+            randx = Random.Range(0, max);
+            randz = Random.Range(0, max);
+        } while (Physics.OverlapSphere(new Vector3(randx, 0, randz), 0).Length > 0);
+        //photonView.RPC(nameof(RPCCreateCoin), RpcTarget.MasterClient, randx, randz);
+        Debug.Log("x: " + randx + ", z: " + randz);
+        PhotonNetwork.InstantiateRoomObject(coin.name, new Vector3(randx, 0, randz), Quaternion.Euler(90, 0, 0));
+    }
+    /*
+    // マスターをターゲットとしたRPCのみで使用
+    [PunRPC]
+    public void RPCCreateCoin(int PosX, int PosZ)
+    {
+        PhotonNetwork.InstantiateRoomObject(coin.name, new Vector3(PosX, 0, PosZ), Quaternion.Euler(90, 0, 0));
+    }*/
+
 }
