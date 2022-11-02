@@ -5,18 +5,13 @@ using UnityEngine;
 public class PhotonLogin : MonoBehaviourPunCallbacks
 {
     [SerializeField] private CreateField createField;
+
     [SerializeField] private GameObject TeamSelectPanel;
     private bool PlayingFlag;
     private bool Joined;
 
-    public static PhotonLogin instance;
-
     private void Awake()
     {
-        if(instance == null)
-        {
-            instance = this;
-        }
         PlayingFlag = false;
         Joined = false;
     }

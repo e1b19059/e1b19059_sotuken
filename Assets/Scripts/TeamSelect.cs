@@ -7,6 +7,8 @@ using TMPro;
 
 public class TeamSelect : MonoBehaviour
 {
+    [SerializeField] private ScoreBoard scoreBoard;
+
     [SerializeField] private ToggleGroup toggleGroup;
     [SerializeField] private Toggle readyToggle;
     [SerializeField] private Button startButton;
@@ -44,7 +46,7 @@ public class TeamSelect : MonoBehaviour
                         string team = toggle.GetComponentsInChildren<Text>()
                             .First(t => t.name == "label").text.Substring(0, 1);
                         PhotonNetwork.LocalPlayer.SetTeam(team);
-                        ScoreBoard.instance.SetTeamLabel(team);
+                        scoreBoard.SetTeamLabel(team);
                     }
                     toggle.interactable = false;
                 }

@@ -60,7 +60,9 @@ public class JSONCreator : MonoBehaviourPunCallbacks
     [DllImport("__Internal")]
     private static extern void setData(string str);
 
+    [SerializeField] private GameManager gameManager;
     [SerializeField] private ObjectContainer container;
+
     private bool updateFlag = false;
 
     void Update()
@@ -98,8 +100,8 @@ public class JSONCreator : MonoBehaviourPunCallbacks
     {
         Debug.Log("stop!");
         updateFlag = false;
-        photonView.RPC(nameof(TurnManager.instance.CreateCoin), RpcTarget.MasterClient);
-        photonView.RPC(nameof(TurnManager.instance.StartTurn), RpcTarget.AllViaServer);
+        photonView.RPC(nameof(gameManager.CreateCoin), RpcTarget.MasterClient);
+        photonView.RPC(nameof(gameManager.StartTurn), RpcTarget.AllViaServer);
     }
 
 }

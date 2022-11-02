@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class ScoreBoard : MonoBehaviour
 {
+    [SerializeField] private PhotonLogin photonLogin;
+
     [SerializeField] private TextMeshProUGUI MyTeamMember = default;
     [SerializeField] private TextMeshProUGUI RivalTeamMember = default;
     [SerializeField] private TextMeshProUGUI MyTeamLabel;
@@ -19,16 +21,6 @@ public class ScoreBoard : MonoBehaviour
     private int MyScore;
     private int RivalScore;
 
-    public static ScoreBoard instance;
-
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-    }
-
     private void Start()
     {
         MyBuilder = new StringBuilder();
@@ -39,7 +31,7 @@ public class ScoreBoard : MonoBehaviour
     void Update()
     {
         // ゲーム中のみ更新する
-        if (!PhotonLogin.instance.GetPlayingFlag()) { return; }
+        if (!photonLogin.GetPlayingFlag()) { return; }
         // 0.1秒毎にテキストを更新する
         elapsedTime += Time.deltaTime;
         if (elapsedTime > 0.1f)

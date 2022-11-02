@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class PlayingUI : MonoBehaviour
 {
+    [SerializeField] private PhotonLogin photonLogin;
+
     private void Update()
     {
-        if (!PhotonLogin.instance.GetPlayingFlag())
+        if (!photonLogin.GetPlayingFlag())
         {
             transform.localScale = Vector3.zero;
         }

@@ -455,6 +455,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd21455a4226216488a9a70e4f567e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 172302013}
   container: {fileID: 812189750}
 --- !u!114 &172302011
 MonoBehaviour:
@@ -468,6 +469,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c373c8640c3dd9f43b5ef9665afec2d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 172302013}
+  scoreBoard: {fileID: 648966588}
 --- !u!114 &172302012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -502,6 +505,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 767952f24ec1ff5439882af526d24952, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  photonLogin: {fileID: 172302008}
+  scoreBoard: {fileID: 648966588}
   TurnText: {fileID: 1076697838}
   MeterImg: {fileID: 816975856}
   FinishTurnButton: {fileID: 1687529331}
@@ -1851,6 +1856,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7292c673eb4c0e246bdd2c5b77b2b8fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  photonLogin: {fileID: 172302008}
   MyTeamMember: {fileID: 1651736403}
   RivalTeamMember: {fileID: 1451194152}
   MyTeamLabel: {fileID: 927715495}
@@ -1869,6 +1875,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73a712b28411c484a991de0381b06e14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  photonLogin: {fileID: 172302008}
 --- !u!1 &708396747
 GameObject:
   m_ObjectHideFlags: 0
@@ -2177,6 +2184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73a712b28411c484a991de0381b06e14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  photonLogin: {fileID: 172302008}
 --- !u!1 &858570363
 GameObject:
   m_ObjectHideFlags: 0
@@ -3796,6 +3804,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 667eb577ad21af146abda8a784ec0741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  photonLogin: {fileID: 172302008}
+  gameManager: {fileID: 172302013}
+  scoreBoard: {fileID: 648966588}
   WinORLose: {fileID: 1051474343}
   MyResult: {fileID: 1846812642}
   RivalResult: {fileID: 708396749}
@@ -5498,6 +5509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbbfc15f82c47f540a92b804bc07f2f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreBoard: {fileID: 648966588}
   toggleGroup: {fileID: 355594091}
   readyToggle: {fileID: 1074834503}
   startButton: {fileID: 1879941821}
@@ -6396,6 +6408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73a712b28411c484a991de0381b06e14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  photonLogin: {fileID: 172302008}
 --- !u!1 &1691768252
 GameObject:
   m_ObjectHideFlags: 0

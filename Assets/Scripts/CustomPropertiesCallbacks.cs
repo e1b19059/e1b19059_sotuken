@@ -6,6 +6,9 @@ using MyConstant;
 
 public class CustomPropertiesCallbacks : MonoBehaviourPunCallbacks
 {
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private ScoreBoard scoreBoard;
+
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
         // カスタムプロパティが更新されたプレイヤーのプレイヤー名とIDをコンソールに出力する
@@ -25,18 +28,18 @@ public class CustomPropertiesCallbacks : MonoBehaviourPunCallbacks
         {
             if (prop.Key.ToString() == GrovalConst.FirstKey)
             {
-                TurnManager.instance.SetFirstToNum(prop.Value.ToString());
+                gameManager.SetFirstToNum(prop.Value.ToString());
             }
             else if (prop.Key.ToString() == GrovalConst.ScoreAKey 
                 || prop.Key.ToString() == GrovalConst.ScoreBKey)
             {     
-                if(prop.Key.ToString() == ScoreBoard.instance.GetMyTeam())
+                if(prop.Key.ToString() == scoreBoard.GetMyTeam())
                 {
-                    ScoreBoard.instance.SetMyScore((int)prop.Value);
+                    scoreBoard.SetMyScore((int)prop.Value);
                 }
                 else
                 {
-                    ScoreBoard.instance.SetRivalScore((int)prop.Value);
+                    scoreBoard.SetRivalScore((int)prop.Value);
                 }
             }
             Debug.Log($"{prop.Key}: {prop.Value}");

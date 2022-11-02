@@ -8,9 +8,10 @@ using TMPro;
 using System.Runtime.InteropServices;
 using MyConstant;
 
-public class TurnManager : MonoBehaviourPunCallbacks
+public class GameManager : MonoBehaviourPunCallbacks
 {
-    public static TurnManager instance;
+    [SerializeField] private PhotonLogin photonLogin;
+    [SerializeField] private ScoreBoard scoreBoard;
 
     [SerializeField] private TextMeshProUGUI TurnText;//ターン数の表示テキスト
     [SerializeField] private Image MeterImg;// 残り時間を示す画像
@@ -59,10 +60,6 @@ public class TurnManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
         InitFillAmount = MeterImg.fillAmount;
         LastRun = true;
         TurnFlag = false;
@@ -74,7 +71,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if (!PhotonLogin.instance.GetPlayingFlag()) { return; }
+        if (!photonLogin.GetPlayingFlag()) { return; }
         if (this.TurnText != null)
         {
             this.TurnText.text = TurnCount.ToString();//何ターン目か表示
@@ -218,7 +215,6 @@ public class TurnManager : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.SetScoreA(0);
             PhotonNetwork.CurrentRoom.SetScoreB(0);
 
-            //CreateObjects();
             CreateCoin();
             photonView.RPC(nameof(RPCGameStart), RpcTarget.AllViaServer);
         }
@@ -228,7 +224,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
     public void RPCGameStart()
     {
         Debug.Log("ゲーム開始");
-        PhotonLogin.instance.GameInit();
+        photonLogin.GameInit();
 #if !UNITY_EDITOR && UNITY_WEBGL
         initWorkspace();
 #endif
@@ -247,7 +243,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
     public void RPCGameFinish()
     {
         Debug.Log("ゲーム終了");
-        PhotonLogin.instance.Finished();
+        photonLogin.Finished();
         ShowResultButton.transform.localScale = Vector3.one;
     }
 
@@ -325,7 +321,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
         {
 #if !UNITY_EDITOR && UNITY_WEBGL
             Debug.Log("ブロックをセット");
-            if (ScoreBoard.instance.GetMyTeam() == info.Sender.GetTeam())
+            if (scoreBoard.GetMyTeam() == info.Sender.GetTeam())
             {
                 setFriendBlock(block);
             }
@@ -340,7 +336,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
     public void DoCode()
     {
         Debug.Log("実行");
-        GameObject obj = GameObject.FindGameObjectWithTag($"Player{ScoreBoard.instance.GetMyTeam()}");
+        GameObject obj = GameObject.FindGameObjectWithTag($"Player{scoreBoard.GetMyTeam()}");
         PhotonView photonView = obj.GetComponent<PhotonView>();
         if (!photonView.IsMine)
         {

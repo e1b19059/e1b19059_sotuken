@@ -7,6 +7,10 @@ using TMPro;
 
 public class ResultView : MonoBehaviour
 {
+    [SerializeField] private PhotonLogin photonLogin;
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private ScoreBoard scoreBoard;
+
     [SerializeField] private TextMeshProUGUI WinORLose;
     [SerializeField] private TextMeshProUGUI MyResult;
     [SerializeField] private TextMeshProUGUI RivalResult;
@@ -22,7 +26,7 @@ public class ResultView : MonoBehaviour
 
     private void Update()
     {
-        if (!TurnManager.instance.GetShowingResults())
+        if (!gameManager.GetShowingResults())
         {
             transform.localScale = Vector3.zero;
         }
@@ -35,16 +39,16 @@ public class ResultView : MonoBehaviour
     // ゲーム終了時に表示される結果表示ボタンで呼び出される
     public void SetResult()
     {
-        int MyScore = ScoreBoard.instance.GetMyScore();
-        int RivalScore = ScoreBoard.instance.GetRivalScore();
+        int MyScore = scoreBoard.GetMyScore();
+        int RivalScore = scoreBoard.GetRivalScore();
         MyBuilder.Clear();
-        MyBuilder.AppendLine($"Team {ScoreBoard.instance.GetMyTeam()}");
-        MyBuilder.AppendLine($"{ScoreBoard.instance.GetMyTeamMember()}\n");
+        MyBuilder.AppendLine($"Team {scoreBoard.GetMyTeam()}");
+        MyBuilder.AppendLine($"{scoreBoard.GetMyTeamMember()}\n");
         MyBuilder.AppendLine($"Total Score: {MyScore}");
         MyResult.text = MyBuilder.ToString();
         RivalBuilder.Clear();
-        RivalBuilder.AppendLine($"Team {ScoreBoard.instance.GetRivalTeam()}");
-        RivalBuilder.AppendLine($"{ScoreBoard.instance.GetRivalTeamMember()}\n");
+        RivalBuilder.AppendLine($"Team {scoreBoard.GetRivalTeam()}");
+        RivalBuilder.AppendLine($"{scoreBoard.GetRivalTeamMember()}\n");
         RivalBuilder.AppendLine($"Total Score: {RivalScore}");
         RivalResult.text = RivalBuilder.ToString();
         if (MyScore > RivalScore)
@@ -63,8 +67,8 @@ public class ResultView : MonoBehaviour
 
     public void Leave()
     {
-        TurnManager.instance.HideResult();
-        PhotonLogin.instance.Leave();
+        gameManager.HideResult();
+        photonLogin.Leave();
     }
 
 }
