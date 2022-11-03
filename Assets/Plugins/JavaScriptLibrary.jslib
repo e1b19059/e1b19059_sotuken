@@ -49,6 +49,11 @@ mergeInto(LibraryManager.library, {
 	Blockly.Xml.domToWorkspace(xml, workspace_rival);
   },
 
+	switchEditable: function(){
+		let elm = document.getElementById('readOnlyParent');
+		elm.className = 'bottom';
+	},
+
 	switchReadOnly: function(){
 		let elm = document.getElementById('readOnlyParent');
 		elm.className = 'top';

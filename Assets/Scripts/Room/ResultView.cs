@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Runtime.InteropServices;
 
 public class ResultView : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class ResultView : MonoBehaviour
 
     private StringBuilder MyBuilder;
     private StringBuilder RivalBuilder;
+
+    [DllImport("__Internal")]
+    private static extern void switchEditable();
 
     private void Start()
     {
@@ -69,6 +73,9 @@ public class ResultView : MonoBehaviour
     {
         gameManager.HideResult();
         photonLogin.Leave();
+#if !UNITY_EDITOR && UNITY_WEBGL
+            switchEditable();
+#endif
     }
 
 }
