@@ -203,7 +203,7 @@ public class CreateField : MonoBehaviourPunCallbacks
         {
             randx = Random.Range(0, max);
             randz = Random.Range(0, max);
-        } while (Physics.OverlapSphere(new Vector3(randx, 0, randz), 0).Length > 0);
+        } while (Physics.OverlapSphere(new Vector3(randx, 0.3f, randz), 0).Length > 0);
         PhotonNetwork.InstantiateRoomObject(coin.name, new Vector3(randx, 0, randz), Quaternion.Euler(90, 0, 0));
     }
     
