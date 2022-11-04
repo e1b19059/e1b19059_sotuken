@@ -34,10 +34,7 @@ public class CreateField : MonoBehaviourPunCallbacks
 
         //’Ê˜H‚Ì¶¬
         //‰‰ñ‚ÍƒS[ƒ‹’n“_‚ğİ’è‚·‚é
-        do
-        {
-            PosB = MakeDungeonMap(PosA);
-        } while (PosA == PosB);// PosA‚ÆPosB‚ªˆê’v‚µ‚È‚¢‚æ‚¤‚ÉŒJ‚è•Ô‚·
+        PosB = MakeDungeonMap(PosA);
         //’Ê˜H¶¬‚ğŒJ‚è•Ô‚µ‚Ä‘Ü¬˜H‚ğŒ¸‚ç‚·
         int[] tmpStart = PosB;
         for (int i = 0; i < max * 5; i++)
@@ -59,6 +56,20 @@ public class CreateField : MonoBehaviourPunCallbacks
                 }
             }
         }
+
+        int randx;
+        int randy;
+        while (PosA[0] == PosB[0] && PosA[1] == PosB[1])
+        {
+            randx = Random.Range(0, max);
+            randy = Random.Range(0, max);
+            PosB[0] = randx;
+            PosB[1] = randy;
+        }
+
+        // A‚ÆB‚ÌÀ•W‚É•Ç‚ª‚©‚Ô‚ç‚È‚¢‚æ‚¤‚É’Ê˜H‚É‚µ‚Ä‚¨‚­
+        walls[PosA[0], PosA[1]] = 1;
+        walls[PosB[0], PosB[1]] = 1;
 
         //ƒ}ƒbƒv‚Ìó‘Ô‚É‰‚¶‚Ä•Ç‚Æ’Ê˜H‚ğ¶¬‚·‚é
         BuildDungeon();
