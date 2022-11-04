@@ -1670,7 +1670,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wheelSpeed: 2
-  moveSpeed: 0.3
+  moveSpeed: 5
   rotateSpeed: 0.3
 --- !u!1 &642994413
 GameObject:

@@ -7,10 +7,10 @@ using UnityEngine;
 public class SceneViewCamera : MonoBehaviour
 {
     [SerializeField, Range(0.1f, 10f)]
-    private float wheelSpeed = 1f;
+    private float wheelSpeed = 2f;
 
     [SerializeField, Range(0.1f, 10f)]
-    private float moveSpeed = 0.3f;
+    private float moveSpeed = 5f;
 
     [SerializeField, Range(0.1f, 10f)]
     private float rotateSpeed = 0.3f;
@@ -50,7 +50,7 @@ public class SceneViewCamera : MonoBehaviour
         if (diff.magnitude < Vector3.kEpsilon)
             return;
 
-        if (Input.GetMouseButton(2))
+        if (Input.GetMouseButton(0))
             transform.Translate(-diff * Time.deltaTime * moveSpeed);
         else if (Input.GetMouseButton(1))
             CameraRotate(new Vector2(-diff.y, diff.x) * rotateSpeed);
