@@ -355,6 +355,28 @@ public class GameManager : MonoBehaviourPunCallbacks
         photonView.RPC(nameof(OnTurnEnds), RpcTarget.AllViaServer);
     }
 
+    public void PutObstacle(int direction)
+    {
+        GameObject obj = GameObject.FindWithTag($"Player{scoreBoard.GetMyTeam()}");
+        Vector3 targetPos = obj.transform.position;
+        switch (direction)
+        {
+            case 0:
+                targetPos -= obj.transform.right;
+                break;
+            case 1:
+                targetPos += obj.transform.right;
+                break;
+            case 2:
+                targetPos += obj.transform.forward;
+                break;
+            case 3:
+                targetPos -= obj.transform.forward;
+                break;
+        }
+        createField.photonView.RPC(nameof(createField.RPCPutObstacle), RpcTarget.MasterClient, targetPos);
+    }
+
     public void DestroyObstacle(int direction)
     {
         var enumerator = container.GetEnumerator();

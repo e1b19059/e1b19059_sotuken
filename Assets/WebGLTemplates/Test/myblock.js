@@ -134,7 +134,7 @@ const put_obstacle = {
 
 const destroy_obstacle = {
     "type": "destroy_obstacle",
-    "message0": "%1 方向の障害物を破壊する",
+    "message0": "%1 方向の障害物を破壊",
     "args0": [
         {
             "type": "input_value",

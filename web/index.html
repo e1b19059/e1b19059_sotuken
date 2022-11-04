@@ -29,6 +29,7 @@
 				<block type="get_back"></block>
 				<block type="check_point"></block>
 				<block type="obstacle"></block>
+				<block type="put_obstacle"></block>
 				<block type="destroy_obstacle"></block>
 				<block type="controls_if"></block>
 				<block type="controls_repeat_ext"></block>
@@ -92,6 +93,9 @@
 			let check_wrapper = function (direction, object) {
 				return check_point_function(direction, object);
 			};
+			let put_obstacle_wrapper = function (direction) {
+				return put_obstacle_function(direction);
+			};
 			let destroy_wrapper = function (direction) {
 				return destroy_obstacle_function(direction);
 			};
@@ -106,6 +110,7 @@
 			interpreter.setProperty(scope, 'move_forward', interpreter.createNativeFunction(move_forward_wrapper));
 			interpreter.setProperty(scope, 'move_back', interpreter.createNativeFunction(move_back_wrapper));
 			interpreter.setProperty(scope, 'check_point', interpreter.createNativeFunction(check_wrapper));
+			interpreter.setProperty(scope, 'put_obstacle', interpreter.createNativeFunction(put_obstacle_wrapper));
 			interpreter.setProperty(scope, 'destroy_obstacle', interpreter.createNativeFunction(destroy_wrapper));
 			interpreter.setProperty(scope, 'initiate', interpreter.createNativeFunction(initiate_wrapper));
 			interpreter.setProperty(scope, 'terminate', interpreter.createNativeFunction(terminate_wrapper));
@@ -145,6 +150,24 @@
 			}else{
 				return false;
 			}
+		}
+		function put_obstacle_function(direction){
+			let direction_number;
+			switch(direction){
+				case 'left':
+					direction_number = 0;
+					break;
+				case 'right':
+					direction_number = 1;
+					break;
+				case 'forward':
+					direction_number = 2;
+					break;
+				case 'back':
+					direction_number = 3;
+					break;
+			}
+			unityInstance.SendMessage("PhotonLogin", "PutObstacle", direction_number);
 		}
 		function destroy_obstacle_function(direction){
 			let direction_number;

@@ -1386,8 +1386,8 @@ MonoBehaviour:
   wall2: {fileID: 1567631149051705942, guid: 3fadd302adccb894193b00d77754bb82, type: 3}
   floor_black: {fileID: 4621270749309294192, guid: b82c04531ff1eae4ca3591f742ec651e, type: 3}
   floor_white: {fileID: 6335002959016194241, guid: a8f9de1b4d9c63a4abc6c3f1c9eee558, type: 3}
-  start: {fileID: 8248815905959517297, guid: a8795d3bef5270e42b2340d7b6bdca30, type: 3}
-  goal: {fileID: 8248815905959517297, guid: 679875af552a4ea42b92343637b8fe4f, type: 3}
+  teamA: {fileID: 8248815905959517297, guid: a8795d3bef5270e42b2340d7b6bdca30, type: 3}
+  teamB: {fileID: 8248815905959517297, guid: 679875af552a4ea42b92343637b8fe4f, type: 3}
   coin: {fileID: 833917923400658107, guid: 00a34844da16d904f81dc1646385fb4a, type: 3}
 --- !u!4 &364245645
 Transform:

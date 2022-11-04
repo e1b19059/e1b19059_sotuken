@@ -10,11 +10,11 @@ public class CreateField : MonoBehaviourPunCallbacks
     */
     public int max = 11;        //縦横のサイズ ※必ず奇数にすること
     public GameObject wall;    //壁用オブジェクト
-    public GameObject wall2;    //壁用オブジェクト
+    public GameObject wall_destroyable;    //壁用オブジェクト
     public GameObject floor_black;    //床用オブジェクト
     public GameObject floor_white;    //床用オブジェクト
-    public GameObject start;   //プレイヤーA用オブジェクト
-    public GameObject goal;    //プレイヤーB用オブジェクト
+    public GameObject teamA;   //チームA用オブジェクト
+    public GameObject teamB;    //チームB用オブジェクト
     public GameObject coin;     //コイン用オブジェクト
 
     /*
@@ -65,8 +65,8 @@ public class CreateField : MonoBehaviourPunCallbacks
 
         //スタート地点とゴール地点にオブジェクトを配置する
         //初回で取得したスタート地点とゴール地点は必ずつながっているので破綻しない
-        PhotonNetwork.InstantiateRoomObject(start.name, new Vector3(PosA[0], 0, PosA[1]), Quaternion.identity);
-        PhotonNetwork.InstantiateRoomObject(goal.name, new Vector3(PosB[0], 0, PosB[1]), Quaternion.identity);
+        PhotonNetwork.InstantiateRoomObject(teamA.name, new Vector3(PosA[0], 0, PosA[1]), Quaternion.identity);
+        PhotonNetwork.InstantiateRoomObject(teamB.name, new Vector3(PosB[0], 0, PosB[1]), Quaternion.identity);
     }
 
     /*
@@ -167,7 +167,7 @@ public class CreateField : MonoBehaviourPunCallbacks
                 }
                 else if (walls[i, j] == 2)
                 {
-                    PhotonNetwork.InstantiateRoomObject(wall2.name, new Vector3(i, 0, j), Quaternion.identity);
+                    PhotonNetwork.InstantiateRoomObject(wall_destroyable.name, new Vector3(i, 0, j), Quaternion.identity);
                 }
             }
         }
@@ -207,4 +207,13 @@ public class CreateField : MonoBehaviourPunCallbacks
         PhotonNetwork.InstantiateRoomObject(coin.name, new Vector3(randx, 0, randz), Quaternion.Euler(90, 0, 0));
     }
     
+    [PunRPC]
+    public void RPCPutObstacle(Vector3 targetPos)
+    {
+        if(Physics.OverlapSphere(targetPos, 0.3f).Length <= 0)
+        {
+            PhotonNetwork.InstantiateRoomObject(wall_destroyable.name, targetPos, Quaternion.identity);
+        }
+    }
+
 }
