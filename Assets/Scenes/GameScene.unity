@@ -472,6 +472,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 172302013}
   scoreBoard: {fileID: 648966588}
+  teamSelect: {fileID: 1543005635}
 --- !u!114 &172302012
 MonoBehaviour:
   m_ObjectHideFlags: 0

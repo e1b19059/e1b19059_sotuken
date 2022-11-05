@@ -8,6 +8,7 @@ public class CustomPropertiesCallbacks : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameManager gameManager;
     [SerializeField] private ScoreBoard scoreBoard;
+    [SerializeField] private TeamSelect teamSelect;
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
@@ -18,6 +19,10 @@ public class CustomPropertiesCallbacks : MonoBehaviourPunCallbacks
         foreach (var prop in changedProps)
         {
             Debug.Log($"{prop.Key}: {prop.Value}");
+        }
+        if (PhotonNetwork.IsMasterClient)
+        {
+            teamSelect.CheckAllReady();
         }
     }
 

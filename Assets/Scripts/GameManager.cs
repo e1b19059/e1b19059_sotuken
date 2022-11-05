@@ -196,31 +196,24 @@ public class GameManager : MonoBehaviourPunCallbacks
                 player.SetOrder(Bnum);
             }
         }
-        if (Anum == 0 || Bnum == 0)
+        // “r’†“üº‚Å‚«‚È‚­‚·‚é
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+        // —”‚ÅæUƒ`[ƒ€‚ğŒˆ‚ß‚é
+        if (Random.Range(0, 2) == 0)
         {
-            Debug.Log("l”‚ª‘«‚è‚Ä‚¢‚Ü‚¹‚ñ");
+            PhotonNetwork.CurrentRoom.SetFirst("A");
         }
         else
         {
-            // “r’†“üº‚Å‚«‚È‚­‚·‚é
-            PhotonNetwork.CurrentRoom.IsOpen = false;
-            // —”‚ÅæUƒ`[ƒ€‚ğŒˆ‚ß‚é
-            if (Random.Range(0, 2) == 0)
-            {
-                PhotonNetwork.CurrentRoom.SetFirst("A");
-            }
-            else
-            {
-                PhotonNetwork.CurrentRoom.SetFirst("B");
-            }
-            PhotonNetwork.CurrentRoom.SetANum(Anum);
-            PhotonNetwork.CurrentRoom.SetBNum(Bnum);
-            PhotonNetwork.CurrentRoom.SetScoreA(0);
-            PhotonNetwork.CurrentRoom.SetScoreB(0);
-
-            createField.CreateCoin();
-            photonView.RPC(nameof(RPCGameStart), RpcTarget.AllViaServer);
+            PhotonNetwork.CurrentRoom.SetFirst("B");
         }
+        PhotonNetwork.CurrentRoom.SetANum(Anum);
+        PhotonNetwork.CurrentRoom.SetBNum(Bnum);
+        PhotonNetwork.CurrentRoom.SetScoreA(0);
+        PhotonNetwork.CurrentRoom.SetScoreB(0);
+
+        createField.CreateCoin();
+        photonView.RPC(nameof(RPCGameStart), RpcTarget.AllViaServer);
     }
 
     [PunRPC]
