@@ -43,6 +43,7 @@ public class MatchmakingView : MonoBehaviourPunCallbacks
             if (roomList.TryGetRoomInfo(roomButton.RoomName, out var roomInfo))
             {
                 roomButton.SetPlayerCount(roomInfo.PlayerCount);
+                roomButton.SetOpen(roomInfo.IsOpen);
             }
             else
             {

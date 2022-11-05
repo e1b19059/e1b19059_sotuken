@@ -202,6 +202,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         else
         {
+            // “r’†“üº‚Å‚«‚È‚­‚·‚é
+            PhotonNetwork.CurrentRoom.IsOpen = false;
             // —”‚ÅæUƒ`[ƒ€‚ğŒˆ‚ß‚é
             if (Random.Range(0, 2) == 0)
             {

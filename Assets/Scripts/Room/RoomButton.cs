@@ -44,4 +44,9 @@ public class RoomButton : MonoBehaviour
         // ルームが満員でない時のみ、ルーム参加ボタンを押せるようにする
         button.interactable = (playerCount < MaxPlayers);
     }
+
+    public void SetOpen(bool boolean)
+    {
+        button.interactable = boolean;
+    }
 }
