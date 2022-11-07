@@ -76,8 +76,8 @@ public class CreateField : MonoBehaviourPunCallbacks
 
         //スタート地点とゴール地点にオブジェクトを配置する
         //初回で取得したスタート地点とゴール地点は必ずつながっているので破綻しない
-        PhotonNetwork.InstantiateRoomObject(teamA.name, new Vector3(PosA[0], 0, PosA[1]), Quaternion.identity);
-        PhotonNetwork.InstantiateRoomObject(teamB.name, new Vector3(PosB[0], 0, PosB[1]), Quaternion.identity);
+        PhotonNetwork.InstantiateRoomObject(teamA.name, new Vector3(PosA[0], -0.5f, PosA[1]), Quaternion.identity);
+        PhotonNetwork.InstantiateRoomObject(teamB.name, new Vector3(PosB[0], -0.5f, PosB[1]), Quaternion.identity);
     }
 
     /*

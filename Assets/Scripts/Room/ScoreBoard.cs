@@ -77,16 +77,17 @@ public class ScoreBoard : MonoBehaviour
     public void SetTeamLabel(string myTeam)
     {
         MyTeamLabel.text = myTeam;
-        MyTeamLabel.color = GameObject.FindGameObjectWithTag($"Player{MyTeamLabel.text}").GetComponent<Renderer>().material.color;
-        if (GetMyTeam() == "A")
+        if (myTeam == "A")
         {
             RivalTeamLabel.text = "B";
-            RivalTeamLabel.color = GameObject.FindGameObjectWithTag("PlayerB").GetComponent<Renderer>().material.color;
+            MyTeamLabel.color = new Color(0, 0, 1.0f, 1.0f); ;
+            RivalTeamLabel.color = new Color(1.0f, 0, 0, 1.0f); ;
         }
         else
         {
             RivalTeamLabel.text = "A";
-            RivalTeamLabel.color = GameObject.FindGameObjectWithTag("PlayerA").GetComponent<Renderer>().material.color;
+            MyTeamLabel.color = new Color(1.0f, 0, 0, 1.0f); ;
+            RivalTeamLabel.color = new Color(0, 0, 1.0f, 1.0f); ;
         }
     }
 

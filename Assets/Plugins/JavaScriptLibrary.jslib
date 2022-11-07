@@ -8,7 +8,7 @@ mergeInto(LibraryManager.library, {
 	let myInterpreter = new Interpreter(code, initFunc);
 	function stepCode() {
 		if (myInterpreter.step()) {
-			window.setTimeout(stepCode, 30);
+			window.setTimeout(stepCode, 50);
 		}
 	}
 	stepCode();

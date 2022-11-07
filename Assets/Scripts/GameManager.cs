@@ -369,6 +369,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 targetPos -= obj.transform.forward;
                 break;
         }
+        targetPos.y = 0;// プレイヤーキャラクターのy座標は足元にあるため他のオブジェクトに合わせる
         createField.photonView.RPC(nameof(createField.RPCPutObstacle), RpcTarget.MasterClient, targetPos);
     }
 
@@ -392,9 +393,10 @@ public class GameManager : MonoBehaviourPunCallbacks
                 targetPos -= obj.transform.forward;
                 break;
         }
+        targetPos.y = 0;// プレイヤーキャラクターのy座標は足元にあるため他のオブジェクトに合わせる
         while (enumerator.MoveNext())
         {
-            if (enumerator.Current.gameObject.CompareTag("Destroyable") && enumerator.Current.transform.position == targetPos)
+            if (enumerator.Current.transform.position == targetPos && enumerator.Current.gameObject.CompareTag("Destroyable"))
             {
                 var _photonView = enumerator.Current.gameObject.GetComponent<PhotonView>();
                 _photonView.RPC("RPCDestroy", RpcTarget.MasterClient);

@@ -188,9 +188,11 @@
 			unityInstance.SendMessage("PhotonLogin", "DestroyObstacle", direction_number);
 		}
 		function initiate(){
+			unityInstance.SendMessage(target_object, "Init");
 			unityInstance.SendMessage("PhotonLogin", "StartUpdate");
 		}
 		function terminate(){
+			unityInstance.SendMessage(target_object, "Termi");
 			unityInstance.SendMessage("PhotonLogin", "StopUpdate");
 			document.getElementById('readOnlyParent').className = 'bottom';
 		}
