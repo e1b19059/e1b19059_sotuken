@@ -21,6 +21,12 @@ const initFunc = function (interpreter, scope) {
 	let move_back_wrapper = function () {
 		return move_back_function();
 	};
+	let turn_left_wrapper = function () {
+		return turn_left_function();
+	};
+	let turn_right_wrapper = function () {
+		return turn_right_function();
+	};
 	let check_wrapper = function (direction, object) {
 		return check_point_function(direction, object);
 	};
@@ -40,6 +46,8 @@ const initFunc = function (interpreter, scope) {
 	interpreter.setProperty(scope, 'move_right', interpreter.createNativeFunction(move_right_wrapper));
 	interpreter.setProperty(scope, 'move_forward', interpreter.createNativeFunction(move_forward_wrapper));
 	interpreter.setProperty(scope, 'move_back', interpreter.createNativeFunction(move_back_wrapper));
+	interpreter.setProperty(scope, 'turn_left', interpreter.createNativeFunction(turn_left_wrapper));
+	interpreter.setProperty(scope, 'turn_right', interpreter.createNativeFunction(turn_right_wrapper));
 	interpreter.setProperty(scope, 'check_point', interpreter.createNativeFunction(check_wrapper));
 	interpreter.setProperty(scope, 'put_obstacle', interpreter.createNativeFunction(put_obstacle_wrapper));
 	interpreter.setProperty(scope, 'destroy_obstacle', interpreter.createNativeFunction(destroy_wrapper));
@@ -61,6 +69,14 @@ function move_forward_function() {
 
 function move_back_function() {
 	unityInstance.SendMessage(player_character, "MoveBack");
+}
+
+function turn_left_function() {
+	unityInstance.SendMessage(player_character, "TurnLeft");
+}
+
+function turn_right_function() {
+	unityInstance.SendMessage(player_character, "TurnRight");
 }
 
 function check_point_function(direction, object){			

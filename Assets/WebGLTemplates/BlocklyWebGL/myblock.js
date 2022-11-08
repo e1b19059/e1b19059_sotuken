@@ -42,6 +42,28 @@ const move_back = {
     "helpUrl": ""
 };
 
+const turn_left = {
+    "type": "turn_left",
+    "message0": "90度左回転",
+    "inputsInline": true,
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+};
+
+const turn_right = {
+    "type": "turn_right",
+    "message0": "90度右回転",
+    "inputsInline": true,
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+};
+
 const get_left = {
     "type": "get_left",
     "message0": "左",
@@ -174,6 +196,18 @@ Blockly.Blocks['move_back'] = {
     }
 };
 
+Blockly.Blocks['turn_left'] = {
+    init: function () {
+        this.jsonInit(turn_left);
+    }
+};
+
+Blockly.Blocks['turn_right'] = {
+    init: function () {
+        this.jsonInit(turn_right);
+    }
+};
+
 Blockly.Blocks['get_left'] = {
     init: function () {
         this.jsonInit(get_left);
@@ -241,6 +275,16 @@ Blockly.JavaScript['move_back'] = function() {;
     let code = 'move_back();\n';
     return code;
 }
+
+Blockly.JavaScript['turn_left'] = function() {
+    let code = 'turn_left();\n';
+    return code;
+};
+
+Blockly.JavaScript['turn_right'] = function() {
+    let code = 'turn_right();\n';
+    return code;
+};
 
 Blockly.JavaScript['get_left'] = function () {
     var code = '\'left\'';

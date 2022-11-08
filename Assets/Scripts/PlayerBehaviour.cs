@@ -84,6 +84,16 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
+    public void TurnLeft()
+    {
+        transform.Rotate(0, -90f, 0);
+    }
+    
+    public void TurnRight()
+    {
+        transform.Rotate(0, 90f, 0);
+    }
+
     public void Init()
     {
         targetPosition = transform.position;
