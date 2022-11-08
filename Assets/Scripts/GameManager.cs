@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private static extern void doCode();
 
     [DllImport("__Internal")]
-    private static extern void setTargetObject(string str);
+    private static extern void setPlayerCharacter(string str);
 
     [DllImport("__Internal")]
     private static extern string getBlockFromWorkspace();
@@ -339,7 +339,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             photonView.RequestOwnership();
         }
 #if !UNITY_EDITOR && UNITY_WEBGL
-        setTargetObject(obj.name);
+        setPlayerCharacter(obj.name);
         doCode();
 #endif
     }
