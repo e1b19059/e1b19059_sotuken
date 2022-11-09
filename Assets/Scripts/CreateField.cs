@@ -76,8 +76,10 @@ public class CreateField : MonoBehaviourPunCallbacks
 
         //スタート地点とゴール地点にオブジェクトを配置する
         //初回で取得したスタート地点とゴール地点は必ずつながっているので破綻しない
-        PhotonNetwork.InstantiateRoomObject(teamA.name, new Vector3(PosA[0], -0.5f, PosA[1]), Quaternion.identity);
-        PhotonNetwork.InstantiateRoomObject(teamB.name, new Vector3(PosB[0], -0.5f, PosB[1]), Quaternion.identity);
+        GameObject objA = PhotonNetwork.InstantiateRoomObject(teamA.name, new Vector3(PosA[0], -0.5f, PosA[1]), Quaternion.identity) as GameObject;
+        GameObject objB = PhotonNetwork.InstantiateRoomObject(teamB.name, new Vector3(PosB[0], -0.5f, PosB[1]), Quaternion.identity) as GameObject;
+        objA.name = teamA.name;
+        objB.name = teamB.name;
     }
 
     /*
@@ -174,11 +176,13 @@ public class CreateField : MonoBehaviourPunCallbacks
                 if (isOutOfRange(i, j)
                     || walls[i, j] == 0)
                 {
-                    PhotonNetwork.InstantiateRoomObject(wall.name, new Vector3(i, 0, j), Quaternion.identity);
+                    GameObject wallObj = PhotonNetwork.InstantiateRoomObject(wall.name, new Vector3(i, 0, j), Quaternion.identity) as GameObject;
+                    wallObj.name = wall.name;
                 }
                 else if (walls[i, j] == 2)
                 {
-                    PhotonNetwork.InstantiateRoomObject(wall_destroyable.name, new Vector3(i, 0, j), Quaternion.identity);
+                    GameObject obstacleObj = PhotonNetwork.InstantiateRoomObject(wall_destroyable.name, new Vector3(i, 0, j), Quaternion.identity) as GameObject;
+                    obstacleObj.name = wall_destroyable.name;
                 }
             }
         }
@@ -215,7 +219,8 @@ public class CreateField : MonoBehaviourPunCallbacks
             randx = Random.Range(0, max);
             randz = Random.Range(0, max);
         } while (Physics.OverlapSphere(new Vector3(randx, 0.3f, randz), 0).Length > 0);
-        PhotonNetwork.InstantiateRoomObject(coin.name, new Vector3(randx, 0, randz), Quaternion.Euler(90, 0, 0));
+        GameObject coinObj = PhotonNetwork.InstantiateRoomObject(coin.name, new Vector3(randx, 0, randz), Quaternion.Euler(90, 0, 0)) as GameObject;
+        coinObj.name = coin.name;
     }
     
     [PunRPC]

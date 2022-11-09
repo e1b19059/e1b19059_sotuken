@@ -27,8 +27,8 @@ const initFunc = function (interpreter, scope) {
 	let turn_right_wrapper = function () {
 		return turn_right_function();
 	};
-	let check_wrapper = function (direction, object) {
-		return check_point_function(direction, object);
+	let check_wrapper = function (direction, targetObj) {
+		return check_point_function(direction, targetObj);
 	};
 	let put_obstacle_wrapper = function (direction) {
 		return put_obstacle_function(direction);
@@ -79,28 +79,24 @@ function turn_right_function() {
 	unityInstance.SendMessage(player_character, "TurnRight");
 }
 
-function check_point_function(direction, object){			
+function check_point_function(direction, targetObj){			
 	let check_point;
 	let player = data_json.objectData.find(object => object.name == player_character);
 	switch(direction){
 		case 'left':
-			check_point = {x: -player.direction.z + player.position.x, y: 0, z: player.direction.x + player.position.z};
+			check_point = {x: -player.direction.z + player.position.x, z: player.direction.x + player.position.z};
 			break;
 		case 'right':
-			check_point = {x: player.direction.z + player.position.x, y: 0, z: -player.direction.x + player.position.z};
+			check_point = {x: player.direction.z + player.position.x, z: -player.direction.x + player.position.z};
 			break;
 		case 'forward':
-			check_point = {x: player.direction.x + player.position.x, y: 0, z: player.direction.z + player.position.z};
+			check_point = {x: player.direction.x + player.position.x, z: player.direction.z + player.position.z};
 			break;
 		case 'back':
-			check_point = {x: -player.direction.x + player.position.x, y: 0, z: -player.direction.z + player.position.z};
+			check_point = {x: -player.direction.x + player.position.x, z: -player.direction.z + player.position.z};
 			break;
 	}
-	if(data_json.objectData.find(object => object.position.x == check_point.x && object.position.z == check_point.z)){
-		return true;
-	}else{
-		return false;
-	}
+	return data_json.objectData.find(object => object.position.x == check_point.x && object.position.z == check_point.z && object.name == targetObj);
 }
 
 function put_obstacle_function(direction){

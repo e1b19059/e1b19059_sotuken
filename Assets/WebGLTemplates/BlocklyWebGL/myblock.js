@@ -136,6 +136,26 @@ const obstacle = {
     "helpUrl": ""
 }
 
+const  wall = {
+    "type": "wall",
+    "message0": "壁",
+    "inputsInline": true,
+    "output": "object",
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+}
+
+const coin = {
+    "type": "coin",
+    "message0": "コイン",
+    "inputsInline": true,
+    "output": "object",
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+}
+
 const put_obstacle = {
     "type": "put_obstacle",
     "message0": "%1 方向に障害物を設置",
@@ -244,6 +264,18 @@ Blockly.Blocks['obstacle'] = {
     }
 };
 
+Blockly.Blocks['wall'] = {
+    init: function () {
+        this.jsonInit(wall);
+    }
+};
+
+Blockly.Blocks['coin'] = {
+    init: function () {
+        this.jsonInit(coin);
+    }
+};
+
 Blockly.Blocks['put_obstacle'] = {
     init: function () {
         this.jsonInit(put_obstacle);
@@ -319,7 +351,17 @@ Blockly.JavaScript['check_point'] = function (block) {
 };
 
 Blockly.JavaScript['obstacle'] = function () {
-    let code = '\'障害物\'';
+    let code = '\'\Obstacle\'';
+    return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['wall'] = function () {
+    let code = '\'Wall\'';
+    return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['coin'] = function () {
+    let code = '\'Coin\'';
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
