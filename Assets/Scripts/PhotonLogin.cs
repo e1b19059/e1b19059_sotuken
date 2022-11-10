@@ -4,19 +4,15 @@ using UnityEngine;
 
 public class PhotonLogin : MonoBehaviourPunCallbacks
 {
-    public GameObject obstacle;
+    [SerializeField] private CreateField createField;
     [SerializeField] private GameObject TeamSelectPanel;
     private bool PlayingFlag;
-
-    public static PhotonLogin instance;
+    private bool Joined;
 
     private void Awake()
     {
-        if(instance == null)
-        {
-            instance = this;
-        }
         PlayingFlag = false;
+        Joined = false;
     }
 
     private void Start()
@@ -37,17 +33,20 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
     // ゲームサーバーへの接続が成功した時に呼ばれるコールバック
     public override void OnJoinedRoom()
     {
+        if (!Joined)
+        {
+            createField.CreateFloor();
+            Joined = true;
+        }
         if (PhotonNetwork.IsMasterClient)
         {
-            var positionA = new Vector3(0, 0, 0);
-            var positionB = new Vector3(5, 0, 5);
-            PhotonNetwork.InstantiateRoomObject("PlayerA", positionA, Quaternion.identity);
-            PhotonNetwork.InstantiateRoomObject("PlayerB", positionB, Quaternion.identity);
-
-            PhotonNetwork.InstantiateRoomObject(obstacle.name, new Vector3(-1f, 0, 1f), Quaternion.identity);
-            PhotonNetwork.InstantiateRoomObject(obstacle.name, new Vector3(1f, 0, 1f), Quaternion.identity);
-            PhotonNetwork.InstantiateRoomObject(obstacle.name, new Vector3(1f, 0, 2f), Quaternion.identity);
+            createField.Create();
         }
+    }
+
+    public void Leave()
+    {
+        PhotonNetwork.LeaveRoom();
     }
 
     public void FocusCanvas(string p_focus)
@@ -74,4 +73,10 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
         PlayingFlag = true;
         TeamSelectPanel.transform.localScale = Vector3.zero;
     }
+
+    public void Finished()
+    {
+        PlayingFlag = false;
+    }
+
 }

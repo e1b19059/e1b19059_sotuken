@@ -6,6 +6,10 @@ using MyConstant;
 
 public class CustomPropertiesCallbacks : MonoBehaviourPunCallbacks
 {
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private ScoreBoard scoreBoard;
+    [SerializeField] private TeamSelect teamSelect;
+
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
         // カスタムプロパティが更新されたプレイヤーのプレイヤー名とIDをコンソールに出力する
@@ -16,6 +20,10 @@ public class CustomPropertiesCallbacks : MonoBehaviourPunCallbacks
         {
             Debug.Log($"{prop.Key}: {prop.Value}");
         }
+        if (PhotonNetwork.IsMasterClient)
+        {
+            teamSelect.CheckAllReady();
+        }
     }
 
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
@@ -23,9 +31,21 @@ public class CustomPropertiesCallbacks : MonoBehaviourPunCallbacks
         // 更新されたルームのカスタムプロパティのペアをコンソールに出力する
         foreach (var prop in propertiesThatChanged)
         {
-            if(prop.Key.ToString() == GrovalConst.FirstKey)
+            if (prop.Key.ToString() == GrovalConst.FirstKey)
             {
-                TurnManager.instance.SetFirstToNum(prop.Value.ToString());
+                gameManager.SetFirstToNum(prop.Value.ToString());
+            }
+            else if (prop.Key.ToString() == GrovalConst.ScoreAKey 
+                || prop.Key.ToString() == GrovalConst.ScoreBKey)
+            {     
+                if(prop.Key.ToString() == scoreBoard.GetMyTeam())
+                {
+                    scoreBoard.SetMyScore((int)prop.Value);
+                }
+                else
+                {
+                    scoreBoard.SetRivalScore((int)prop.Value);
+                }
             }
             Debug.Log($"{prop.Key}: {prop.Value}");
         }
