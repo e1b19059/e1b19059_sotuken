@@ -18,22 +18,22 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] private Image MeterImg;// 残り時間を示す画像
     [SerializeField] private Button FinishTurnButton;// 時間が残っていてもターンを終えるボタン
     [SerializeField] private Button ShowResultButton;// 結果を表示するボタン
+    [SerializeField] private TextMeshProUGUI PhaseUI;//フェーズの表示テキスト
     private int TurnCount = 0;
     private int MaxTurn;
-    private int FirstOrSecond;
     private float InitFillAmount;
     private float TurnDuration = 60f;
     private float elapsedTime;
     private bool IsShowingResults;
-    private bool MiddleOfTurn;
-    private bool TurnFlag;
-    private bool NextTurnFlag;
-    private bool LastRun;
-    [SerializeField] private TextMeshProUGUI Test;
-    [SerializeField] private TextMeshProUGUI Test2;
+
+    bool IsDriver;
+    bool IsFirst;
+    bool IsFinished;
+    bool IsShare;
+    int phase;
 
     [DllImport("__Internal")]
-    private static extern void doCode();
+    private static extern bool doCode();
 
     [DllImport("__Internal")]
     private static extern void setPlayerCharacter(string str);
@@ -51,6 +51,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     private static extern void switchReadOnly();
 
     [DllImport("__Internal")]
+    private static extern void switchEditable();
+
+    [DllImport("__Internal")]
     private static extern void replaceBlock();
 
     [DllImport("__Internal")]
@@ -62,11 +65,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Awake()
     {
         InitFillAmount = MeterImg.fillAmount;
-        LastRun = true;
-        TurnFlag = false;
         elapsedTime = 0f;
         MaxTurn = 4;
-        FinishTurnButton.interactable = false;
         ShowResultButton.transform.localScale = Vector3.zero;
     }
 
@@ -77,11 +77,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             this.TurnText.text = TurnCount.ToString();//何ターン目か表示
         }
-        if (this.TurnCount > 0 && this.MeterImg != null && !IsShowingResults && MiddleOfTurn)
+        if (this.TurnCount > 0 && this.MeterImg != null && !IsShowingResults && !IsFinished)
         {
             MeterImg.fillAmount -= InitFillAmount / this.TurnDuration * Time.deltaTime;
         }
-        if (TurnFlag && MiddleOfTurn)// 自分のターンならブロックを送信する
+        if (IsShare)// ドライバーならブロックを送信する
         {
             // 0.5秒毎にブロックを送信する
             elapsedTime += Time.deltaTime;
@@ -91,90 +91,136 @@ public class GameManager : MonoBehaviourPunCallbacks
                 SendMyBlock();
             }
         }
-        if (MiddleOfTurn && MeterImg.fillAmount == 0)// タイムアウト
+        if (this.PhaseUI != null)
         {
-            OnTurnEnds();
+            this.PhaseUI.text = "phase:" + phase.ToString();
+        }
+        if (!IsFinished && MeterImg.fillAmount == 0)// タイムアウト
+        {
+            Debug.Log("タイムアウト");
+            FinishPhase();
         }
     }
 
+    // フェーズの変化に伴う処理を行うメソッド、RpcTarget.AllViaServerで呼ばれる
     [PunRPC]
-    public void OnTurnBegins()// ターン開始時
+    public void RPCPhaseChange(int _phase)
     {
-        Debug.Log("OnTurnBegins() turn: " + ++TurnCount);
-        MiddleOfTurn = true;
-        IsShowingResults = false;
-        MeterImg.fillAmount = InitFillAmount;
-        if (CheckMyTurn(0))
+        phase = _phase;
+        // phaseは1,2,3はタイムアウト時のRPC、4,5はブロックの末尾で進行させるようになっている
+        switch (_phase)
         {
-            Test.text = "Your Turn";
-            Test2.text = "Next: Other's Turn";
-            TurnFlag = true;
-            NextTurnFlag = false;
-            FinishTurnButton.interactable = true;
+            case 1:
+                // 先攻後攻にかかわらず両方のチームがプログラミングを行う。相手チームへのブロック共有はなし
+                StartTimer();
+                initWorkspace();
+                if (IsDriver = AmIDriver(TurnCount))
+                {
+                    IsShare = true;
+                    switchEditable();
+                }
+                else
+                {
+                    switchReadOnly();
+                }
+                break;
+            case 2:
+                // 先攻チームがプログラミングを行う。ブロック共有はあり(双方向)
+                // 自分のチームが先攻か確認して、ワークスペースの切り替え
+                StartTimer();
+                if (IsDriver)
+                {
+                    if (!IsFirst)
+                    {
+                        switchReadOnly();
+                        replaceBlock();
+                    }
+                }
+                break;
+            case 3:
+                // 後攻チームがプログラミングを行う。ブロック共有はあり(双方向)
+                // 自分のチームが後攻か確認して、ワークスペースの切り替え
+                StartTimer();
+                if (IsDriver)
+                {
+                    if (!IsFirst)
+                    {
+                        switchEditable();
+                    }
+                    else
+                    {
+                        switchReadOnly();
+                        replaceBlock();
+                    }
+                }
+                break;
+            case 4:
+                // 先攻チームのブロックを実行
+                // 両方のチームのワークスペースを読み込み専用にして、先攻かつドライバーならブロックを実行
+                if (IsDriver && !IsFirst)
+                {
+                    switchReadOnly();
+                    replaceBlock();
+                }
+                else if (IsDriver && IsFirst)
+                {
+                    DoCode();
+                }
+                IsShare = false;
+                break;
+            case 5:
+                // 後攻チームのブロックを実行
+                // 後攻かつドライバーならブロックを実行
+                if (IsDriver && !IsFirst)
+                {
+                    DoCode();
+                }
+                IsFirst = !IsFirst;
+                break;
+            default:
+                break;
+        }
+    }
+
+    // タイマーを開始するメソッド
+    public void StartTimer()
+    {
+        MeterImg.fillAmount = InitFillAmount;// タイマー初期化
+        IsFinished = false;// タイマー開始
+    }
+
+    // フェーズを進行させるメソッド
+    public void PhaseProgress(int _phase)
+    {
+        // phaseが5以上ならターンを終える,そうでないならphase+1
+        if (_phase >= 5)
+        {
+            FinishTurn();
         }
         else
         {
-            Test.text = "Other's Turn";
-            TurnFlag = false;
-            FinishTurnButton.interactable = false;
-#if !UNITY_EDITOR && UNITY_WEBGL
-            switchReadOnly();
-#endif
-            if (CheckMyTurn(1))
-            {
-                Test2.text = "Next: Your Turn";
-                NextTurnFlag = true;
-#if !UNITY_EDITOR && UNITY_WEBGL
-                clearRival();
-#endif
-            }
-            else
-            {
-                Test2.text = "Next: Other's Turn";
-                NextTurnFlag = false;
-            }
+            Debug.Log("PhaseProgress: " + _phase + ">>" + (_phase+1));
+            photonView.RPC(nameof(RPCPhaseChange), RpcTarget.AllViaServer, _phase + 1);
         }
     }
 
     [PunRPC]
-    public void OnTurnEnds()// ターン終了時
+    public void FinishPhase()
     {
-        Debug.Log("OnTurnEnds: " + TurnCount);
-        MiddleOfTurn = false;
-        if (TurnFlag)
-        {
-#if !UNITY_EDITOR && UNITY_WEBGL
-            replaceBlock();
-#endif
-        }
-        else if (NextTurnFlag)
-        {
-            DoCode();
-        }
+        Debug.Log("FinishPhase");
+        IsFinished = true;// タイマーを止める
+        if (PhotonNetwork.IsMasterClient) PhaseProgress(phase);
     }
 
-    // ブロック実行時、最後にJavaScriptから呼び出される関数内でRpcTarget.AllViaServerで呼ばれる
+    // ターンを開始するメソッド、RpcTarget.AllViaServerで呼ばれる
     [PunRPC]
     public void StartTurn()// ターンを開始する
     {
-        if (TurnCount >= MaxTurn)
+        Debug.Log(++TurnCount + "ターン目開始");// ターン加算
+        if (PhotonNetwork.IsMasterClient)
         {
-            if (!LastRun)
-            {
-                GameFinish();
-            }
-            if (TurnFlag && LastRun)
-            {
-                LastRun = false;
-                DoCode();
-            }
-        }
-        else
-        {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                photonView.RPC(nameof(OnTurnBegins), RpcTarget.AllViaServer);
-            }
+            createField.CreateCoin();
+            PhaseProgress(0);
         }
     }
 
@@ -187,32 +233,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             if (player.GetTeam() == "A")
             {
-                Anum++;
-                player.SetOrder(Anum);
+                player.SetOrder(Anum++);
             }
             else
             {
-                Bnum++;
-                player.SetOrder(Bnum);
+                player.SetOrder(Bnum++);
             }
         }
-        // 途中入室できなくする
-        PhotonNetwork.CurrentRoom.IsOpen = false;
-        // 乱数で先攻チームを決める
-        if (Random.Range(0, 2) == 0)
-        {
-            PhotonNetwork.CurrentRoom.SetFirst("A");
-        }
-        else
-        {
-            PhotonNetwork.CurrentRoom.SetFirst("B");
-        }
-        PhotonNetwork.CurrentRoom.SetANum(Anum);
-        PhotonNetwork.CurrentRoom.SetBNum(Bnum);
-        PhotonNetwork.CurrentRoom.SetScoreA(0);
-        PhotonNetwork.CurrentRoom.SetScoreB(0);
-
-        createField.CreateCoin();
+        PhotonNetwork.CurrentRoom.IsOpen = false;// 途中入室できなくする
+        PhotonNetwork.CurrentRoom.SetInit(Anum, Bnum);
         photonView.RPC(nameof(RPCGameStart), RpcTarget.AllViaServer);
     }
 
@@ -221,18 +250,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("ゲーム開始");
         photonLogin.GameInit();
-#if !UNITY_EDITOR && UNITY_WEBGL
         initWorkspace();
-#endif
         ShowResultButton.transform.localScale = Vector3.zero;
         TurnCount = 0;
-        LastRun = true;
+        IsFirst = (PhotonNetwork.LocalPlayer.GetTeam() == "A");
         StartTurn();
-    }
-
-    public void GameFinish()
-    {
-        photonView.RPC(nameof(RPCGameFinish), RpcTarget.AllViaServer);
     }
 
     [PunRPC]
@@ -243,89 +265,43 @@ public class GameManager : MonoBehaviourPunCallbacks
         ShowResultButton.transform.localScale = Vector3.one;
     }
 
-    // turnが自分のチームのターンか確認するメソッド
-    public bool CheckTeamTurn(int turn)
+    // そのターン自分がドライバーか確認するメソッド
+    // 同じプレイヤーが2ターン続けてドライバーになる
+    public bool AmIDriver(int turn)
     {
-        if (turn % 2 == FirstOrSecond)
+        int num;
+        if (scoreBoard.GetMyTeam() == "A")
         {
-            return true;
+            num = PhotonNetwork.CurrentRoom.GetANum();
         }
         else
         {
-            return false;
+            num = PhotonNetwork.CurrentRoom.GetBNum();
         }
+        return (turn / 2 + turn % 2 + num - 1) % num == PhotonNetwork.LocalPlayer.GetOrder();
     }
 
-    // nextターン先のターンが自分のターンか確認するメソッド
-    public bool CheckMyTurn(int next)
-    {
-        int turn = TurnCount + next;
-        if (CheckTeamTurn(turn))
-        {
-            bool odd = turn % 2 == 1 ? true : false;
-            turn /= 2;
-            if (odd)
-            {
-                turn += 1;
-            }
-            if (PhotonNetwork.LocalPlayer.GetTeam() == "A")
-            {
-                int num = PhotonNetwork.CurrentRoom.GetANum();
-                if ((turn + num - 1) % num + 1 == PhotonNetwork.LocalPlayer.GetOrder())
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                int num = PhotonNetwork.CurrentRoom.GetBNum();
-                if ((turn + num - 1) % num + 1 == PhotonNetwork.LocalPlayer.GetOrder())
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    // 自分のチームが先攻か確認して定数を取得する
-    // firstのカスタムプロパティが更新されたときに呼ばれるようになっている
-    public void SetFirstToNum(string first)
-    {
-        if (first == PhotonNetwork.LocalPlayer.GetTeam())
-        {
-            FirstOrSecond = GrovalConst.FirstNum;
-        }
-        else
-        {
-            FirstOrSecond = GrovalConst.SecondNum;
-        }
-    }
-
+    // ブロックを送信するメソッド
     public void SendMyBlock()
     {
-#if !UNITY_EDITOR && UNITY_WEBGL
         photonView.RPC(nameof(SetOthersBlock), RpcTarget.Others, getBlockFromWorkspace());
-#endif
     }
 
+    // ブロックをセットするメソッド
     [PunRPC]
     public void SetOthersBlock(string block, PhotonMessageInfo info)
     {
-        // 次のターンにドライバーになるプレイヤーにはブロックを共有しない
-        if (!NextTurnFlag)
+        // ナビゲーターなら、敵味方を判別してブロックをセットする
+        if (!IsDriver)
         {
-#if !UNITY_EDITOR && UNITY_WEBGL
-            Debug.Log("ブロックをセット");
             if (scoreBoard.GetMyTeam() == info.Sender.GetTeam())
             {
                 setFriendBlock(block);
             }
             else
             {
-                setRivalBlock(block);
+                if(phase != 1)setRivalBlock(block);
             }
-#endif
         }
     }
 
@@ -338,16 +314,28 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             photonView.RequestOwnership();
         }
-#if !UNITY_EDITOR && UNITY_WEBGL
         setPlayerCharacter(obj.name);
         doCode();
-#endif
     }
 
-    // ブロックの編集を止め、ターンを終えるメソッド
+    // ターン終了するメソッド、RpcTarget.AllViaServerで呼ばれる
+    [PunRPC]
     public void FinishTurn()
     {
-        photonView.RPC(nameof(OnTurnEnds), RpcTarget.AllViaServer);
+        if (TurnCount < MaxTurn)
+        {
+            photonView.RPC(nameof(StartTurn), RpcTarget.AllViaServer);
+        }
+        else
+        {
+            photonView.RPC(nameof(RPCGameFinish), RpcTarget.AllViaServer);
+        }
+    }
+
+    // フェーズが終わるかテストする
+    public void FinTest()
+    {
+        photonView.RPC(nameof(FinishPhase), RpcTarget.AllViaServer);
     }
 
     public void PutObstacle(int direction)

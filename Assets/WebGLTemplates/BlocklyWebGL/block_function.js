@@ -145,5 +145,4 @@ function initiate(){
 function terminate(){
 	unityInstance.SendMessage(player_character, "Termi");
 	unityInstance.SendMessage("PhotonLogin", "StopUpdate");
-	document.getElementById('readOnlyParent').className = 'bottom';
 }

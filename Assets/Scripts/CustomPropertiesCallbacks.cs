@@ -6,7 +6,6 @@ using MyConstant;
 
 public class CustomPropertiesCallbacks : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private GameManager gameManager;
     [SerializeField] private ScoreBoard scoreBoard;
     [SerializeField] private TeamSelect teamSelect;
 
@@ -19,10 +18,10 @@ public class CustomPropertiesCallbacks : MonoBehaviourPunCallbacks
         foreach (var prop in changedProps)
         {
             Debug.Log($"{prop.Key}: {prop.Value}");
-        }
-        if (PhotonNetwork.IsMasterClient)
-        {
-            teamSelect.CheckAllReady();
+            if (PhotonNetwork.IsMasterClient && prop.Key.ToString() == GrovalConst.TeamKey)
+            {
+                teamSelect.CheckAllReady();
+            }
         }
     }
 
@@ -31,11 +30,7 @@ public class CustomPropertiesCallbacks : MonoBehaviourPunCallbacks
         // 更新されたルームのカスタムプロパティのペアをコンソールに出力する
         foreach (var prop in propertiesThatChanged)
         {
-            if (prop.Key.ToString() == GrovalConst.FirstKey)
-            {
-                gameManager.SetFirstToNum(prop.Value.ToString());
-            }
-            else if (prop.Key.ToString() == GrovalConst.ScoreAKey 
+            if (prop.Key.ToString() == GrovalConst.ScoreAKey 
                 || prop.Key.ToString() == GrovalConst.ScoreBKey)
             {     
                 if(prop.Key.ToString() == scoreBoard.GetMyTeam())
