@@ -192,6 +192,24 @@ const destroy_obstacle = {
     "helpUrl": ""
 };
 
+const custom_number = {
+  "type": "custom_number",
+  "message0": "%1",
+  "args0": [
+    {
+      "type": "field_number",
+      "name": "number",
+      "value": 3,
+      "min": 0,
+      "max": 5
+    }
+  ],
+  "output": "Number",
+  "colour": 230,
+  "tooltip": "",
+  "helpUrl": ""
+}
+
 Blockly.Blocks['move_left'] = {
     init: function () {
         this.jsonInit(move_left);
@@ -288,6 +306,12 @@ Blockly.Blocks['destroy_obstacle'] = {
     }
 };
 
+Blockly.Blocks['custom_number'] = {
+    init: function () {
+        this.jsonInit(custom_number);
+    }
+};
+
 Blockly.JavaScript['move_left'] = function() {
     let code = 'move_left();\n';
     return code;
@@ -375,4 +399,12 @@ Blockly.JavaScript['destroy_obstacle'] = function (block) {
     var value_name = Blockly.JavaScript.valueToCode(block, 'direction', Blockly.JavaScript.ORDER_ATOMIC);
     let code = 'destroy_obstacle(' + value_name + ');\n';
     return code;
+};
+
+Blockly.JavaScript['custom_number'] = function(block) {
+  var number_name = block.getFieldValue('number');
+  // TODO: Assemble JavaScript into code variable.
+  var code = number_name;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
 };
