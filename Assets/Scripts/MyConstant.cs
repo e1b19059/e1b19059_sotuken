@@ -14,6 +14,7 @@ namespace MyConstant
         public const string FirstKey = "f";
         public const string ScoreAKey = "A";
         public const string ScoreBKey = "B";
+        public const string TeamKey = "t";
         public const int FirstNum = 1;
         public const int SecondNum = 0;
     }

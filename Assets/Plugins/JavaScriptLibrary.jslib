@@ -62,7 +62,6 @@ mergeInto(LibraryManager.library, {
 	replaceBlock: function(){
 		workspace_readOnly.clear();
 		Blockly.Xml.domToWorkspace(Blockly.Xml.workspaceToDom(workspace), workspace_readOnly);
-		workspace.clear();
 	},
 
 	clearRival: function(){

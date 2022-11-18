@@ -1,3 +1,8 @@
+let player_character;
+let data_json;
+let code;
+let myInterpreter;
+
 document.addEventListener('click', function (e) {
 	if (e.target.id == "unity-canvas") {
 		// Clicked on canvas 
@@ -145,5 +150,4 @@ function initiate(){
 function terminate(){
 	unityInstance.SendMessage(player_character, "Termi");
 	unityInstance.SendMessage("PhotonLogin", "StopUpdate");
-	document.getElementById('readOnlyParent').className = 'bottom';
 }

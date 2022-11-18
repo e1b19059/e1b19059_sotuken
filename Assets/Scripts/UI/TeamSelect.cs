@@ -57,7 +57,6 @@ public class TeamSelect : MonoBehaviour
             foreach (Toggle toggle in toggles)
             {
                 toggle.interactable = true;
-
             }
         }
     }
@@ -67,7 +66,6 @@ public class TeamSelect : MonoBehaviour
         if (readyToggle.interactable)
         {
             Debug.Log("ƒLƒƒƒ“ƒZƒ‹");
-            PhotonNetwork.LocalPlayer.SetTeam(null);
             toggleGroup.ActiveToggles().First().isOn = false;
             readyToggle.isOn = false;
             readyToggle.interactable = false;

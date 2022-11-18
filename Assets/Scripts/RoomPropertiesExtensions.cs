@@ -16,11 +16,6 @@ public static class RoomPropertiesExtensions
         return (room.CustomProperties[GrovalConst.BNumKey] is int number) ? number : 0;
     }
 
-    public static string GetFirst(this Room room)
-    {
-        return (room.CustomProperties[GrovalConst.FirstKey] is string first) ? first : string.Empty;
-    }
-
     public static int GetScoreA(this Room room)
     {
         return (room.CustomProperties[GrovalConst.ScoreAKey] is int score) ? score : 0;
@@ -45,13 +40,6 @@ public static class RoomPropertiesExtensions
         propsToSet.Clear();
     }
 
-    public static void SetFirst(this Room room, string first)
-    {
-        propsToSet[GrovalConst.FirstKey] = first;
-        room.SetCustomProperties(propsToSet);
-        propsToSet.Clear();
-    }
-
     public static void SetScoreA(this Room room, int score)
     {
         propsToSet[GrovalConst.ScoreAKey] = score;
@@ -66,4 +54,13 @@ public static class RoomPropertiesExtensions
         propsToSet.Clear();
     }
 
+    public static void SetInit(this Room room, int Anum, int Bnum)
+    {
+        propsToSet[GrovalConst.ANumKey] = Anum;
+        propsToSet[GrovalConst.BNumKey] = Bnum;
+        propsToSet[GrovalConst.ScoreAKey] = 0;
+        propsToSet[GrovalConst.ScoreBKey] = 0;
+        room.SetCustomProperties(propsToSet);
+        propsToSet.Clear();
+    }
 }
