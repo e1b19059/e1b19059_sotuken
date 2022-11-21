@@ -375,17 +375,17 @@ Blockly.JavaScript['check_point'] = function (block) {
 };
 
 Blockly.JavaScript['obstacle'] = function () {
-    let code = '\'\Obstacle\'';
+    let code = '\'\Obstacle(Clone)\'';
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
 Blockly.JavaScript['wall'] = function () {
-    let code = '\'Wall\'';
+    let code = '\'Wall(Clone)\'';
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
 Blockly.JavaScript['coin'] = function () {
-    let code = '\'Coin\'';
+    let code = '\'Coin(Clone)\'';
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
@@ -403,8 +403,6 @@ Blockly.JavaScript['destroy_obstacle'] = function (block) {
 
 Blockly.JavaScript['custom_number'] = function(block) {
   var number_name = block.getFieldValue('number');
-  // TODO: Assemble JavaScript into code variable.
   var code = number_name;
-  // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
