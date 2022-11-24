@@ -13,12 +13,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] private PhotonLogin photonLogin;
     [SerializeField] private ScoreBoard scoreBoard;
     [SerializeField] private CreateField createField;
+    [SerializeField] private PhaseUIManager phaseUIManager;
     [SerializeField] private ObjectContainer container;
-    [SerializeField] private TextMeshProUGUI TurnText;//ターン数の表示テキスト
-    [SerializeField] private Image MeterImg;// 残り時間を示す画像
+    [SerializeField] private Slider timer;// タイムバー
     [SerializeField] private Button FinishTurnButton;// 時間が残っていてもターンを終えるボタン
     [SerializeField] private Button ShowResultButton;// 結果を表示するボタン
-    [SerializeField] private TextMeshProUGUI PhaseUI;//フェーズの表示テキスト
     private int TurnCount = 0;
     private int MaxTurn;
     private float InitFillAmount;
@@ -31,6 +30,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     bool IsFinished;
     bool IsShare;
     int phase;
+    int TrapNumber = 3;
 
     [DllImport("__Internal")]
     private static extern bool doCode();
@@ -64,7 +64,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        InitFillAmount = MeterImg.fillAmount;
         elapsedTime = 0f;
         MaxTurn = 4;
         ShowResultButton.transform.localScale = Vector3.zero;
@@ -73,13 +72,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Update()
     {
         if (!photonLogin.GetPlayingFlag()) { return; }
-        if (this.TurnText != null)
+        if (this.TurnCount > 0 && this.timer != null && !IsShowingResults && !IsFinished)
         {
-            this.TurnText.text = TurnCount.ToString();//何ターン目か表示
-        }
-        if (this.TurnCount > 0 && this.MeterImg != null && !IsShowingResults && !IsFinished)
-        {
-            MeterImg.fillAmount -= InitFillAmount / this.TurnDuration * Time.deltaTime;
+            //経過時間から移動量の計算
+            float amount = Time.deltaTime / TurnDuration;
+
+            //スライダーの移動量を代入
+            timer.value -= amount;
         }
         if (IsShare)// ドライバーならブロックを送信する
         {
@@ -91,11 +90,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 SendMyBlock();
             }
         }
-        if (this.PhaseUI != null)
-        {
-            this.PhaseUI.text = "phase:" + phase.ToString();
-        }
-        if (!IsFinished && MeterImg.fillAmount == 0)// タイムアウト
+        if (!IsFinished && timer.value == 0)// タイムアウト
         {
             Debug.Log("タイムアウト");
             FinishPhase();
@@ -107,6 +102,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void RPCPhaseChange(int _phase)
     {
         phase = _phase;
+        phaseUIManager.SetHighLight(_phase);
         // phaseは1,2,3はタイムアウト時のRPC、4,5はブロックの末尾で進行させるようになっている
         switch (_phase)
         {
@@ -122,6 +118,14 @@ public class GameManager : MonoBehaviourPunCallbacks
                 else
                 {
                     switchReadOnly();
+                }
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    for(int i = 0; i < TrapNumber; i++)
+                    {
+                        var point = createField.CreatePoint();
+                        photonView.RPC(nameof(RPCCreateTrap), RpcTarget.AllViaServer, point.x, point.z, point.type);
+                    }
                 }
                 break;
             case 2:
@@ -185,7 +189,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     // タイマーを開始するメソッド
     public void StartTimer()
     {
-        MeterImg.fillAmount = InitFillAmount;// タイマー初期化
+        timer.value = 1.0f;// タイマー初期化
         IsFinished = false;// タイマー開始
     }
 
@@ -199,7 +203,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            Debug.Log("PhaseProgress: " + _phase + ">>" + (_phase+1));
+            Debug.Log("PhaseProgress: " + _phase + ">>" + (_phase + 1));
             photonView.RPC(nameof(RPCPhaseChange), RpcTarget.AllViaServer, _phase + 1);
         }
     }
@@ -217,6 +221,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void StartTurn()// ターンを開始する
     {
         Debug.Log(++TurnCount + "ターン目開始");// ターン加算
+        phaseUIManager.Init(scoreBoard.GetMyTeam(), IsFirst);
         if (PhotonNetwork.IsMasterClient)
         {
             createField.CreateCoin();
@@ -262,6 +267,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("ゲーム終了");
         photonLogin.Finished();
+        phaseUIManager.Finished();
         ShowResultButton.transform.localScale = Vector3.one;
     }
 
@@ -300,7 +306,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
             else
             {
-                if(phase != 1)setRivalBlock(block);
+                if (phase != 1) setRivalBlock(block);
             }
         }
     }
@@ -308,7 +314,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void DoCode()
     {
         Debug.Log("実行");
-        GameObject obj = GameObject.FindGameObjectWithTag($"Player{scoreBoard.GetMyTeam()}");
+        GameObject obj = GameObject.FindWithTag($"Player{scoreBoard.GetMyTeam()}");
         PhotonView photonView = obj.GetComponent<PhotonView>();
         if (!photonView.IsMine)
         {
@@ -318,10 +324,14 @@ public class GameManager : MonoBehaviourPunCallbacks
         doCode();
     }
 
-    // ターン終了するメソッド、RpcTarget.AllViaServerで呼ばれる
-    [PunRPC]
+    // ターン終了するメソッド
     public void FinishTurn()
     {
+        if (TurnCount % 2 == 0)
+        {
+            photonView.RPC(nameof(RPCTrapDestroy), RpcTarget.AllViaServer);
+        }
+
         if (TurnCount < MaxTurn)
         {
             photonView.RPC(nameof(StartTurn), RpcTarget.AllViaServer);
@@ -329,6 +339,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         else
         {
             photonView.RPC(nameof(RPCGameFinish), RpcTarget.AllViaServer);
+        }
+    }
+
+    // トラップオブジェクトを破壊するメソッド、RpcTarget.AllViaServerで呼ばれる
+    [PunRPC]
+    public void RPCTrapDestroy()
+    {
+        if (!IsDriver) { return; }
+        GameObject[] traps = GameObject.FindGameObjectsWithTag("Trap");
+        foreach (var trap in traps)
+        {
+            Destroy(trap);
         }
     }
 
@@ -358,7 +380,11 @@ public class GameManager : MonoBehaviourPunCallbacks
                 break;
         }
         targetPos.y = 0;// プレイヤーキャラクターのy座標は足元にあるため他のオブジェクトに合わせる
-        createField.photonView.RPC(nameof(createField.RPCPutObstacle), RpcTarget.MasterClient, targetPos);
+        
+        if (Physics.OverlapSphere(targetPos, 0.3f).Length <= 0)
+        {
+            createField.photonView.RPC(nameof(createField.RPCPutObstacle), RpcTarget.MasterClient, targetPos);
+        }
     }
 
     public void DestroyObstacle(int direction)
@@ -391,6 +417,12 @@ public class GameManager : MonoBehaviourPunCallbacks
                 break;
             }
         }
+    }
+
+    [PunRPC]
+    public void RPCCreateTrap(int posX, int posZ, int trapType)
+    {
+        if (IsDriver) createField.CreateTrap(posX, posZ, trapType);
     }
 
     public bool GetShowingResults()
