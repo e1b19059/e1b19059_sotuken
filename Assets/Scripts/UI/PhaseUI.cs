@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PhaseUI : MonoBehaviour
 {
     Animator animator;
     Image image;
+    [SerializeField] private TextMeshProUGUI phaseLabel;
     bool currentPhase;
     bool CurrentPhase
     { // プロパティ
@@ -30,11 +32,13 @@ public class PhaseUI : MonoBehaviour
     public void OnHighLight()
     {
         CurrentPhase = true;
+        phaseLabel.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     public void OffHighLight()
     {
         CurrentPhase = false;
+        phaseLabel.color = new Color(0, 0, 0, 1.0f);
     }
 
     public void SetTeamColor(Color _color)

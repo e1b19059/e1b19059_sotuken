@@ -426,6 +426,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b0507e76571117448db47a5c441656d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  phaseLabel: {fileID: 1000208718}
 --- !u!95 &155334497
 Animator:
   serializedVersion: 4
@@ -1137,8 +1138,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2091,6 +2092,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b0507e76571117448db47a5c441656d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  phaseLabel: {fileID: 258536083}
 --- !u!95 &479693647
 Animator:
   serializedVersion: 4
@@ -2968,6 +2970,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b0507e76571117448db47a5c441656d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  phaseLabel: {fileID: 1242504265}
 --- !u!95 &782221076
 Animator:
   serializedVersion: 4
@@ -3799,8 +3802,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -4519,6 +4522,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b0507e76571117448db47a5c441656d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  phaseLabel: {fileID: 1526109886}
 --- !u!95 &1074878863
 Animator:
   serializedVersion: 4
@@ -4891,8 +4895,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -6568,6 +6572,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b0507e76571117448db47a5c441656d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  phaseLabel: {fileID: 1607042212}
 --- !u!95 &1522269192
 Animator:
   serializedVersion: 4
@@ -6655,8 +6660,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -7052,8 +7057,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
