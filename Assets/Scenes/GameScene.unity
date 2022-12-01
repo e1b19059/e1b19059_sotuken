@@ -1886,6 +1886,7 @@ MonoBehaviour:
   teamB: {fileID: 1340578814931192539, guid: 26c8144204b7c2441bb7d8eb1e61c272, type: 3}
   coin: {fileID: 833917923400658107, guid: 00a34844da16d904f81dc1646385fb4a, type: 3}
   trap: {fileID: 7221132491063750319, guid: bb8dffc9bcfff104baf20617adaa4a36, type: 3}
+  bomb: {fileID: 3509797065261204065, guid: 58719ff71dee4bf4e8403d1a72f673e7, type: 3}
   trapContainer: {fileID: 1648405457}
 --- !u!4 &364245645
 Transform:

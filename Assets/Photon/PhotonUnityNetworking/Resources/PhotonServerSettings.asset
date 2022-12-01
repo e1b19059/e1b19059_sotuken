@@ -55,6 +55,8 @@ MonoBehaviour:
   - CreateTrap
   - RPCCreateTrap
   - RPCTrapDestroy
+  - RPCPutObject
+  - RPCTextChange
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
