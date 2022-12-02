@@ -398,22 +398,22 @@ Blockly.JavaScript['check_point'] = function (block) {
 };
 
 Blockly.JavaScript['wall'] = function () {
-    let code = '\'Wall(Clone)\'';
+    let code = '\'Wall\'';
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
 Blockly.JavaScript['coin'] = function () {
-    let code = '\'Coin(Clone)\'';
+    let code = '\'Coin\'';
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
 Blockly.JavaScript['obstacle'] = function () {
-    let code = '\'\Obstacle(Clone)\'';
+    let code = '\'\Obstacle\'';
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
 Blockly.JavaScript['bomb'] = function () {
-    let code = '\'Bomb(Clone)\'';
+    let code = '\'Bomb\'';
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 

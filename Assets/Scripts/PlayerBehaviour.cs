@@ -1,12 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.InteropServices;
+using System;
 
 public class PlayerBehaviour : MonoBehaviour
 {
     private int speed = 3;
     private Vector3 targetPosition;
     private bool moving;
+
+    [DllImport("__Internal")]
+    private static extern void setPlayerPos(int x, int z);
+
+    [DllImport("__Internal")]
+    private static extern void setPlayerDir(int x, int z);
 
     Animator animator;
     bool running; // フィールド
@@ -41,6 +49,8 @@ public class PlayerBehaviour : MonoBehaviour
             {
                 Running = false; // プロパティによるセット
             }
+            setPlayerPos((int)Math.Round(transform.position.x), (int)Math.Round(transform.position.z));
+            setPlayerDir((int)transform.forward.x, (int)transform.forward.z);
         }
     }
 

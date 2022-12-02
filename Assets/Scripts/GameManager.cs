@@ -407,7 +407,6 @@ public class GameManager : MonoBehaviourPunCallbacks
                 targetPos -= obj.transform.forward;
                 break;
         }
-        Debug.Log("direction: " + direction);
         targetPos.y = 0;// プレイヤーキャラクターのy座標は足元にあるため他のオブジェクトに合わせる
         if (Physics.OverlapSphere(targetPos, 0.3f).Length <= 0)
         {
@@ -415,23 +414,23 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public void DestroyObstacle(int direction)
+    public void DestroyObstacle(string direction)
     {
         var enumerator = container.GetEnumerator();
         GameObject obj = GameObject.FindWithTag($"Player{scoreBoard.GetMyTeam()}");
         Vector3 targetPos = obj.transform.position;
         switch (direction)
         {
-            case 0:
+            case "left":
                 targetPos -= obj.transform.right;
                 break;
-            case 1:
+            case "right":
                 targetPos += obj.transform.right;
                 break;
-            case 2:
+            case "forward":
                 targetPos += obj.transform.forward;
                 break;
-            case 3:
+            case "back":
                 targetPos -= obj.transform.forward;
                 break;
         }

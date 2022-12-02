@@ -18,6 +18,14 @@ mergeInto(LibraryManager.library, {
 		player_character = UTF8ToString(obj);
 	},
 
+	setPlayerPos: function(x, z){
+		playerPos = {x: x, z: z};
+	},
+
+	setPlayerDir: function(x, z){
+		playerDir = {x: x, z: z};
+	},
+
 	setData: function(data){
 		data_json = JSON.parse(UTF8ToString(data));
 	},
