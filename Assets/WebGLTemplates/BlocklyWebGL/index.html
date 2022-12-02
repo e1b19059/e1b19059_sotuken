@@ -18,29 +18,49 @@
 		<div class="middle">
 			<div id="blocklyDiv" style="width: 650px; height: 640px;"></div> <!-- ワークスペースを用意 -->
 			<xml id="toolbox" style="display: none">
-				<block type="move_left"></block>
-				<block type="move_right"></block>
-				<block type="move_forward"></block>
-				<block type="move_back"></block>
-				<block type="turn_left"></block>
-				<block type="turn_right"></block>
-				<block type="get_left"></block>
-				<block type="get_right"></block>
-				<block type="get_forward"></block>
-				<block type="get_back"></block>
-				<block type="check_point"></block>
-				<block type="obstacle"></block>
-				<block type="wall"></block>
-				<block type="coin"></block>
-				<block type="put_obstacle"></block>
-				<block type="destroy_obstacle"></block>
-				<block type="controls_if"></block>
-				<block type="controls_repeat_ext"></block>
-				<block type="logic_compare"></block>
-				<block type="custom_number"></block>
-				<block type="math_arithmetic"></block>
-				<block type="text"></block>
-				<block type="text_print"></block>
+				<category name="キャラ操作" colour="230">
+					<block type="move_left"></block>
+					<block type="move_right"></block>
+					<block type="move_forward"></block>
+					<block type="move_back"></block>
+					<block type="turn_left"></block>
+					<block type="turn_right"></block>
+				</category>
+				<category name="値" colour="230">
+					<block type="get_left"></block>
+					<block type="get_right"></block>
+					<block type="get_forward"></block>
+					<block type="get_back"></block>
+					<block type="obstacle"></block>
+					<block type="wall"></block>
+					<block type="coin"></block>
+					<block type="bomb"></block>
+					<block type="custom_number"></block>
+				</category>
+				<category name="条件分岐" colour="230">
+					<block type="controls_if"></block>
+					<block type="controls_ifelse"></block>
+					<block type="check_point"></block>
+				</category>
+				<category name="繰り返し" colour="230">
+					<block type="controls_repeat_ext">
+						<value name="TIMES">
+							<block type="custom_number">
+								<field name="number">3</field>
+							</block>
+						</value>
+					</block>
+				</category>
+				<category name="行動" colour="230">
+					<block type="put_object"></block>
+					<block type="destroy_obstacle"></block>					
+				</category>
+				<category name="爆弾" colour="230" custom="BOMB_VARIABLE"></category>
+				<category name="その他" colour="230">
+					<block type="logic_compare"></block>
+					<block type="math_arithmetic"></block>
+					<block type="text"></block>
+				</category>
 			</xml>
 		</div>
 		<div id="readOnlyParent" class="bottom">
@@ -64,9 +84,37 @@
 		}).then(x => unityInstance = x);
 	</script>
 	<script>
-		let workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox'), scrollbars: true, trashcan: true, maxBlocks: 9, maxInstances: {'move_left': 3, 'move_right': 3, 'move_forward': 3, 'move_back': 3, 'controls_repeat_ext': 2 }});
+		let workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox'), scrollbars: true, trashcan: true, maxBlocks: 20, maxInstances: {'move_left': 3, 'move_right': 3, 'move_forward': 3, 'move_back': 3, 'controls_repeat_ext': 2 }});
 		let workspace_readOnly = Blockly.inject('blocklyDiv_readOnly', { readOnly:true, scrollbars: true });
 		let workspace_rival = Blockly.inject('blocklyDiv_rival', { readOnly:true, scrollbars: true });
+		workspace.registerButtonCallback ("createBombVariableButtonPressed", () => {
+			const name = window.prompt ("変数名を入力");
+			if (name && name !== "") {
+				workspace.createVariable (name, "Number");
+			}
+		});
+		workspace.registerToolboxCategoryCallback ("BOMB_VARIABLE", (workspace) => {
+			const xmlStringList = ["<button text=\"爆弾の作成...\" callbackKey=\"createBombVariableButtonPressed\"></button>"];
+
+			// 既存の数値型変数をリストアップ
+			const bombVariables = workspace.getVariablesOfType ("Number");
+
+			// 既存の数値型変数があったら代入ブロックとそれぞれの取得ブロックを追加
+			if (bombVariables.length > 0) {
+				let field = "<field name=\"VAR\" id=\"" + bombVariables[0].getId () + "\" variabletype=\"Number\"></field>";
+				xmlStringList.push ("<block type=\"variables_set_bomb\">" + field + "</block>");
+				for (const numberVariable of bombVariables) {
+					field = "<field name=\"VAR\" id=\"" + numberVariable.getId () + "\" variabletype=\"Number\">0</field>";
+					xmlStringList.push ("<block type=\"variables_get_bomb\">" + field + "</block>");
+				}
+			}
+
+			// xmlStringListをElement型にする
+			const xmlElementList = xmlStringList.map ((item) => {
+				return Blockly.Xml.textToDom (item);
+			});
+			return xmlElementList;
+		});
 	</script>
 </body>
 

@@ -35,8 +35,8 @@ const initFunc = function (interpreter, scope) {
 	let check_wrapper = function (direction, targetObj) {
 		return check_point_function(direction, targetObj);
 	};
-	let put_obstacle_wrapper = function (direction) {
-		return put_obstacle_function(direction);
+	let put_object_wrapper = function (direction, object) {
+		return put_object_function(direction, object);
 	};
 	let destroy_wrapper = function (direction) {
 		return destroy_obstacle_function(direction);
@@ -47,6 +47,9 @@ const initFunc = function (interpreter, scope) {
 	let terminate_wrapper = function () {
 		return terminate();
 	};
+	let get_bomb_wrapper = function (turn) {
+		return get_bomb(turn);
+	};
 	interpreter.setProperty(scope, 'move_left', interpreter.createNativeFunction(move_left_wrapper));
 	interpreter.setProperty(scope, 'move_right', interpreter.createNativeFunction(move_right_wrapper));
 	interpreter.setProperty(scope, 'move_forward', interpreter.createNativeFunction(move_forward_wrapper));
@@ -54,10 +57,11 @@ const initFunc = function (interpreter, scope) {
 	interpreter.setProperty(scope, 'turn_left', interpreter.createNativeFunction(turn_left_wrapper));
 	interpreter.setProperty(scope, 'turn_right', interpreter.createNativeFunction(turn_right_wrapper));
 	interpreter.setProperty(scope, 'check_point', interpreter.createNativeFunction(check_wrapper));
-	interpreter.setProperty(scope, 'put_obstacle', interpreter.createNativeFunction(put_obstacle_wrapper));
+	interpreter.setProperty(scope, 'put_object', interpreter.createNativeFunction(put_object_wrapper));
 	interpreter.setProperty(scope, 'destroy_obstacle', interpreter.createNativeFunction(destroy_wrapper));
 	interpreter.setProperty(scope, 'initiate', interpreter.createNativeFunction(initiate_wrapper));
 	interpreter.setProperty(scope, 'terminate', interpreter.createNativeFunction(terminate_wrapper));
+	interpreter.setProperty(scope, 'get_bomb', interpreter.createNativeFunction(get_bomb_wrapper));
 }
 
 function move_left_function() {
@@ -104,23 +108,25 @@ function check_point_function(direction, targetObj){
 	return data_json.objectData.find(object => object.position.x == check_point.x && object.position.z == check_point.z && object.name == targetObj);
 }
 
-function put_obstacle_function(direction){
-	let direction_number;
-	switch(direction){
+function put_object_function(direction, object){
+	if(object == "Obstacle(Clone)"){
+		unityInstance.SendMessage("PhotonLogin", "PutObstacle", direction);
+	}else{
+		switch(direction){
 		case 'left':
-			direction_number = 0;
+			unityInstance.SendMessage("PhotonLogin", "PutObjectLeft", object);
 			break;
 		case 'right':
-			direction_number = 1;
+			unityInstance.SendMessage("PhotonLogin", "PutObjectRight", object);
 			break;
 		case 'forward':
-			direction_number = 2;
+			unityInstance.SendMessage("PhotonLogin", "PutObjectForward", object);
 			break;
 		case 'back':
-			direction_number = 3;
+			unityInstance.SendMessage("PhotonLogin", "PutObjectBack", object);
 			break;
+		}
 	}
-	unityInstance.SendMessage("PhotonLogin", "PutObstacle", direction_number);
 }
 
 function destroy_obstacle_function(direction){
@@ -150,4 +156,8 @@ function initiate(){
 function terminate(){
 	unityInstance.SendMessage(player_character, "Termi");
 	unityInstance.SendMessage("PhotonLogin", "StopUpdate");
+}
+
+function get_bomb(turn){
+	return turn;
 }

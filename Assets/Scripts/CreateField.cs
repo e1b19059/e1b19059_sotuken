@@ -18,6 +18,7 @@ public class CreateField : MonoBehaviourPunCallbacks
     public GameObject teamB;    //チームB用オブジェクト
     public GameObject coin;     //コイン用オブジェクト
     public GameObject trap;     //トラップ用オブジェクト
+    public GameObject bomb;     //爆弾用オブジェクト
     public GameObject trapContainer;
     /*
     *内部パラメータ
@@ -219,6 +220,14 @@ public class CreateField : MonoBehaviourPunCallbacks
     public void RPCPutObstacle(Vector3 targetPos)
     {
         PhotonNetwork.InstantiateRoomObject(wall_destroyable.name, targetPos, Quaternion.identity);
+    }
+
+    [PunRPC]
+    public void RPCPutObject(Vector3 targetPos, int turn)
+    {
+        targetPos.y = -0.4f;
+        GameObject bombObj = Instantiate(bomb, targetPos, bomb.transform.rotation) as GameObject;
+        bombObj.GetComponentInChildren<TextMeshPro>().text = turn.ToString();
     }
 
     // マスターのみ実行

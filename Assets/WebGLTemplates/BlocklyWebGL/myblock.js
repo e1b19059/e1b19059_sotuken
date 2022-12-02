@@ -116,7 +116,10 @@ const check_point = {
         {
             "type": "input_value",
             "name": "object",
-            "check": "object",
+            "check": [
+                "object1",
+                "object3"
+            ]
         }
     ],
     "inputsInline": true,
@@ -130,17 +133,17 @@ const obstacle = {
     "type": "obstacle",
     "message0": "障害物",
     "inputsInline": true,
-    "output": "object",
+    "output": "object3",
     "colour": 230,
     "tooltip": "",
     "helpUrl": ""
 }
 
-const  wall = {
+const wall = {
     "type": "wall",
     "message0": "壁",
     "inputsInline": true,
-    "output": "object",
+    "output": "object1",
     "colour": 230,
     "tooltip": "",
     "helpUrl": ""
@@ -150,28 +153,45 @@ const coin = {
     "type": "coin",
     "message0": "コイン",
     "inputsInline": true,
-    "output": "object",
+    "output": "object1",
     "colour": 230,
     "tooltip": "",
     "helpUrl": ""
 }
 
-const put_obstacle = {
-    "type": "put_obstacle",
-    "message0": "%1 方向に障害物を設置",
+const bomb = {
+    "type": "bomb",
+    "message0": "爆弾",
+    "inputsInline": true,
+    "output": "object1",
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+}
+
+const put_object = {
+    "type": "put_object",
+    "message0": "%1 方向に %2 を設置",
     "args0": [
         {
             "type": "input_value",
             "name": "direction",
-            "check": "direction",
+            "check": "direction"
+        },
+        {
+            "type": "input_value",
+            "name": "object",
+            "check": [
+                "object2",
+                "object3"
+            ]
         }
     ],
     "inputsInline": true,
     "previousStatement": null,
     "nextStatement": null,
     "colour": 270,
-    "tooltip": "",
-    "helpUrl": ""
+    "tooltip": "爆弾変数または障害物を設置できる"
 };
 
 const destroy_obstacle = {
@@ -209,6 +229,44 @@ const custom_number = {
   "tooltip": "",
   "helpUrl": ""
 }
+
+const variables_get_bomb = {
+    "type": "variables_get_bomb",
+    "message0": "爆弾 %1",
+    "args0": [
+        {
+            "type": "field_variable",
+            "name": "VAR",
+            "variable": "%{BKY_VARIABLES_DEFAULT_NAME}",
+            "variableTypes": ["Number"],
+            "defaultType": "Number"
+        }
+    ],
+    "output": "object2",
+    "tooltip": "爆弾の変数"
+};
+
+const variables_set_bomb = {
+    "type": "variables_set_bomb",
+    "message0": "爆弾 %1 の爆発を %2 ターン後に設定",
+    "args0": [
+        {
+            "type": "field_variable",
+            "name": "VAR",
+            "variable": "%{BKY_VARIABLES_DEFAULT_NAME}",
+            "variableTypes": ["Number"],
+            "defaultType": "Number"
+        },
+        {
+            "type": "input_value",
+            "name": "VALUE",
+            "check": "Number"
+        }
+    ],
+    "previousStatement": null,
+    "nextStatement": null,
+    "tooltip": "何ターン後に爆発するか設定できる"
+};
 
 Blockly.Blocks['move_left'] = {
     init: function () {
@@ -294,9 +352,15 @@ Blockly.Blocks['coin'] = {
     }
 };
 
-Blockly.Blocks['put_obstacle'] = {
+Blockly.Blocks['bomb'] = {
     init: function () {
-        this.jsonInit(put_obstacle);
+        this.jsonInit(bomb);
+    }
+};
+
+Blockly.Blocks['put_object'] = {
+    init: function () {
+        this.jsonInit(put_object);
     }
 };
 
@@ -309,6 +373,18 @@ Blockly.Blocks['destroy_obstacle'] = {
 Blockly.Blocks['custom_number'] = {
     init: function () {
         this.jsonInit(custom_number);
+    }
+};
+
+Blockly.Blocks["variables_get_bomb"] = {
+    init: function(){
+        this.jsonInit(variables_get_bomb);
+    }
+};
+
+Blockly.Blocks["variables_set_bomb"] = {
+    init: function(){
+        this.jsonInit(variables_set_bomb);
     }
 };
 
@@ -389,10 +465,20 @@ Blockly.JavaScript['coin'] = function () {
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['put_obstacle'] = function (block) {
-    var value_name = Blockly.JavaScript.valueToCode(block, 'direction', Blockly.JavaScript.ORDER_ATOMIC);
-    let code = 'put_obstacle(' + value_name + ');\n';
-    return code;
+Blockly.JavaScript['bomb'] = function () {
+    let code = '\'Bomb(Clone)\'';
+    return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['put_object'] = function (block) {
+    var direction = Blockly.JavaScript.valueToCode(block, 'direction', Blockly.JavaScript.ORDER_ATOMIC) || null;
+    var object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+    console.log("object: " + object);
+    if(direction == null){
+        return '\n';
+    }else{
+        return 'put_object(' + direction + ', ' + object + ');\n';
+    }
 };
 
 Blockly.JavaScript['destroy_obstacle'] = function (block) {
@@ -402,7 +488,20 @@ Blockly.JavaScript['destroy_obstacle'] = function (block) {
 };
 
 Blockly.JavaScript['custom_number'] = function(block) {
-  var number_name = block.getFieldValue('number');
-  var code = number_name;
-  return [code, Blockly.JavaScript.ORDER_NONE];
+    var number_value = block.getFieldValue('number');
+    var code = number_value;
+    return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['variables_get_bomb'] = function(block) {
+    var variable_bomb = Blockly.JavaScript.nameDB_.getName(block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+    var code = 'get_bomb(' + variable_bomb + ')';
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['variables_set_bomb'] = function(block) {
+    const argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_ASSIGNMENT) || '0';
+    const varName = Blockly.JavaScript.nameDB_.getName(
+      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+    return varName + ' = ' + argument0 + ';\n';
 };
