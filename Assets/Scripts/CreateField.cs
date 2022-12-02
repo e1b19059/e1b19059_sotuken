@@ -223,12 +223,19 @@ public class CreateField : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
+    public void RPCPutBomb(Vector3 targetPos)
+    {
+        targetPos.y = -0.1f;
+        PhotonNetwork.InstantiateRoomObject(bomb.name, targetPos, bomb.transform.rotation);
+    }
+
+    /*[PunRPC]
     public void RPCPutObject(Vector3 targetPos, int turn)
     {
         targetPos.y = -0.4f;
         GameObject bombObj = Instantiate(bomb, targetPos, bomb.transform.rotation) as GameObject;
         bombObj.GetComponentInChildren<TextMeshPro>().text = turn.ToString();
-    }
+    }*/
 
     // マスターのみ実行
     public (int x, int z, int type) CreatePoint()

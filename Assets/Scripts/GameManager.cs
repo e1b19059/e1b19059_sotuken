@@ -388,47 +388,30 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public void PutObjectLeft(int turn)
+    public void PutBomb(string direction)
     {
         GameObject obj = GameObject.FindWithTag($"Player{scoreBoard.GetMyTeam()}");
-        Vector3 targetPos = obj.transform.position - obj.transform.right;
-        targetPos.y = 0;
-        if (Physics.OverlapSphere(targetPos, 0.3f).Length <= 0)
+        Vector3 targetPos = obj.transform.position;
+        switch (direction)
         {
-            createField.photonView.RPC(nameof(createField.RPCPutObject), RpcTarget.AllViaServer, targetPos, turn);
+            case "left":
+                targetPos -= obj.transform.right;
+                break;
+            case "right":
+                targetPos += obj.transform.right;
+                break;
+            case "forward":
+                targetPos += obj.transform.forward;
+                break;
+            case "back":
+                targetPos -= obj.transform.forward;
+                break;
         }
-    }
-
-    public void PutObjectRight(int turn)
-    {
-        GameObject obj = GameObject.FindWithTag($"Player{scoreBoard.GetMyTeam()}");
-        Vector3 targetPos = obj.transform.position + obj.transform.right;
-        targetPos.y = 0;
+        Debug.Log("direction: " + direction);
+        targetPos.y = 0;// プレイヤーキャラクターのy座標は足元にあるため他のオブジェクトに合わせる
         if (Physics.OverlapSphere(targetPos, 0.3f).Length <= 0)
         {
-            createField.photonView.RPC(nameof(createField.RPCPutObject), RpcTarget.AllViaServer, targetPos, turn);
-        }
-    }
-
-    public void PutObjectForward(int turn)
-    {
-        GameObject obj = GameObject.FindWithTag($"Player{scoreBoard.GetMyTeam()}");
-        Vector3 targetPos = obj.transform.position + obj.transform.forward;
-        targetPos.y = 0;
-        if (Physics.OverlapSphere(targetPos, 0.3f).Length <= 0)
-        {
-            createField.photonView.RPC(nameof(createField.RPCPutObject), RpcTarget.AllViaServer, targetPos, turn);
-        }
-    }
-
-    public void PutObjectBack(int turn)
-    {
-        GameObject obj = GameObject.FindWithTag($"Player{scoreBoard.GetMyTeam()}");
-        Vector3 targetPos = obj.transform.position - obj.transform.forward;
-        targetPos.y = 0;
-        if (Physics.OverlapSphere(targetPos, 0.3f).Length <= 0)
-        {
-            createField.photonView.RPC(nameof(createField.RPCPutObject), RpcTarget.AllViaServer, targetPos, turn);
+            createField.photonView.RPC(nameof(createField.RPCPutBomb), RpcTarget.MasterClient, targetPos);
         }
     }
 

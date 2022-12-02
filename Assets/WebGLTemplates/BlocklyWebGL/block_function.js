@@ -47,9 +47,6 @@ const initFunc = function (interpreter, scope) {
 	let terminate_wrapper = function () {
 		return terminate();
 	};
-	let get_bomb_wrapper = function (turn) {
-		return get_bomb(turn);
-	};
 	interpreter.setProperty(scope, 'move_left', interpreter.createNativeFunction(move_left_wrapper));
 	interpreter.setProperty(scope, 'move_right', interpreter.createNativeFunction(move_right_wrapper));
 	interpreter.setProperty(scope, 'move_forward', interpreter.createNativeFunction(move_forward_wrapper));
@@ -61,7 +58,6 @@ const initFunc = function (interpreter, scope) {
 	interpreter.setProperty(scope, 'destroy_obstacle', interpreter.createNativeFunction(destroy_wrapper));
 	interpreter.setProperty(scope, 'initiate', interpreter.createNativeFunction(initiate_wrapper));
 	interpreter.setProperty(scope, 'terminate', interpreter.createNativeFunction(terminate_wrapper));
-	interpreter.setProperty(scope, 'get_bomb', interpreter.createNativeFunction(get_bomb_wrapper));
 }
 
 function move_left_function() {
@@ -109,6 +105,7 @@ function check_point_function(direction, targetObj){
 }
 
 function put_object_function(direction, object){
+	/*
 	if(object == "Obstacle(Clone)"){
 		unityInstance.SendMessage("PhotonLogin", "PutObstacle", direction);
 	}else{
@@ -126,6 +123,11 @@ function put_object_function(direction, object){
 			unityInstance.SendMessage("PhotonLogin", "PutObjectBack", object);
 			break;
 		}
+	}*/
+	if(object.includes("Obstacle")){
+		unityInstance.SendMessage("PhotonLogin", "PutObstacle", direction);
+	}else if(object.includes("Bomb")){
+		unityInstance.SendMessage("PhotonLogin", "PutBomb", direction);
 	}
 }
 
@@ -156,8 +158,4 @@ function initiate(){
 function terminate(){
 	unityInstance.SendMessage(player_character, "Termi");
 	unityInstance.SendMessage("PhotonLogin", "StopUpdate");
-}
-
-function get_bomb(turn){
-	return turn;
 }

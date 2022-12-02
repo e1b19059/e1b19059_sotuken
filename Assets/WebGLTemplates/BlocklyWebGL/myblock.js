@@ -118,22 +118,12 @@ const check_point = {
             "name": "object",
             "check": [
                 "object1",
-                "object3"
+                "object2"
             ]
         }
     ],
     "inputsInline": true,
     "output": "Boolean",
-    "colour": 230,
-    "tooltip": "",
-    "helpUrl": ""
-}
-
-const obstacle = {
-    "type": "obstacle",
-    "message0": "障害物",
-    "inputsInline": true,
-    "output": "object3",
     "colour": 230,
     "tooltip": "",
     "helpUrl": ""
@@ -159,11 +149,21 @@ const coin = {
     "helpUrl": ""
 }
 
+const obstacle = {
+    "type": "obstacle",
+    "message0": "障害物",
+    "inputsInline": true,
+    "output": "object2",
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+}
+
 const bomb = {
     "type": "bomb",
     "message0": "爆弾",
     "inputsInline": true,
-    "output": "object1",
+    "output": "object2",
     "colour": 230,
     "tooltip": "",
     "helpUrl": ""
@@ -181,10 +181,7 @@ const put_object = {
         {
             "type": "input_value",
             "name": "object",
-            "check": [
-                "object2",
-                "object3"
-            ]
+            "check": "object2"
         }
     ],
     "inputsInline": true,
@@ -229,44 +226,6 @@ const custom_number = {
   "tooltip": "",
   "helpUrl": ""
 }
-
-const variables_get_bomb = {
-    "type": "variables_get_bomb",
-    "message0": "爆弾 %1",
-    "args0": [
-        {
-            "type": "field_variable",
-            "name": "VAR",
-            "variable": "%{BKY_VARIABLES_DEFAULT_NAME}",
-            "variableTypes": ["Number"],
-            "defaultType": "Number"
-        }
-    ],
-    "output": "object2",
-    "tooltip": "爆弾の変数"
-};
-
-const variables_set_bomb = {
-    "type": "variables_set_bomb",
-    "message0": "爆弾 %1 の爆発を %2 ターン後に設定",
-    "args0": [
-        {
-            "type": "field_variable",
-            "name": "VAR",
-            "variable": "%{BKY_VARIABLES_DEFAULT_NAME}",
-            "variableTypes": ["Number"],
-            "defaultType": "Number"
-        },
-        {
-            "type": "input_value",
-            "name": "VALUE",
-            "check": "Number"
-        }
-    ],
-    "previousStatement": null,
-    "nextStatement": null,
-    "tooltip": "何ターン後に爆発するか設定できる"
-};
 
 Blockly.Blocks['move_left'] = {
     init: function () {
@@ -334,12 +293,6 @@ Blockly.Blocks['check_point'] = {
     }
 };
 
-Blockly.Blocks['obstacle'] = {
-    init: function () {
-        this.jsonInit(obstacle);
-    }
-};
-
 Blockly.Blocks['wall'] = {
     init: function () {
         this.jsonInit(wall);
@@ -349,6 +302,12 @@ Blockly.Blocks['wall'] = {
 Blockly.Blocks['coin'] = {
     init: function () {
         this.jsonInit(coin);
+    }
+};
+
+Blockly.Blocks['obstacle'] = {
+    init: function () {
+        this.jsonInit(obstacle);
     }
 };
 
@@ -373,18 +332,6 @@ Blockly.Blocks['destroy_obstacle'] = {
 Blockly.Blocks['custom_number'] = {
     init: function () {
         this.jsonInit(custom_number);
-    }
-};
-
-Blockly.Blocks["variables_get_bomb"] = {
-    init: function(){
-        this.jsonInit(variables_get_bomb);
-    }
-};
-
-Blockly.Blocks["variables_set_bomb"] = {
-    init: function(){
-        this.jsonInit(variables_set_bomb);
     }
 };
 
@@ -450,11 +397,6 @@ Blockly.JavaScript['check_point'] = function (block) {
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['obstacle'] = function () {
-    let code = '\'\Obstacle(Clone)\'';
-    return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
 Blockly.JavaScript['wall'] = function () {
     let code = '\'Wall(Clone)\'';
     return [code, Blockly.JavaScript.ORDER_NONE];
@@ -465,6 +407,11 @@ Blockly.JavaScript['coin'] = function () {
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
+Blockly.JavaScript['obstacle'] = function () {
+    let code = '\'\Obstacle(Clone)\'';
+    return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
 Blockly.JavaScript['bomb'] = function () {
     let code = '\'Bomb(Clone)\'';
     return [code, Blockly.JavaScript.ORDER_NONE];
@@ -472,7 +419,7 @@ Blockly.JavaScript['bomb'] = function () {
 
 Blockly.JavaScript['put_object'] = function (block) {
     var direction = Blockly.JavaScript.valueToCode(block, 'direction', Blockly.JavaScript.ORDER_ATOMIC) || null;
-    var object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+    var object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_ATOMIC) || null;
     console.log("object: " + object);
     if(direction == null){
         return '\n';
@@ -491,17 +438,4 @@ Blockly.JavaScript['custom_number'] = function(block) {
     var number_value = block.getFieldValue('number');
     var code = number_value;
     return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['variables_get_bomb'] = function(block) {
-    var variable_bomb = Blockly.JavaScript.nameDB_.getName(block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
-    var code = 'get_bomb(' + variable_bomb + ')';
-    return [code, Blockly.JavaScript.ORDER_ATOMIC];
-};
-
-Blockly.JavaScript['variables_set_bomb'] = function(block) {
-    const argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_ASSIGNMENT) || '0';
-    const varName = Blockly.JavaScript.nameDB_.getName(
-      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
-    return varName + ' = ' + argument0 + ';\n';
 };
