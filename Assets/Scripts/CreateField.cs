@@ -226,7 +226,7 @@ public class CreateField : MonoBehaviourPunCallbacks
     public void RPCPutBomb(Vector3 targetPos)
     {
         targetPos.y = -0.1f;
-        PhotonNetwork.InstantiateRoomObject(bomb.name, targetPos, bomb.transform.rotation);
+        Instantiate(bomb, targetPos, bomb.transform.rotation);
     }
 
     // マスターのみ実行

@@ -327,6 +327,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     // ターン終了するメソッド
     public void FinishTurn()
     {
+        photonView.RPC(nameof(RPCExplodeBomb), RpcTarget.AllViaServer);
+
         if (TurnCount % 2 == 0)
         {
             photonView.RPC(nameof(RPCTrapDestroy), RpcTarget.AllViaServer);
@@ -339,6 +341,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         else
         {
             photonView.RPC(nameof(RPCGameFinish), RpcTarget.AllViaServer);
+        }
+    }
+
+    [PunRPC]
+    private void RPCExplodeBomb()
+    {
+        Debug.Log("RPCExplodeBomb");
+        GameObject[] bombs = GameObject.FindGameObjectsWithTag("Bomb");
+        foreach (var bomb in bombs)
+        {
+            Debug.Log("bomb:" + bomb.transform.position);
+            bomb.GetComponent<BombManager>().Explode();
         }
     }
 
@@ -410,7 +424,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         targetPos.y = 0;// プレイヤーキャラクターのy座標は足元にあるため他のオブジェクトに合わせる
         if (Physics.OverlapSphere(targetPos, 0.3f).Length <= 0)
         {
-            createField.photonView.RPC(nameof(createField.RPCPutBomb), RpcTarget.MasterClient, targetPos);
+            createField.photonView.RPC(nameof(createField.RPCPutBomb), RpcTarget.AllViaServer, targetPos);
         }
     }
 

@@ -8,6 +8,8 @@ TagManager:
   - PlayerB
   - Destroyable
   - Trap
+  - Explosion
+  - Bomb
   layers:
   - Default
   - TransparentFX
@@ -17,7 +19,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - FieldObject
   - 
   - 
   - 
