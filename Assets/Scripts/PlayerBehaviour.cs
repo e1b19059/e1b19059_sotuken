@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Runtime.InteropServices;
-using System;
+using UnityEngine;
+using Photon.Pun;
 
 public class PlayerBehaviour : MonoBehaviour
 {
@@ -51,6 +52,26 @@ public class PlayerBehaviour : MonoBehaviour
             }
             setPlayerPos((int)Math.Round(transform.position.x), (int)Math.Round(transform.position.z));
             setPlayerDir((int)transform.forward.x, (int)transform.forward.z);
+        }
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("îöî≠Ç…ìñÇΩÇ¡ÇΩ");
+        if (PhotonNetwork.IsMasterClient)
+        {
+            if (other.CompareTag("Explosion"))
+            {
+                Debug.Log("ÉXÉRÉAå∏ÇÁÇµÇΩ");
+                if (gameObject.name.Substring(0, 1) == "A")// êÊì™ÇÃï∂éöÇî‰är
+                {
+                    PhotonNetwork.CurrentRoom.SetScoreA(PhotonNetwork.CurrentRoom.GetScoreA() - 1);
+                }
+                else
+                {
+                    PhotonNetwork.CurrentRoom.SetScoreB(PhotonNetwork.CurrentRoom.GetScoreB() - 1);
+                }
+            }
         }
     }
 
