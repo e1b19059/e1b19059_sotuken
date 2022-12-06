@@ -46,12 +46,12 @@ public class ResultView : MonoBehaviour
         int MyScore = scoreBoard.GetMyScore();
         int RivalScore = scoreBoard.GetRivalScore();
         MyBuilder.Clear();
-        MyBuilder.AppendLine($"Team {scoreBoard.GetMyTeam()}");
+        MyBuilder.AppendLine($"チーム {scoreBoard.GetMyTeam()}");
         MyBuilder.AppendLine($"{scoreBoard.GetMyTeamMember()}\n");
         MyBuilder.AppendLine($"Total Score: {MyScore}");
         MyResult.text = MyBuilder.ToString();
         RivalBuilder.Clear();
-        RivalBuilder.AppendLine($"Team {scoreBoard.GetRivalTeam()}");
+        RivalBuilder.AppendLine($"チーム {scoreBoard.GetRivalTeam()}");
         RivalBuilder.AppendLine($"{scoreBoard.GetRivalTeamMember()}\n");
         RivalBuilder.AppendLine($"Total Score: {RivalScore}");
         RivalResult.text = RivalBuilder.ToString();

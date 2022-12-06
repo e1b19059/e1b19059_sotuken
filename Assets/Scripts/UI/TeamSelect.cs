@@ -42,7 +42,7 @@ public class TeamSelect : MonoBehaviour
                 {
                     if (toggle.isOn == true)
                     {
-                        string team = toggle.GetComponentsInChildren<Text>()
+                        string team = toggle.GetComponentsInChildren<TextMeshProUGUI>()
                             .First(t => t.name == "label").text.Substring(0, 1);
                         PhotonNetwork.LocalPlayer.SetTeam(team);
                         scoreBoard.SetTeamLabel(team);
