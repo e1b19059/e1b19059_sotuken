@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             // 0.5秒毎にブロックを送信する
             elapsedTime += Time.deltaTime;
-            if (elapsedTime > 0.5f)
+            if (elapsedTime > 1f)
             {
                 elapsedTime = 0f;
                 SendMyBlock();
@@ -138,6 +138,8 @@ public class GameManager : MonoBehaviourPunCallbacks
                     {
                         switchReadOnly();
                         replaceBlock();
+                        SendMyBlock();
+                        IsShare = false;
                     }
                 }
                 break;
@@ -150,11 +152,14 @@ public class GameManager : MonoBehaviourPunCallbacks
                     if (!IsFirst)
                     {
                         switchEditable();
+                        IsShare = true;
                     }
                     else
                     {
                         switchReadOnly();
                         replaceBlock();
+                        SendMyBlock();
+                        IsShare = false;
                     }
                 }
                 break;
@@ -347,11 +352,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RPCExplodeBomb()
     {
-        Debug.Log("RPCExplodeBomb");
         GameObject[] bombs = GameObject.FindGameObjectsWithTag("Bomb");
         foreach (var bomb in bombs)
         {
-            Debug.Log("bomb:" + bomb.transform.position);
             bomb.GetComponent<BombManager>().Explode();
         }
     }
@@ -393,7 +396,6 @@ public class GameManager : MonoBehaviourPunCallbacks
                 targetPos -= obj.transform.forward;
                 break;
         }
-        Debug.Log("direction: " + direction);
         targetPos.y = 0;// プレイヤーキャラクターのy座標は足元にあるため他のオブジェクトに合わせる
         
         if (Physics.OverlapSphere(targetPos, 0.3f).Length <= 0)

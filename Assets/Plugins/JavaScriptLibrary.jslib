@@ -4,8 +4,8 @@ mergeInto(LibraryManager.library, {
 	},
 
 	doCode: function(){
-		let code = 'initiate();\n' + Blockly.JavaScript.workspaceToCode(workspace_readOnly) + 'terminate();\n';
-		let myInterpreter = new Interpreter(code, initFunc);
+		code = 'initiate();\n' + Blockly.JavaScript.workspaceToCode(workspace_readOnly) + 'terminate();\n';
+		myInterpreter = new Interpreter(code, initFunc);
 		function stepCode() {
 			if (myInterpreter.step()) {
 				window.setTimeout(stepCode, 50);

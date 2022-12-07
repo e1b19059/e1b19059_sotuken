@@ -1,13 +1,0 @@
-Font: M PLUS 1 Code  Style: Medium
-Point Size: 48   SP/PD Ratio: 10.4%
-
-Characters included: 246/247
-Missing characters: 1
-Excluded characters: 0
-
-Characters missing from font file:
-----------------------------------------
-ID: 13	Hex: D	Char []
-
-Characters excluded from packing:
-----------------------------------------
