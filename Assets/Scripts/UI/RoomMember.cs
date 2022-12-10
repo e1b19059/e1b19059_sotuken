@@ -36,7 +36,7 @@ public class RoomMember : MonoBehaviour
     {
         var players = PhotonNetwork.PlayerList;
         builder.Clear();
-        builder.AppendLine("RoomMember");
+        builder.AppendLine("ƒ‹[ƒ€ƒƒ“ƒo[");
         foreach (var player in players)
         {
             builder.AppendLine($"{player.NickName}({player.ActorNumber}) - {player.GetTeam()}");

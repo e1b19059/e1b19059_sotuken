@@ -4,8 +4,8 @@ mergeInto(LibraryManager.library, {
 	},
 
 	doCode: function(){
-		let code = 'initiate();\n' + Blockly.JavaScript.workspaceToCode(workspace_readOnly) + 'terminate();\n';
-		let myInterpreter = new Interpreter(code, initFunc);
+		code = 'initiate();\n' + Blockly.JavaScript.workspaceToCode(workspace_readOnly) + 'terminate();\n';
+		myInterpreter = new Interpreter(code, initFunc);
 		function stepCode() {
 			if (myInterpreter.step()) {
 				window.setTimeout(stepCode, 50);
@@ -16,6 +16,14 @@ mergeInto(LibraryManager.library, {
 
 	setPlayerCharacter: function(obj){
 		player_character = UTF8ToString(obj);
+	},
+
+	setPlayerPos: function(x, z){
+		playerPos = {x: x, z: z};
+	},
+
+	setPlayerDir: function(x, z){
+		playerDir = {x: x, z: z};
 	},
 
 	setData: function(data){

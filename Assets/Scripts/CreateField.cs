@@ -223,11 +223,10 @@ public class CreateField : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void RPCPutObject(Vector3 targetPos, int turn)
+    public void RPCPutBomb(Vector3 targetPos)
     {
-        targetPos.y = -0.4f;
-        GameObject bombObj = Instantiate(bomb, targetPos, bomb.transform.rotation) as GameObject;
-        bombObj.GetComponentInChildren<TextMeshPro>().text = turn.ToString();
+        targetPos.y = -0.1f;
+        Instantiate(bomb, targetPos, bomb.transform.rotation);
     }
 
     // マスターのみ実行

@@ -55,7 +55,6 @@
 					<block type="put_object"></block>
 					<block type="destroy_obstacle"></block>					
 				</category>
-				<category name="爆弾" colour="230" custom="BOMB_VARIABLE"></category>
 				<category name="その他" colour="230">
 					<block type="logic_compare"></block>
 					<block type="math_arithmetic"></block>
@@ -87,34 +86,6 @@
 		let workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox'), scrollbars: true, trashcan: true, maxBlocks: 20, maxInstances: {'move_left': 3, 'move_right': 3, 'move_forward': 3, 'move_back': 3, 'controls_repeat_ext': 2 }});
 		let workspace_readOnly = Blockly.inject('blocklyDiv_readOnly', { readOnly:true, scrollbars: true });
 		let workspace_rival = Blockly.inject('blocklyDiv_rival', { readOnly:true, scrollbars: true });
-		workspace.registerButtonCallback ("createBombVariableButtonPressed", () => {
-			const name = window.prompt ("変数名を入力");
-			if (name && name !== "") {
-				workspace.createVariable (name, "Number");
-			}
-		});
-		workspace.registerToolboxCategoryCallback ("BOMB_VARIABLE", (workspace) => {
-			const xmlStringList = ["<button text=\"爆弾の作成...\" callbackKey=\"createBombVariableButtonPressed\"></button>"];
-
-			// 既存の数値型変数をリストアップ
-			const bombVariables = workspace.getVariablesOfType ("Number");
-
-			// 既存の数値型変数があったら代入ブロックとそれぞれの取得ブロックを追加
-			if (bombVariables.length > 0) {
-				let field = "<field name=\"VAR\" id=\"" + bombVariables[0].getId () + "\" variabletype=\"Number\"></field>";
-				xmlStringList.push ("<block type=\"variables_set_bomb\">" + field + "</block>");
-				for (const numberVariable of bombVariables) {
-					field = "<field name=\"VAR\" id=\"" + numberVariable.getId () + "\" variabletype=\"Number\">0</field>";
-					xmlStringList.push ("<block type=\"variables_get_bomb\">" + field + "</block>");
-				}
-			}
-
-			// xmlStringListをElement型にする
-			const xmlElementList = xmlStringList.map ((item) => {
-				return Blockly.Xml.textToDom (item);
-			});
-			return xmlElementList;
-		});
 	</script>
 </body>
 

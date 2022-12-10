@@ -15,7 +15,7 @@ public class CoinManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            if (other.gameObject.name.Substring(other.gameObject.name.Length - 1) == "A")// ––”ö‚Ì•¶š‚ğØ‚èo‚·
+            if (other.gameObject.name.Substring(0, 1) == "A")// æ“ª‚Ì•¶š‚ğ”äŠr
             {
                 PhotonNetwork.CurrentRoom.SetScoreA(PhotonNetwork.CurrentRoom.GetScoreA() + 1);
             }

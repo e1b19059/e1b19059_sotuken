@@ -19,7 +19,7 @@ public class RoomButton : MonoBehaviour
     public void Init(MatchmakingView parentView, int roomId)
     {
         matchmakingView = parentView;
-        RoomName = $"Room{roomId}";
+        RoomName = $"ÉãÅ[ÉÄ{roomId}";
 
         button = GetComponent<Button>();
         button.interactable = false;

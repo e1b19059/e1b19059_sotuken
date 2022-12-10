@@ -11,13 +11,9 @@ public class CustomPropertiesCallbacks : MonoBehaviourPunCallbacks
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-        // カスタムプロパティが更新されたプレイヤーのプレイヤー名とIDをコンソールに出力する
-        Debug.Log($"{targetPlayer.NickName}({targetPlayer.ActorNumber})");
-
         // 更新されたプレイヤーのカスタムプロパティのペアをコンソールに出力する
         foreach (var prop in changedProps)
         {
-            Debug.Log($"{prop.Key}: {prop.Value}");
             if (PhotonNetwork.IsMasterClient && prop.Key.ToString() == GrovalConst.TeamKey)
             {
                 teamSelect.CheckAllReady();
@@ -42,7 +38,6 @@ public class CustomPropertiesCallbacks : MonoBehaviourPunCallbacks
                     scoreBoard.SetRivalScore((int)prop.Value);
                 }
             }
-            Debug.Log($"{prop.Key}: {prop.Value}");
         }
     }
 }

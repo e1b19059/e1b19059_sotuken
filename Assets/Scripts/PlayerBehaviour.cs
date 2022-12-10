@@ -1,12 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
+using Photon.Pun;
 
 public class PlayerBehaviour : MonoBehaviour
 {
     private int speed = 3;
     private Vector3 targetPosition;
     private bool moving;
+
+    [DllImport("__Internal")]
+    private static extern void setPlayerPos(int x, int z);
+
+    [DllImport("__Internal")]
+    private static extern void setPlayerDir(int x, int z);
 
     Animator animator;
     bool running; // フィールド
@@ -40,6 +49,28 @@ public class PlayerBehaviour : MonoBehaviour
             else
             {
                 Running = false; // プロパティによるセット
+            }
+            setPlayerPos((int)Math.Round(transform.position.x), (int)Math.Round(transform.position.z));
+            setPlayerDir((int)transform.forward.x, (int)transform.forward.z);
+        }
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("爆発に当たった");
+        if (PhotonNetwork.IsMasterClient)
+        {
+            if (other.CompareTag("Explosion"))
+            {
+                Debug.Log("スコア減らした");
+                if (gameObject.name.Substring(0, 1) == "A")// 先頭の文字を比較
+                {
+                    PhotonNetwork.CurrentRoom.SetScoreA(PhotonNetwork.CurrentRoom.GetScoreA() - 1);
+                }
+                else
+                {
+                    PhotonNetwork.CurrentRoom.SetScoreB(PhotonNetwork.CurrentRoom.GetScoreB() - 1);
+                }
             }
         }
     }
