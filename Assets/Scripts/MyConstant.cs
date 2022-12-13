@@ -9,13 +9,6 @@ namespace MyConstant
     /// </summary>
     public static class GrovalConst
     {
-        public const string ANumKey = "a";
-        public const string BNumKey = "b";
-        public const string FirstKey = "f";
-        public const string ScoreAKey = "A";
-        public const string ScoreBKey = "B";
         public const string TeamKey = "t";
-        public const int FirstNum = 1;
-        public const int SecondNum = 0;
     }
 }

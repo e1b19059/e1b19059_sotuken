@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class PhotonLogin : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private CreateField createField;
-    [SerializeField] private GameObject TeamSelectPanel;
-    private bool PlayingFlag;
-    private bool Joined;
+    [SerializeField] CreateField createField;
+    [SerializeField] GameObject TeamSelectPanel;
+    [SerializeField] ObjectContainer container;
+    bool PlayingFlag;
+    bool Joined;
 
     private void Awake()
     {
@@ -47,13 +48,18 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
         }
         if (PhotonNetwork.IsMasterClient)
         {
-            createField.Create();
+            createField.CreateWallAndCharacter();
         }
     }
 
     public void Leave()
     {
+        var enumerator = container.GetEnumerator();
         PhotonNetwork.LeaveRoom();
+        while (enumerator.MoveNext())
+        {
+            Destroy(enumerator.Current.gameObject);
+        }
     }
 
     public void FocusCanvas(string p_focus)
@@ -78,6 +84,8 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
     public void GameInit()
     {
         PlayingFlag = true;
+        PlayerPrefs.SetInt("ScoreA", 0);
+        PlayerPrefs.SetInt("ScoreB", 0);
         TeamSelectPanel.transform.localScale = Vector3.zero;
     }
 

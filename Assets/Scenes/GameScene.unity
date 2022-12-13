@@ -598,7 +598,7 @@ GameObject:
   - component: {fileID: 172302012}
   m_Layer: 0
   m_Name: PhotonLogin
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -617,6 +617,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   createField: {fileID: 364245644}
   TeamSelectPanel: {fileID: 1543005630}
+  container: {fileID: 812189750}
 --- !u!4 &172302009
 Transform:
   m_ObjectHideFlags: 0
@@ -698,7 +699,6 @@ MonoBehaviour:
   scoreBoard: {fileID: 648966588}
   createField: {fileID: 364245644}
   phaseUIManager: {fileID: 345149278}
-  container: {fileID: 812189750}
   timer: {fileID: 1863267540}
   FinishTurnButton: {fileID: 1687529331}
   ShowResultButton: {fileID: 518349027}
@@ -1888,6 +1888,7 @@ MonoBehaviour:
   trap: {fileID: 7221132491063750319, guid: bb8dffc9bcfff104baf20617adaa4a36, type: 3}
   bomb: {fileID: 3986315451880020455, guid: 7b75fe3e2946c2b47bc0ed2a0e9a6047, type: 3}
   trapContainer: {fileID: 1648405457}
+  transparentMaterial: {fileID: 2100000, guid: 7a93b3ae04a912246bf2a256705ffd71, type: 2}
 --- !u!4 &364245645
 Transform:
   m_ObjectHideFlags: 0
@@ -5388,8 +5389,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1543005632}
-        m_TargetAssemblyTypeName: InRoomButton, Assembly-CSharp
+      - m_Target: {fileID: 172302008}
+        m_TargetAssemblyTypeName: PhotonLogin, Assembly-CSharp
         m_MethodName: Leave
         m_Mode: 1
         m_Arguments:

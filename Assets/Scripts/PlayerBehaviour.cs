@@ -7,9 +7,12 @@ using Photon.Pun;
 
 public class PlayerBehaviour : MonoBehaviour
 {
-    private int speed = 3;
-    private Vector3 targetPosition;
-    private bool moving;
+    int speed = 3;
+    bool moving;
+    Vector3 targetPosition;
+    JSONCreator jsonCreator;
+    CreateField createField;
+    ObjectContainer container;
 
     [DllImport("__Internal")]
     private static extern void setPlayerPos(int x, int z);
@@ -35,6 +38,9 @@ public class PlayerBehaviour : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
+        jsonCreator = GameObject.FindGameObjectWithTag("GameController").GetComponent<JSONCreator>();
+        createField = GameObject.Find("FloorContainer").GetComponent<CreateField>();
+        container = GameObject.Find("ObjectContainer").GetComponent<ObjectContainer>();
     }
 
     void Update()
@@ -57,21 +63,11 @@ public class PlayerBehaviour : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        Debug.Log("爆発に当たった");
-        if (PhotonNetwork.IsMasterClient)
+        if (other.CompareTag("Explosion"))
         {
-            if (other.CompareTag("Explosion"))
-            {
-                Debug.Log("スコア減らした");
-                if (gameObject.name.Substring(0, 1) == "A")// 先頭の文字を比較
-                {
-                    PhotonNetwork.CurrentRoom.SetScoreA(PhotonNetwork.CurrentRoom.GetScoreA() - 1);
-                }
-                else
-                {
-                    PhotonNetwork.CurrentRoom.SetScoreB(PhotonNetwork.CurrentRoom.GetScoreB() - 1);
-                }
-            }
+            Debug.Log("爆風に当たってしまった!");
+            var team = gameObject.name.Substring(0, 1);
+            PlayerPrefs.SetInt($"Score{team}", PlayerPrefs.GetInt($"Score{team}") - 1);
         }
     }
 
@@ -119,21 +115,106 @@ public class PlayerBehaviour : MonoBehaviour
     {
         transform.Rotate(0, -90f, 0);
     }
-    
+
     public void TurnRight()
     {
         transform.Rotate(0, 90f, 0);
+    }
+
+    public void PutObstacle(string direction)
+    {
+        Vector3 targetPos = transform.position;
+        switch (direction)
+        {
+            case "left":
+                targetPos -= transform.right;
+                break;
+            case "right":
+                targetPos += transform.right;
+                break;
+            case "forward":
+                targetPos += transform.forward;
+                break;
+            case "back":
+                targetPos -= transform.forward;
+                break;
+        }
+        targetPos.y = 0;// プレイヤーキャラクターのy座標は足元にあるため他のオブジェクトに合わせる
+
+        if (Physics.OverlapSphere(targetPos, 0.3f).Length <= 0)
+        {
+            createField.RPCCreateObstacle(targetPos);
+        }
+    }
+
+    public void PutBomb(string direction)
+    {
+        Vector3 targetPos = transform.position;
+        switch (direction)
+        {
+            case "left":
+                targetPos -= transform.right;
+                break;
+            case "right":
+                targetPos += transform.right;
+                break;
+            case "forward":
+                targetPos += transform.forward;
+                break;
+            case "back":
+                targetPos -= transform.forward;
+                break;
+        }
+        targetPos.y = 0;// プレイヤーキャラクターのy座標は足元にあるため他のオブジェクトに合わせる
+        if (Physics.OverlapSphere(targetPos, 0.3f).Length <= 0)
+        {
+            createField.RPCCreateBomb(targetPos);
+        }
+    }
+
+    public void DestroyObstacle(string direction)
+    {
+        var enumerator = container.GetEnumerator();
+        Vector3 targetPos = transform.position;
+        switch (direction)
+        {
+            case "left":
+                targetPos -= transform.right;
+                break;
+            case "right":
+                targetPos += transform.right;
+                break;
+            case "forward":
+                targetPos += transform.forward;
+                break;
+            case "back":
+                targetPos -= transform.forward;
+                break;
+        }
+        targetPos.y = 0;// プレイヤーキャラクターのy座標は足元にあるため他のオブジェクトに合わせる
+        while (enumerator.MoveNext())
+        {
+            if (enumerator.Current.transform.position == targetPos && enumerator.Current.gameObject.CompareTag("Destroyable"))
+            {
+                Destroy(enumerator.Current.gameObject);
+                break;
+            }
+        }
     }
 
     public void Init()
     {
         targetPosition = transform.position;
         moving = true;
+        jsonCreator.StartUpdate();
     }
 
     public void Termi()
     {
         moving = false;
+        Running = false;
+        transform.position = targetPosition;
+        jsonCreator.StopUpdate();
     }
 
 }

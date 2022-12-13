@@ -8,16 +8,16 @@ using System.Runtime.InteropServices;
 
 public class ResultView : MonoBehaviour
 {
-    [SerializeField] private PhotonLogin photonLogin;
-    [SerializeField] private GameManager gameManager;
-    [SerializeField] private ScoreBoard scoreBoard;
+    [SerializeField] PhotonLogin photonLogin;
+    [SerializeField] GameManager gameManager;
+    [SerializeField] ScoreBoard scoreBoard;
 
-    [SerializeField] private TextMeshProUGUI WinORLose;
-    [SerializeField] private TextMeshProUGUI MyResult;
-    [SerializeField] private TextMeshProUGUI RivalResult;
+    [SerializeField] TextMeshProUGUI WinORLose;
+    [SerializeField] TextMeshProUGUI MyResult;
+    [SerializeField] TextMeshProUGUI RivalResult;
 
-    private StringBuilder MyBuilder;
-    private StringBuilder RivalBuilder;
+    StringBuilder MyBuilder;
+    StringBuilder RivalBuilder;
 
     [DllImport("__Internal")]
     private static extern void switchEditable();
@@ -73,9 +73,7 @@ public class ResultView : MonoBehaviour
     {
         gameManager.HideResult();
         photonLogin.Leave();
-#if !UNITY_EDITOR && UNITY_WEBGL
-            switchEditable();
-#endif
+        switchEditable();
     }
 
 }

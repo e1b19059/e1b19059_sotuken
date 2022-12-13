@@ -28,13 +28,4 @@ public class ObjectContainer : MonoBehaviour, IEnumerable<ObjectContainerChild>
         return GetEnumerator();
     }
 
-    public void OnClick()
-    {
-        var enumerator = GetEnumerator();
-        while (enumerator.MoveNext())
-        {
-            Debug.Log("position:" + enumerator.Current.transform.position);
-
-        }
-    }
 }

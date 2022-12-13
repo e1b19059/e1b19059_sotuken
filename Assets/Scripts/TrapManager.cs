@@ -6,26 +6,26 @@ using TMPro;
 
 public class TrapManager : MonoBehaviour
 {
-    [SerializeField] private TextMeshPro TrapLabel;
+    [SerializeField] TextMeshPro TrapLabel;
+    [SerializeField] Material trapMaterial;
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name.Substring(0, 1) == PhotonNetwork.LocalPlayer.GetTeam())// æ“ª‚Ì•¶š‚ğØ‚èo‚·
+        this.GetComponentInChildren<Renderer>().material = trapMaterial;
+        GetComponentInChildren<TextMeshPro>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        switch (TrapLabel.text)
         {
-            switch (TrapLabel.text)
-            {
-                case "L":
-                    Debug.Log("¶‰ñ“]");
-                    other.gameObject.transform.Rotate(0, -90f, 0);
-                    break;
-                case "R":
-                    Debug.Log("‰E‰ñ“]");
-                    other.gameObject.transform.Rotate(0, 90f, 0);
-                    break;
-                default:
-                    Debug.Log("Œø‰Ê‚È‚µ");
-                    break;
-            }
+            case "L":
+                Debug.Log("¶‰ñ“]");
+                other.gameObject.transform.Rotate(0, -90f, 0);
+                break;
+            case "R":
+                Debug.Log("‰E‰ñ“]");
+                other.gameObject.transform.Rotate(0, 90f, 0);
+                break;
+            default:
+                Debug.Log("Œø‰Ê‚È‚µ");
+                break;
         }
     }
 

@@ -20,6 +20,7 @@ public class CreateField : MonoBehaviourPunCallbacks
     public GameObject trap;     //トラップ用オブジェクト
     public GameObject bomb;     //爆弾用オブジェクト
     public GameObject trapContainer;
+    public Material transparentMaterial;
     /*
     *内部パラメータ
     */
@@ -27,7 +28,7 @@ public class CreateField : MonoBehaviourPunCallbacks
     private int[] PosA;    //スタートの座標
     private int[] PosB;     //ゴールの座標
 
-    public void Create()
+    public void CreateWallAndCharacter()
     {
         //マップ状態初期化
         walls = new int[max, max];
@@ -75,8 +76,15 @@ public class CreateField : MonoBehaviourPunCallbacks
         walls[PosB[0], PosB[1]] = 1;
 
         BuildDungeon();
-        PhotonNetwork.InstantiateRoomObject(teamA.name, new Vector3(PosA[0], -0.5f, PosA[1]), Quaternion.identity);
-        PhotonNetwork.InstantiateRoomObject(teamB.name, new Vector3(PosB[0], -0.5f, PosB[1]), Quaternion.identity);
+
+        photonView.RPC(nameof(CreateCharacter), RpcTarget.AllBuffered, PosA[0], PosA[1], PosB[0], PosB[1]);
+    }
+
+    [PunRPC]
+    public void CreateCharacter(int x1, int z1, int x2, int z2)
+    {
+        Instantiate(teamA, new Vector3(x1, -0.5f, z1), Quaternion.identity);
+        Instantiate(teamB, new Vector3(x2, -0.5f, x2), Quaternion.identity);
     }
 
     /*
@@ -162,8 +170,10 @@ public class CreateField : MonoBehaviourPunCallbacks
     }
 
     //パラメータに応じてオブジェクトを生成する
+    [PunRPC]
     void BuildDungeon()
     {
+        int[,] _walls = walls;
         //縦横1マスずつ大きくループを回し、壁とする
         for (int i = -1; i <= max; i++)
         {
@@ -171,16 +181,28 @@ public class CreateField : MonoBehaviourPunCallbacks
             {
                 //範囲外、または壁の場合に壁オブジェクトを生成する
                 if (isOutOfRange(i, j)
-                    || walls[i, j] == 0)
+                    || _walls[i, j] == 0)
                 {
-                    PhotonNetwork.InstantiateRoomObject(wall.name, new Vector3(i, 0, j), Quaternion.identity);
+                    photonView.RPC(nameof(RPCCreateWall), RpcTarget.AllBuffered, new Vector3(i, 0, j));
                 }
-                else if (walls[i, j] == 2)
+                else if (_walls[i, j] == 2)
                 {
-                    PhotonNetwork.InstantiateRoomObject(wall_destroyable.name, new Vector3(i, 0, j), Quaternion.identity);
+                    photonView.RPC(nameof(RPCCreateObstacle), RpcTarget.AllBuffered, new Vector3(i, 0, j));
                 }
             }
         }
+    }
+
+    [PunRPC]
+    public void RPCCreateWall(Vector3 targetPos)
+    {
+        Instantiate(wall, targetPos, Quaternion.identity);
+    }
+
+    [PunRPC]
+    public void RPCCreateObstacle(Vector3 targetPos)
+    {
+        Instantiate(wall_destroyable, targetPos, Quaternion.identity);
     }
 
     public void CreateFloor()
@@ -204,26 +226,14 @@ public class CreateField : MonoBehaviourPunCallbacks
         }
     }
 
-    public void CreateCoin()
+    [PunRPC]
+    public void RPCCreateCoin(Vector3 targetPos)
     {
-        int randx;
-        int randz;
-        do
-        {
-            randx = Random.Range(0, max);
-            randz = Random.Range(0, max);
-        } while (Physics.OverlapSphere(new Vector3(randx, -0.3f, randz), 0).Length > 0);
-        PhotonNetwork.InstantiateRoomObject(coin.name, new Vector3(randx, 0, randz), Quaternion.Euler(90, 0, 0));
+        Instantiate(coin, targetPos, coin.transform.rotation);
     }
 
     [PunRPC]
-    public void RPCPutObstacle(Vector3 targetPos)
-    {
-        PhotonNetwork.InstantiateRoomObject(wall_destroyable.name, targetPos, Quaternion.identity);
-    }
-
-    [PunRPC]
-    public void RPCPutBomb(Vector3 targetPos)
+    public void RPCCreateBomb(Vector3 targetPos)
     {
         targetPos.y = -0.1f;
         Instantiate(bomb, targetPos, bomb.transform.rotation);
@@ -242,15 +252,19 @@ public class CreateField : MonoBehaviourPunCallbacks
         return point;
     }
 
-    [PunRPC]
-    public void CreateTrap(int posX, int posZ, int trapType)
+    public void RPCCreateTrap(int posX, int posZ, int trapType, bool transparent)
     {
-        if(Physics.OverlapSphere(new Vector3(posX, -0.3f, posZ), 0).Length <= 0)
+        if (Physics.OverlapSphere(new Vector3(posX, -0.3f, posZ), 0).Length <= 0)
         {
             GameObject trapObj = Instantiate(trap, new Vector3(posX, -0.45f, posZ), Quaternion.identity) as GameObject;
             trapObj.transform.parent = trapContainer.transform;
 
             if (trapType == 0) trapObj.GetComponentInChildren<TextMeshPro>().text = "R";
+            if (transparent)
+            {
+                trapObj.GetComponentInChildren<Renderer>().material = transparentMaterial;
+                trapObj.GetComponentInChildren<TextMeshPro>().color = new Color(0, 0, 0, 0);
+            }
         }
     }
 

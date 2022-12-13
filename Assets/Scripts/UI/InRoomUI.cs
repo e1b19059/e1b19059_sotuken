@@ -4,16 +4,10 @@ using Photon.Realtime;
 
 public class InRoomUI : MonoBehaviourPunCallbacks
 {
-
     void Start()
     {
         // ”ñ•\Ž¦
         transform.localScale = Vector3.zero;
-    }
-
-    public void Leave()
-    {
-        PhotonNetwork.LeaveRoom();
     }
 
     public override void OnJoinedRoom()
