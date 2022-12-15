@@ -52,6 +52,11 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
         }
     }
 
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        Leave();
+    }
+
     public void Leave()
     {
         var enumerator = container.GetEnumerator();
