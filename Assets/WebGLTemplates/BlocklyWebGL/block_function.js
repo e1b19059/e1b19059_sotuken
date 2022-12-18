@@ -4,6 +4,7 @@ let playerDir;
 let data_json;
 let code;
 let myInterpreter;
+let IsMyturn;
 
 document.addEventListener('click', function (e) {
 	if (e.target.id == "unity-canvas") {
@@ -16,6 +17,10 @@ document.addEventListener('click', function (e) {
 });
 
 const initFunc = function (interpreter, scope) {
+	let wrapper = function(id) {
+		id = id ? id.toString() : '';
+		return highlightBlock(id);
+	};
 	let move_left_wrapper = function () {
 		return move_left_function();
 	};
@@ -49,6 +54,7 @@ const initFunc = function (interpreter, scope) {
 	let terminate_wrapper = function () {
 		return terminate();
 	};
+	interpreter.setProperty(scope, 'highlightBlock', interpreter.createNativeFunction(wrapper));
 	interpreter.setProperty(scope, 'move_left', interpreter.createNativeFunction(move_left_wrapper));
 	interpreter.setProperty(scope, 'move_right', interpreter.createNativeFunction(move_right_wrapper));
 	interpreter.setProperty(scope, 'move_forward', interpreter.createNativeFunction(move_forward_wrapper));
@@ -61,6 +67,21 @@ const initFunc = function (interpreter, scope) {
 	interpreter.setProperty(scope, 'initiate', interpreter.createNativeFunction(initiate_wrapper));
 	interpreter.setProperty(scope, 'terminate', interpreter.createNativeFunction(terminate_wrapper));
 }
+
+function highlightBlock(id) {
+	console.log('IsMyturn:'+ IsMyturn);
+	if(IsMyturn){
+		workspace_readOnly.highlightBlock(id);
+	}else{
+		workspace_rival.highlightBlock(id);
+	}
+}
+
+function generateCodeAndLoadIntoInterpreter() {
+	Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
+	Blockly.JavaScript.addReservedWords('highlightBlock');
+}
+generateCodeAndLoadIntoInterpreter();
 
 function move_left_function() {
 	unityInstance.SendMessage(player_character, "MoveLeft");
@@ -107,22 +128,21 @@ function check_point_function(direction, targetObj){
 
 function put_object_function(direction, object){
 	if(object.includes("Obstacle")){
-		unityInstance.SendMessage("PhotonLogin", "PutObstacle", direction);
+		unityInstance.SendMessage(player_character, "PutObstacle", direction);
 	}else if(object.includes("Bomb")){
-		unityInstance.SendMessage("PhotonLogin", "PutBomb", direction);
+		unityInstance.SendMessage(player_character, "PutBomb", direction);
 	}
 }
 
 function destroy_obstacle_function(direction){
-	unityInstance.SendMessage("PhotonLogin", "DestroyObstacle", direction);
+	unityInstance.SendMessage(player_character, "DestroyObstacle", direction);
 }
 
 function initiate(){
 	unityInstance.SendMessage(player_character, "Init");
-	unityInstance.SendMessage("PhotonLogin", "StartUpdate");
 }
 
 function terminate(){
+	highlightBlock(false);
 	unityInstance.SendMessage(player_character, "Termi");
-	unityInstance.SendMessage("PhotonLogin", "StopUpdate");
 }

@@ -3,8 +3,13 @@ mergeInto(LibraryManager.library, {
 		window.alert(UTF8ToString(str));
 	},
 
-	doCode: function(){
-		code = 'initiate();\n' + Blockly.JavaScript.workspaceToCode(workspace_readOnly) + 'terminate();\n';
+	doCode: function(turn){
+		IsMyturn = turn;
+		if(IsMyturn){
+			code = 'initiate();\n' + Blockly.JavaScript.workspaceToCode(workspace_readOnly) + 'terminate();\n';
+		}else{
+			code = 'initiate();\n' + Blockly.JavaScript.workspaceToCode(workspace_rival) + 'terminate();\n';
+		}
 		myInterpreter = new Interpreter(code, initFunc);
 		function stepCode() {
 			if (myInterpreter.step()) {

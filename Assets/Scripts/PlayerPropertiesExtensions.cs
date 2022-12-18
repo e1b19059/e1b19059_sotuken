@@ -4,7 +4,6 @@ using MyConstant;
 
 public static class PlayerPropertiesExtensions
 {
-    //private const string TeamKey = "t";
     private const string OrderKey = "o";
 
     private static readonly Hashtable propsToSet = new Hashtable();

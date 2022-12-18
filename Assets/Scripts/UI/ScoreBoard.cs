@@ -6,20 +6,20 @@ using UnityEngine;
 
 public class ScoreBoard : MonoBehaviour
 {
-    [SerializeField] private PhotonLogin photonLogin;
+    [SerializeField] PhotonLogin photonLogin;
 
-    [SerializeField] private TextMeshProUGUI MyTeamMember = default;
-    [SerializeField] private TextMeshProUGUI RivalTeamMember = default;
-    [SerializeField] private TextMeshProUGUI MyTeamLabel;
-    [SerializeField] private TextMeshProUGUI RivalTeamLabel;
-    [SerializeField] private TextMeshProUGUI MyScoreLabel;
-    [SerializeField] private TextMeshProUGUI RivalScoreLabel;
+    [SerializeField] TextMeshProUGUI MyTeamMember = default;
+    [SerializeField] TextMeshProUGUI RivalTeamMember = default;
+    [SerializeField] TextMeshProUGUI MyTeamLabel;
+    [SerializeField] TextMeshProUGUI RivalTeamLabel;
+    [SerializeField] TextMeshProUGUI MyScoreLabel;
+    [SerializeField] TextMeshProUGUI RivalScoreLabel;
 
-    private StringBuilder MyBuilder;
-    private StringBuilder RivalBuilder;
-    private float elapsedTime;
-    private int MyScore;
-    private int RivalScore;
+    StringBuilder MyBuilder;
+    StringBuilder RivalBuilder;
+    float elapsedTime;
+    int MyScore;
+    int RivalScore;
 
     private void Start()
     {
@@ -38,6 +38,7 @@ public class ScoreBoard : MonoBehaviour
         {
             elapsedTime = 0f;
             UpdateMember();
+            SetScore();
         }
     }
 
@@ -119,6 +120,12 @@ public class ScoreBoard : MonoBehaviour
     public int GetRivalScore()
     {
         return RivalScore;
+    }
+
+    public void SetScore()
+    {
+        SetMyScore(PlayerPrefs.GetInt($"Score{GetMyTeam()}"));
+        SetRivalScore(PlayerPrefs.GetInt($"Score{GetRivalTeam()}"));
     }
 
 }

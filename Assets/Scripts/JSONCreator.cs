@@ -100,7 +100,7 @@ public class JSONCreator : MonoBehaviourPunCallbacks
     {
         Debug.Log("stop!");
         updateFlag = false;
-        photonView.RPC(nameof(gameManager.FinishPhase), RpcTarget.AllViaServer);
+        photonView.RPC(nameof(gameManager.RPCTellFinished), RpcTarget.MasterClient);// 実行し終えたことをマスタークライアントに知らせる
     }
 
 }

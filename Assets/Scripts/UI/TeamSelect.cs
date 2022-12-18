@@ -7,10 +7,10 @@ using TMPro;
 
 public class TeamSelect : MonoBehaviour
 {
-    [SerializeField] private ScoreBoard scoreBoard;
-    [SerializeField] private ToggleGroup toggleGroup;
-    [SerializeField] private Toggle readyToggle;
-    [SerializeField] private Button startButton;
+    [SerializeField] ScoreBoard scoreBoard;
+    [SerializeField] ToggleGroup toggleGroup;
+    [SerializeField] Toggle readyToggle;
+    [SerializeField] Button startButton;
 
     private void Start()
     {

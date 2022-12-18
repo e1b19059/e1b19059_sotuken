@@ -1,24 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
 
-public class ObstacleManager : MonoBehaviourPunCallbacks
+public class ObstacleManager : MonoBehaviour
 {
     public void OnTriggerEnter(Collider other)
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (other.CompareTag("Explosion"))
         {
-            if (other.CompareTag("Explosion"))
-            {
-                PhotonNetwork.Destroy(gameObject);
-            }
+            Destroy(gameObject);
         }
     }
 
-    [PunRPC]
-    public void RPCDestroy()
-    {
-        PhotonNetwork.Destroy(gameObject);
-    }
 }

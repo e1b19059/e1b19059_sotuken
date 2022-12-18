@@ -34,31 +34,26 @@ MonoBehaviour:
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - BuildDungeon
   - ClickRpc
-  - DestroyRpc
-  - MoveBack
-  - SetOthersBlock
-  - RPCGameStart
-  - FinishTurn
-  - OnTurnBegins
-  - OnTurnEnds
-  - RPCGameFinish
-  - RPCDestroy
-  - CreateCoin
-  - StartTurn
-  - SetTeamLabel
-  - RPCCreateCoin
-  - DestroyRoomObject
-  - RPCPutObstacle
-  - FinishPhase
-  - RPCPhaseChange
+  - CreateCharacter
   - CreateTrap
-  - RPCCreateTrap
-  - RPCTrapDestroy
-  - RPCPutObject
-  - RPCTextChange
-  - RPCPutBomb
+  - DestroyRpc
+  - DoCode
+  - FinishPhase
+  - RPCCreateBomb
+  - RPCCreateCoin
+  - RPCCreateObstacle
+  - RPCCreateWall
   - RPCExplodeBomb
+  - RPCGameFinish
+  - RPCGameStart
+  - RPCPhaseChange
+  - RPCTellFinished
+  - RPCTrapDestroy
+  - SetBlockAndDoCode
+  - SetOthersBlock
+  - StartTurn
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

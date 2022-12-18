@@ -285,3 +285,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TrapLabel: {fileID: 8289340456303425688}
+  trapMaterial: {fileID: 2100000, guid: b31a96faf9f25a941908823bcec3f7f8, type: 2}

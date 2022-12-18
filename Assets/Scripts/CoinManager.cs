@@ -1,10 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
-using Photon.Realtime;
 
-public class CoinManager : MonoBehaviourPunCallbacks
+public class CoinManager : MonoBehaviour
 {
     void Update()
     {
@@ -13,18 +11,21 @@ public class CoinManager : MonoBehaviourPunCallbacks
 
     void OnTriggerEnter(Collider other)
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
+        //if (PhotonNetwork.IsMasterClient)
+        //{
             if (other.gameObject.name.Substring(0, 1) == "A")// êÊì™ÇÃï∂éöÇî‰är
             {
-                PhotonNetwork.CurrentRoom.SetScoreA(PhotonNetwork.CurrentRoom.GetScoreA() + 1);
+            //PhotonNetwork.CurrentRoom.SetScoreA(PhotonNetwork.CurrentRoom.GetScoreA() + 1);
+            PlayerPrefs.SetInt("ScoreA", PlayerPrefs.GetInt("ScoreA") + 1);
             }
             else
             {
-                PhotonNetwork.CurrentRoom.SetScoreB(PhotonNetwork.CurrentRoom.GetScoreB() + 1);
-            }
-            PhotonNetwork.Destroy(gameObject);
+            //PhotonNetwork.CurrentRoom.SetScoreB(PhotonNetwork.CurrentRoom.GetScoreB() + 1);
+            PlayerPrefs.SetInt("ScoreB", PlayerPrefs.GetInt("ScoreB") + 1);
         }
+            //PhotonNetwork.Destroy(gameObject);
+            Destroy(gameObject);
+        //}
     }
 
 }
