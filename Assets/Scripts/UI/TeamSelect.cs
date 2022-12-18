@@ -106,4 +106,9 @@ public class TeamSelect : MonoBehaviour
         }
     }
 
+    public void HidePanel()
+    {
+        transform.localScale = Vector3.zero;
+    }
+
 }

@@ -5,8 +5,9 @@ using UnityEngine;
 public class PhotonLogin : MonoBehaviourPunCallbacks
 {
     [SerializeField] CreateField createField;
-    [SerializeField] GameObject TeamSelectPanel;
+    [SerializeField] TeamSelect teamSelect;
     [SerializeField] ObjectContainer container;
+    bool finished;
     bool PlayingFlag;
     bool Joined;
 
@@ -50,11 +51,16 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
         {
             createField.CreateWallAndCharacter();
         }
+        finished = false;
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
-        Leave();
+        if (!finished)
+        {
+            teamSelect.Cancel();
+            Leave();
+        }
     }
 
     public void Leave()
@@ -91,12 +97,13 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
         PlayingFlag = true;
         PlayerPrefs.SetInt("ScoreA", 0);
         PlayerPrefs.SetInt("ScoreB", 0);
-        TeamSelectPanel.transform.localScale = Vector3.zero;
+        teamSelect.HidePanel();
     }
 
     public void Finished()
     {
         PlayingFlag = false;
+        finished = true;
     }
 
 }
