@@ -124,8 +124,8 @@ public class ScoreBoard : MonoBehaviour
 
     public void SetScore()
     {
-        SetMyScore(PlayerPrefs.GetInt($"Score{GetMyTeam()}"));
-        SetRivalScore(PlayerPrefs.GetInt($"Score{GetRivalTeam()}"));
+        SetMyScore(PlayerPrefs.GetInt($"Coin{GetMyTeam()}") - PlayerPrefs.GetInt($"Damage{GetMyTeam()}"));
+        SetRivalScore(PlayerPrefs.GetInt($"Coin{GetRivalTeam()}") - PlayerPrefs.GetInt($"Damage{GetRivalTeam()}"));
     }
 
 }

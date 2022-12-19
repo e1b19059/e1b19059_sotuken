@@ -12,7 +12,7 @@ public class CoinManager : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         string team = other.gameObject.name.Substring(0, 1);
-        PlayerPrefs.SetInt($"Score{team}", PlayerPrefs.GetInt($"Score{team}") + 1);
+        PlayerPrefs.SetInt($"Coin{team}", PlayerPrefs.GetInt($"Coin{team}") + 1);
         Destroy(gameObject);
     }
 

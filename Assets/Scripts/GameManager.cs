@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] PhotonLogin photonLogin;
     [SerializeField] ScoreBoard scoreBoard;
     [SerializeField] CreateField createField;
+    [SerializeField] ResultView resultView;
     [SerializeField] PhaseUIManager phaseUIManager;
     [SerializeField] Slider timer;// タイムバー
     [SerializeField] Button FinishTurnButton;// 時間が残っていてもターンを終えるボタン
@@ -281,6 +282,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.Log("ゲーム終了");
         photonLogin.Finished();
         phaseUIManager.Finished();
+        resultView.SetResult();
         ShowResultButton.transform.localScale = Vector3.one;
     }
 

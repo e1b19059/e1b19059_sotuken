@@ -67,7 +67,7 @@ public class PlayerBehaviour : MonoBehaviour
         {
             Debug.Log("”š•—‚É“–‚½‚Á‚Ä‚µ‚Ü‚Á‚½!");
             var team = gameObject.name.Substring(0, 1);
-            PlayerPrefs.SetInt($"Score{team}", PlayerPrefs.GetInt($"Score{team}") - 1);
+            PlayerPrefs.SetInt($"Damage{team}", PlayerPrefs.GetInt($"Damage{team}") + 1);
         }
     }
 
