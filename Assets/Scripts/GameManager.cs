@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         elapsedTime = 0f;
         TrapNumber = 3;
-        MaxTurn = 4;
+        MaxTurn = 8;
         ShowResultButton.transform.localScale = Vector3.zero;
     }
 

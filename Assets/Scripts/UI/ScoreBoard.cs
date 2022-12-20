@@ -51,7 +51,14 @@ public class ScoreBoard : MonoBehaviour
         {
             if (player.GetTeam() == GetMyTeam())
             {
-                MyBuilder.AppendLine($"{player.NickName}({player.ActorNumber})");
+                if (player.IsLocal)
+                {
+                    MyBuilder.AppendLine($"<color=#FAFAFA>{player.NickName}({player.ActorNumber})</color>");
+                }
+                else
+                {
+                    MyBuilder.AppendLine($"{player.NickName}({player.ActorNumber})");
+                }
             }
             else
             {
@@ -124,8 +131,8 @@ public class ScoreBoard : MonoBehaviour
 
     public void SetScore()
     {
-        SetMyScore(PlayerPrefs.GetInt($"Coin{GetMyTeam()}") - PlayerPrefs.GetInt($"Damage{GetMyTeam()}"));
-        SetRivalScore(PlayerPrefs.GetInt($"Coin{GetRivalTeam()}") - PlayerPrefs.GetInt($"Damage{GetRivalTeam()}"));
+        SetMyScore(PlayerPrefs.GetInt($"Score{GetMyTeam()}"));
+        SetRivalScore(PlayerPrefs.GetInt($"Score{GetRivalTeam()}"));
     }
 
 }

@@ -39,8 +39,8 @@ public class PlayerBehaviour : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         jsonCreator = GameObject.FindGameObjectWithTag("GameController").GetComponent<JSONCreator>();
-        createField = GameObject.Find("FloorContainer").GetComponent<CreateField>();
-        container = GameObject.Find("ObjectContainer").GetComponent<ObjectContainer>();
+        createField = GameObject.FindGameObjectWithTag("FloorContainer").GetComponent<CreateField>();
+        container = GameObject.FindGameObjectWithTag("ObjectContainer").GetComponent<ObjectContainer>();
     }
 
     void Update()
@@ -68,6 +68,7 @@ public class PlayerBehaviour : MonoBehaviour
             Debug.Log("”š•—‚É“–‚½‚Á‚Ä‚µ‚Ü‚Á‚½!");
             var team = gameObject.name.Substring(0, 1);
             PlayerPrefs.SetInt($"Damage{team}", PlayerPrefs.GetInt($"Damage{team}") + 1);
+            if (PlayerPrefs.GetInt($"Score{team}") > 0) PlayerPrefs.SetInt($"Score{team}", PlayerPrefs.GetInt($"Score{team}") - 1);
         }
     }
 

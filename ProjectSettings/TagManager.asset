@@ -10,6 +10,8 @@ TagManager:
   - Trap
   - Explosion
   - Bomb
+  - FloorContainer
+  - ObjectContainer
   layers:
   - Default
   - TransparentFX

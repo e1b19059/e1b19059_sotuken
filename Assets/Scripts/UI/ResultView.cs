@@ -49,29 +49,36 @@ public class ResultView : MonoBehaviour
         int coinB = PlayerPrefs.GetInt("CoinB");
         int damageA = PlayerPrefs.GetInt("DamageA");
         int damageB = PlayerPrefs.GetInt("DamageB");
-        int scoreA = coinA - damageA;
-        int scoreB = coinB - damageB;
+        int scoreA = PlayerPrefs.GetInt("ScoreA");
+        int scoreB = PlayerPrefs.GetInt("ScoreB");
         ATeamBuilder.Clear();
         BTeamBuilder.Clear();
-        ATeamBuilder.AppendLine($"チームA");
-        BTeamBuilder.AppendLine($"チームB");
+        ATeamBuilder.AppendLine("チーム<color=#0000FF>A</color>");
+        BTeamBuilder.AppendLine("チーム<color=#FF0000>B</color>");
         foreach (var player in players)
         {
             if (player.GetTeam() == "A")
             {
-                ATeamBuilder.AppendLine("   " + player.NickName);
+                if (player.IsLocal)
+                {
+                    ATeamBuilder.AppendLine("<color=#FAFAFA>   " + player.NickName + "</color>");
+                }
+                else
+                {
+                    ATeamBuilder.AppendLine("   " + player.NickName);
+                }
             }
             else
             {
                 BTeamBuilder.AppendLine("   " + player.NickName);
             }
         }
-        ATeamBuilder.AppendLine("コイン獲得数 : " + coinA);
-        BTeamBuilder.AppendLine("コイン獲得数 : " + coinB);
+        ATeamBuilder.AppendLine("\nコイン獲得数 : " + coinA);
+        BTeamBuilder.AppendLine("\nコイン獲得数 : " + coinB);
         ATeamBuilder.AppendLine("爆発に当たった回数 : " + damageA);
         BTeamBuilder.AppendLine("爆発に当たった回数 : " + damageB);
-        ATeamBuilder.AppendLine("スコア : " + scoreA);
-        BTeamBuilder.AppendLine("スコア : " + scoreB);
+        ATeamBuilder.AppendLine("\nスコア : " + scoreA);
+        BTeamBuilder.AppendLine("\nスコア : " + scoreB);
         if (scoreBoard.GetMyTeam() == "A")
         {
             MyResult.text = ATeamBuilder.ToString();
