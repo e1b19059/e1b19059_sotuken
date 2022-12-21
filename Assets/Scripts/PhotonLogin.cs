@@ -1,6 +1,7 @@
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using System.Runtime.InteropServices;
 
 public class PhotonLogin : MonoBehaviourPunCallbacks
 {
@@ -10,6 +11,9 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
     bool finished;
     bool PlayingFlag;
     bool Joined;
+
+    [DllImport("__Internal")]
+    private static extern void leaveAlert();
 
     private void Awake()
     {
@@ -60,6 +64,7 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
         {
             teamSelect.Cancel();
             Leave();
+            leaveAlert();
         }
     }
 

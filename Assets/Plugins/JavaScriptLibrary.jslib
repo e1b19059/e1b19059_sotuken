@@ -86,4 +86,9 @@ mergeInto(LibraryManager.library, {
 		workspace_readOnly.clear();
 		workspace_rival.clear();
 	},
+
+	leaveAlert: function(){
+		alert('Master Client disconnected!');
+	}
+
 });
