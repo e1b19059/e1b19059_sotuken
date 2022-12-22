@@ -149,6 +149,16 @@ const coin = {
     "helpUrl": ""
 }
 
+const player = {
+    "type": "player",
+    "message0": "プレイヤー",
+    "inputsInline": true,
+    "output": "object1",
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+}
+
 const obstacle = {
     "type": "obstacle",
     "message0": "障害物",
@@ -305,6 +315,12 @@ Blockly.Blocks['coin'] = {
     }
 };
 
+Blockly.Blocks['player'] = {
+    init: function () {
+        this.jsonInit(player);
+    }
+};
+
 Blockly.Blocks['obstacle'] = {
     init: function () {
         this.jsonInit(obstacle);
@@ -404,6 +420,11 @@ Blockly.JavaScript['wall'] = function () {
 
 Blockly.JavaScript['coin'] = function () {
     let code = '\'Coin\'';
+    return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['player'] = function () {
+    let code = '\'Player\'';
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 

@@ -13,7 +13,7 @@ mergeInto(LibraryManager.library, {
 		myInterpreter = new Interpreter(code, initFunc);
 		function stepCode() {
 			if (myInterpreter.step()) {
-				window.setTimeout(stepCode, 50);
+				window.setTimeout(stepCode, 30);
 			}
 		}
 		stepCode();
