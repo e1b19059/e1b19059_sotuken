@@ -735,7 +735,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c373c8640c3dd9f43b5ef9665afec2d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreBoard: {fileID: 648966588}
   teamSelect: {fileID: 1543005635}
 --- !u!114 &172302012
 MonoBehaviour:
@@ -1954,7 +1953,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f080eaad79ebfd40a92364dbca572e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max: 11
+  max: 9
   wall: {fileID: 5146388987318394406, guid: 1550ccf52645cf1468b3f786b070aa34, type: 3}
   wall_destroyable: {fileID: 1567631149051705942, guid: 3fadd302adccb894193b00d77754bb82, type: 3}
   floor_black: {fileID: 4621270749309294192, guid: b82c04531ff1eae4ca3591f742ec651e, type: 3}

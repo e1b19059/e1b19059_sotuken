@@ -9,7 +9,7 @@ public class CreateField : MonoBehaviourPunCallbacks
     /*
     *設定する値
     */
-    public int max = 11;        //縦横のサイズ ※必ず奇数にすること
+    public int max = 9;        //縦横のサイズ ※必ず奇数にすること
     public GameObject wall;    //壁用オブジェクト
     public GameObject wall_destroyable;    //壁用オブジェクト
     public GameObject floor_black;    //床用オブジェクト
@@ -51,13 +51,10 @@ public class CreateField : MonoBehaviourPunCallbacks
         {
             for (int j = 0; j < max; j++)
             {
-                if ((PosA[0] != i || PosA[1] != j) && (PosB[0] != i || PosB[1] != j))
-                {
-                    // ランダムに壁を消す
-                    if (Random.Range(0, 2) == 0) walls[i, j] = 1;
-                    // ランダムに2種類目の壁を置く
-                    if (Random.Range(0, 10) == 0) walls[i, j] = 2;
-                }
+                // ランダムに壁を消す
+                if (Random.Range(0, 2) == 0) walls[i, j] = 1;
+                // ランダムに2種類目の壁を置く
+                if (Random.Range(0, 10) == 0) walls[i, j] = 2;
             }
         }
 
@@ -74,7 +71,6 @@ public class CreateField : MonoBehaviourPunCallbacks
         // AとBの座標に壁がかぶらないように通路にしておく
         walls[PosA[0], PosA[1]] = 1;
         walls[PosB[0], PosB[1]] = 1;
-
         BuildDungeon();
 
         photonView.RPC(nameof(CreateCharacter), RpcTarget.AllBuffered, PosA[0], PosA[1], PosB[0], PosB[1]);
@@ -84,7 +80,7 @@ public class CreateField : MonoBehaviourPunCallbacks
     public void CreateCharacter(int x1, int z1, int x2, int z2)
     {
         Instantiate(teamA, new Vector3(x1, -0.5f, z1), Quaternion.identity);
-        Instantiate(teamB, new Vector3(x2, -0.5f, x2), Quaternion.identity);
+        Instantiate(teamB, new Vector3(x2, -0.5f, z2), Quaternion.identity);
     }
 
     /*
