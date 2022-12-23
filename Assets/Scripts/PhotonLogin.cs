@@ -1,14 +1,19 @@
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using System.Runtime.InteropServices;
 
 public class PhotonLogin : MonoBehaviourPunCallbacks
 {
     [SerializeField] CreateField createField;
-    [SerializeField] GameObject TeamSelectPanel;
+    [SerializeField] TeamSelect teamSelect;
     [SerializeField] ObjectContainer container;
+    bool finished;
     bool PlayingFlag;
     bool Joined;
+
+    [DllImport("__Internal")]
+    private static extern void leaveAlert();
 
     private void Awake()
     {
@@ -50,11 +55,17 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
         {
             createField.CreateWallAndCharacter();
         }
+        finished = false;
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
-        Leave();
+        if (!finished)
+        {
+            teamSelect.Cancel();
+            Leave();
+            leaveAlert();
+        }
     }
 
     public void Leave()
@@ -89,14 +100,19 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
     public void GameInit()
     {
         PlayingFlag = true;
+        PlayerPrefs.SetInt("CoinA", 0);
+        PlayerPrefs.SetInt("DamageA", 0);
         PlayerPrefs.SetInt("ScoreA", 0);
+        PlayerPrefs.SetInt("CoinB", 0);
+        PlayerPrefs.SetInt("DamageB", 0);
         PlayerPrefs.SetInt("ScoreB", 0);
-        TeamSelectPanel.transform.localScale = Vector3.zero;
+        teamSelect.HidePanel();
     }
 
     public void Finished()
     {
         PlayingFlag = false;
+        finished = true;
     }
 
 }

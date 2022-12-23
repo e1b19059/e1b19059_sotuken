@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Photon.Pun;
 using System.Runtime.InteropServices;
 
 public class ResultView : MonoBehaviour
@@ -16,16 +17,16 @@ public class ResultView : MonoBehaviour
     [SerializeField] TextMeshProUGUI MyResult;
     [SerializeField] TextMeshProUGUI RivalResult;
 
-    StringBuilder MyBuilder;
-    StringBuilder RivalBuilder;
+    StringBuilder ATeamBuilder;
+    StringBuilder BTeamBuilder;
 
     [DllImport("__Internal")]
     private static extern void switchEditable();
 
     private void Start()
     {
-        MyBuilder = new StringBuilder();
-        RivalBuilder = new StringBuilder();
+        ATeamBuilder = new StringBuilder();
+        BTeamBuilder = new StringBuilder();
     }
 
     private void Update()
@@ -40,32 +41,77 @@ public class ResultView : MonoBehaviour
         }
     }
 
-    // ゲーム終了時に表示される結果表示ボタンで呼び出される
+    // ゲーム終了時に呼び出される
     public void SetResult()
     {
-        int MyScore = scoreBoard.GetMyScore();
-        int RivalScore = scoreBoard.GetRivalScore();
-        MyBuilder.Clear();
-        MyBuilder.AppendLine($"チーム {scoreBoard.GetMyTeam()}");
-        MyBuilder.AppendLine($"{scoreBoard.GetMyTeamMember()}\n");
-        MyBuilder.AppendLine($"Total Score: {MyScore}");
-        MyResult.text = MyBuilder.ToString();
-        RivalBuilder.Clear();
-        RivalBuilder.AppendLine($"チーム {scoreBoard.GetRivalTeam()}");
-        RivalBuilder.AppendLine($"{scoreBoard.GetRivalTeamMember()}\n");
-        RivalBuilder.AppendLine($"Total Score: {RivalScore}");
-        RivalResult.text = RivalBuilder.ToString();
-        if (MyScore > RivalScore)
+        var players = PhotonNetwork.PlayerList;
+        int coinA = PlayerPrefs.GetInt("CoinA");
+        int coinB = PlayerPrefs.GetInt("CoinB");
+        int damageA = PlayerPrefs.GetInt("DamageA");
+        int damageB = PlayerPrefs.GetInt("DamageB");
+        int scoreA = PlayerPrefs.GetInt("ScoreA");
+        int scoreB = PlayerPrefs.GetInt("ScoreB");
+        ATeamBuilder.Clear();
+        BTeamBuilder.Clear();
+        ATeamBuilder.AppendLine("チーム<color=#0000FF>A</color>");
+        BTeamBuilder.AppendLine("チーム<color=#FF0000>B</color>");
+        foreach (var player in players)
         {
-            WinORLose.text = "Your Team Win";
+            if (player.GetTeam() == "A")
+            {
+                if (player.IsLocal)
+                {
+                    ATeamBuilder.AppendLine("<color=#FAFAFA>   " + player.NickName + "</color>");
+                }
+                else
+                {
+                    ATeamBuilder.AppendLine("   " + player.NickName);
+                }
+            }
+            else
+            {
+                BTeamBuilder.AppendLine("   " + player.NickName);
+            }
         }
-        else if (MyScore == RivalScore)
+        ATeamBuilder.AppendLine("\nコイン獲得数 : " + coinA);
+        BTeamBuilder.AppendLine("\nコイン獲得数 : " + coinB);
+        ATeamBuilder.AppendLine("爆発に当たった回数 : " + damageA);
+        BTeamBuilder.AppendLine("爆発に当たった回数 : " + damageB);
+        ATeamBuilder.AppendLine("\nスコア : " + scoreA);
+        BTeamBuilder.AppendLine("\nスコア : " + scoreB);
+        if (scoreBoard.GetMyTeam() == "A")
         {
-            WinORLose.text = "Draw";
+            MyResult.text = ATeamBuilder.ToString();
+            RivalResult.text = BTeamBuilder.ToString();
+            if (scoreA > scoreB)
+            {
+                WinORLose.text = "Your Team Win";
+            }
+            else if (scoreA == scoreB)
+            {
+                WinORLose.text = "Draw";
+            }
+            else
+            {
+                WinORLose.text = "Your Team Lose";
+            }
         }
         else
         {
-            WinORLose.text = "Your Team Lose";
+            MyResult.text = BTeamBuilder.ToString();
+            RivalResult.text = ATeamBuilder.ToString();
+            if (scoreA < scoreB)
+            {
+                WinORLose.text = "Your Team Win";
+            }
+            else if (scoreA == scoreB)
+            {
+                WinORLose.text = "Draw";
+            }
+            else
+            {
+                WinORLose.text = "Your Team Lose";
+            }
         }
     }
 

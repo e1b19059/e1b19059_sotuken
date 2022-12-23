@@ -51,7 +51,14 @@ public class ScoreBoard : MonoBehaviour
         {
             if (player.GetTeam() == GetMyTeam())
             {
-                MyBuilder.AppendLine($"{player.NickName}({player.ActorNumber})");
+                if (player.IsLocal)
+                {
+                    MyBuilder.AppendLine($"<color=#FAFAFA>{player.NickName}({player.ActorNumber})</color>");
+                }
+                else
+                {
+                    MyBuilder.AppendLine($"{player.NickName}({player.ActorNumber})");
+                }
             }
             else
             {

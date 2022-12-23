@@ -6,7 +6,6 @@ using MyConstant;
 
 public class CustomPropertiesCallbacks : MonoBehaviourPunCallbacks
 {
-    [SerializeField] ScoreBoard scoreBoard;
     [SerializeField] TeamSelect teamSelect;
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)

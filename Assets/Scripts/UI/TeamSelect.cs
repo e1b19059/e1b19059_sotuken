@@ -2,10 +2,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using Photon.Pun;
+using Photon.Realtime;
 using System.Linq;
 using TMPro;
 
-public class TeamSelect : MonoBehaviour
+public class TeamSelect : MonoBehaviourPunCallbacks
 {
     [SerializeField] ScoreBoard scoreBoard;
     [SerializeField] ToggleGroup toggleGroup;
@@ -104,6 +105,21 @@ public class TeamSelect : MonoBehaviour
         {
             startButton.interactable = false;
         }
+    }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        if (PhotonNetwork.IsMasterClient) CheckAllReady();
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        if (PhotonNetwork.IsMasterClient) CheckAllReady();
+    }
+
+    public void HidePanel()
+    {
+        transform.localScale = Vector3.zero;
     }
 
 }
