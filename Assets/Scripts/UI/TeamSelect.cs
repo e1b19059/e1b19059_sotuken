@@ -11,6 +11,7 @@ public class TeamSelect : MonoBehaviourPunCallbacks
     [SerializeField] ScoreBoard scoreBoard;
     [SerializeField] ToggleGroup toggleGroup;
     [SerializeField] Toggle readyToggle;
+    [SerializeField] Toggle modeToggle;
     [SerializeField] Button startButton;
 
     private void Start()
@@ -24,10 +25,12 @@ public class TeamSelect : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             startButton.transform.localScale = Vector3.one;
+            modeToggle.transform.localScale = Vector3.one;
         }
         else
         {
             startButton.transform.localScale = Vector3.zero;
+            modeToggle.transform.localScale = Vector3.zero;
         }
     }
 
@@ -120,6 +123,11 @@ public class TeamSelect : MonoBehaviourPunCallbacks
     public void HidePanel()
     {
         transform.localScale = Vector3.zero;
+    }
+
+    public void ChangeMode()
+    {
+        PhotonNetwork.CurrentRoom.SetSingleMode(modeToggle.isOn);
     }
 
 }

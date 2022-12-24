@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     bool IsFirst;
     bool IsFinished;
     bool IsShare;
+    bool singleMode;
 
     [DllImport("__Internal")]
     private static extern bool doCode(bool IsMyturn);
@@ -257,6 +258,13 @@ public class GameManager : MonoBehaviourPunCallbacks
                 player.SetOrder(Bnum++);
             }
         }
+        photonView.RPC(nameof(InitMode), RpcTarget.All);// モードの初期化
+        if (PhotonNetwork.CurrentRoom.GetSingleMode())
+        {
+            // ペアがいない場合シングルモードをオンにする
+            if (Anum == 1) photonView.RPC(nameof(OnSingleModeA), RpcTarget.All);
+            if (Bnum == 1) photonView.RPC(nameof(OnSingleModeB), RpcTarget.All);
+        }
         PhotonNetwork.CurrentRoom.IsOpen = false;// 途中入室できなくする
         PhotonNetwork.CurrentRoom.SetInit(Anum, Bnum);
         photonView.RPC(nameof(RPCGameStart), RpcTarget.AllViaServer, Anum + Bnum);
@@ -284,6 +292,30 @@ public class GameManager : MonoBehaviourPunCallbacks
         phaseUIManager.Finished();
         resultView.SetResult();
         ShowResultButton.transform.localScale = Vector3.one;
+    }
+
+    [PunRPC]
+    public void InitMode()
+    {
+        singleMode = false;
+    }
+
+    [PunRPC]
+    public void OnSingleModeA()
+    {
+        if(scoreBoard.GetMyTeam() == "A")
+        {
+            singleMode = true;
+        }
+    }
+
+    [PunRPC]
+    public void OnSingleModeB()
+    {
+        if (scoreBoard.GetMyTeam() == "B")
+        {
+            singleMode = true;
+        }
     }
 
     // そのターン自分がドライバーか確認するメソッド
@@ -318,7 +350,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void SetOthersBlock(string block, PhotonMessageInfo info)
     {
         // ナビゲーターなら、敵味方を判別してブロックをセットする
-        if (!IsDriver)
+        if (!IsDriver || (IsDriver && singleMode))
         {
             if (scoreBoard.GetMyTeam() == info.Sender.GetTeam())
             {

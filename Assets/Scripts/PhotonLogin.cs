@@ -62,8 +62,14 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
     {
         if (!finished)
         {
+            GameObject[] traps = GameObject.FindGameObjectsWithTag("Trap");
+            foreach (var trap in traps)
+            {
+                Destroy(trap);
+            }
             teamSelect.Cancel();
             Leave();
+            Finished();
             leaveAlert();
         }
     }

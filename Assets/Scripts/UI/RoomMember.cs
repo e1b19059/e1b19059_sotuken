@@ -39,7 +39,20 @@ public class RoomMember : MonoBehaviour
         builder.AppendLine("ƒ‹[ƒ€ƒƒ“ƒo[");
         foreach (var player in players)
         {
-            builder.AppendLine($"{player.NickName}({player.ActorNumber}) - {player.GetTeam()}");
+            string team;
+            if (player.GetTeam() == "A")
+            {
+                team = "<color=#0000FF>A</color>";
+            }
+            else if (player.GetTeam() == "B")
+            {
+                team = "<color=#FF0000>B</color>";
+            }
+            else
+            {
+                team = "";
+            }
+            builder.AppendLine($"{player.NickName}({player.ActorNumber}) - {team}");
         }
         label.text = builder.ToString();
     }
