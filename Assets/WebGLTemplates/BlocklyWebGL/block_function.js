@@ -5,14 +5,17 @@ let data_json;
 let code;
 let myInterpreter;
 let IsMyturn;
+let gameScene = false;
 
 document.addEventListener('click', function (e) {
-	if (e.target.id == "unity-canvas") {
-		// Clicked on canvas 
-		unityInstance.SendMessage("PhotonLogin", "FocusCanvas", "1");
-	} else {
-		// Clicked outside of canvas 
-		unityInstance.SendMessage("PhotonLogin", "FocusCanvas", "0");
+	if(gameScene){
+		if (e.target.id == "unity-canvas") {
+			// Clicked on canvas 
+			unityInstance.SendMessage("PhotonLogin", "FocusCanvas", "1");
+		} else {
+			// Clicked outside of canvas 
+			unityInstance.SendMessage("PhotonLogin", "FocusCanvas", "0");
+		}
 	}
 });
 
@@ -48,6 +51,9 @@ const initFunc = function (interpreter, scope) {
 	let destroy_wrapper = function (direction) {
 		return destroy_obstacle_function(direction);
 	};
+	let pick_bomb_wrapper = function (direction) {
+		return pick_bomb_function(direction);
+	};
 	let initiate_wrapper = function () {
 		return initiate();
 	};
@@ -64,6 +70,7 @@ const initFunc = function (interpreter, scope) {
 	interpreter.setProperty(scope, 'check_point', interpreter.createNativeFunction(check_wrapper));
 	interpreter.setProperty(scope, 'put_object', interpreter.createNativeFunction(put_object_wrapper));
 	interpreter.setProperty(scope, 'destroy_obstacle', interpreter.createNativeFunction(destroy_wrapper));
+	interpreter.setProperty(scope, 'pick_bomb', interpreter.createNativeFunction(pick_bomb_wrapper));
 	interpreter.setProperty(scope, 'initiate', interpreter.createNativeFunction(initiate_wrapper));
 	interpreter.setProperty(scope, 'terminate', interpreter.createNativeFunction(terminate_wrapper));
 }
@@ -135,7 +142,11 @@ function put_object_function(direction, object){
 }
 
 function destroy_obstacle_function(direction){
-	unityInstance.SendMessage(player_character, "DestroyObstacle", direction);
+	if(direction != null)unityInstance.SendMessage(player_character, "DestroyObstacle", direction);
+}
+
+function pick_bomb_function(direction){
+	if(direction != null)unityInstance.SendMessage(player_character, "PickBomb", direction);
 }
 
 function initiate(){

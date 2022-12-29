@@ -219,6 +219,24 @@ const destroy_obstacle = {
     "helpUrl": ""
 };
 
+const pick_bomb = {
+    "type": "pick_bomb",
+    "message0": "%1 方向の爆弾を回収",
+    "args0": [
+        {
+            "type": "input_value",
+            "name": "direction",
+            "check": "direction",
+        }
+    ],
+    "inputsInline": true,
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 270,
+    "tooltip": "",
+    "helpUrl": ""
+};
+
 const custom_number = {
   "type": "custom_number",
   "message0": "%1",
@@ -345,6 +363,12 @@ Blockly.Blocks['destroy_obstacle'] = {
     }
 };
 
+Blockly.Blocks['pick_bomb'] = {
+    init: function () {
+        this.jsonInit(pick_bomb);
+    }
+};
+
 Blockly.Blocks['custom_number'] = {
     init: function () {
         this.jsonInit(custom_number);
@@ -441,8 +465,7 @@ Blockly.JavaScript['bomb'] = function () {
 Blockly.JavaScript['put_object'] = function (block) {
     var direction = Blockly.JavaScript.valueToCode(block, 'direction', Blockly.JavaScript.ORDER_ATOMIC) || null;
     var object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_ATOMIC) || null;
-    console.log("object: " + object);
-    if(direction == null){
+    if(direction == null || object == null){
         return '\n';
     }else{
         return 'put_object(' + direction + ', ' + object + ');\n';
@@ -450,8 +473,14 @@ Blockly.JavaScript['put_object'] = function (block) {
 };
 
 Blockly.JavaScript['destroy_obstacle'] = function (block) {
-    var value_name = Blockly.JavaScript.valueToCode(block, 'direction', Blockly.JavaScript.ORDER_ATOMIC);
+    var value_name = Blockly.JavaScript.valueToCode(block, 'direction', Blockly.JavaScript.ORDER_ATOMIC) || null;
     let code = 'destroy_obstacle(' + value_name + ');\n';
+    return code;
+};
+
+Blockly.JavaScript['pick_bomb'] = function (block) {
+    var value_name = Blockly.JavaScript.valueToCode(block, 'direction', Blockly.JavaScript.ORDER_ATOMIC) || null;
+    let code = 'pick_bomb(' + value_name + ');\n';
     return code;
 };
 

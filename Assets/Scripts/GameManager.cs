@@ -280,6 +280,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         TurnCount = 0;
         codeFinPlayer = 0;
         playerCnt = _playerCnt;
+        scoreBoard.SetPlayerBehaviour();
         IsFirst = (PhotonNetwork.LocalPlayer.GetTeam() == "A");
         StartTurn();
     }

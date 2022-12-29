@@ -89,6 +89,10 @@ mergeInto(LibraryManager.library, {
 
 	leaveAlert: function(){
 		alert('Master Client disconnected!');
-	}
+	},
 
+	transScene: function(){
+		game_scene = true;
+	}
+	
 });

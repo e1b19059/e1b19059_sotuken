@@ -7,14 +7,17 @@ using UnityEngine;
 public class ScoreBoard : MonoBehaviour
 {
     [SerializeField] PhotonLogin photonLogin;
-
     [SerializeField] TextMeshProUGUI MyTeamMember = default;
     [SerializeField] TextMeshProUGUI RivalTeamMember = default;
     [SerializeField] TextMeshProUGUI MyTeamLabel;
     [SerializeField] TextMeshProUGUI RivalTeamLabel;
     [SerializeField] TextMeshProUGUI MyScoreLabel;
     [SerializeField] TextMeshProUGUI RivalScoreLabel;
+    [SerializeField] TextMeshProUGUI MyBombCnt;
+    [SerializeField] TextMeshProUGUI RivalBombCnt;
 
+    PlayerBehaviour MyCharacter;
+    PlayerBehaviour RivalCharacter;
     StringBuilder MyBuilder;
     StringBuilder RivalBuilder;
     float elapsedTime;
@@ -69,6 +72,12 @@ public class ScoreBoard : MonoBehaviour
         RivalTeamMember.text = RivalBuilder.ToString();
     }
 
+    public void SetPlayerBehaviour()
+    {
+        MyCharacter = GameObject.FindGameObjectWithTag($"Player{GetMyTeam()}").GetComponent<PlayerBehaviour>();
+        RivalCharacter = GameObject.FindGameObjectWithTag($"Player{GetRivalTeam()}").GetComponent<PlayerBehaviour>();
+    }
+
     public void SetMyScore(int score)
     {
         MyScore = score;
@@ -79,6 +88,16 @@ public class ScoreBoard : MonoBehaviour
     {
         RivalScore = score;
         RivalScoreLabel.text = "Score: " + score.ToString();
+    }
+
+    public void SetMyBombCnt(int cnt)
+    {
+        MyBombCnt.text = "Bomb: " + cnt.ToString();
+    }
+
+    public void SetRivalBombCnt(int cnt)
+    {
+        RivalBombCnt.text = "Bomb: " + cnt.ToString();
     }
 
     // チームラベルの文字と色をセットするメソッド
@@ -133,6 +152,8 @@ public class ScoreBoard : MonoBehaviour
     {
         SetMyScore(PlayerPrefs.GetInt($"Score{GetMyTeam()}"));
         SetRivalScore(PlayerPrefs.GetInt($"Score{GetRivalTeam()}"));
+        SetMyBombCnt(MyCharacter.GetBombCnt());
+        SetRivalBombCnt(RivalCharacter.GetBombCnt());
     }
 
 }

@@ -8,6 +8,7 @@ using Photon.Pun;
 public class PlayerBehaviour : MonoBehaviour
 {
     int speed = 3;
+    int bombCnt;
     bool moving;
     Vector3 targetPosition;
     JSONCreator jsonCreator;
@@ -41,6 +42,7 @@ public class PlayerBehaviour : MonoBehaviour
         jsonCreator = GameObject.FindGameObjectWithTag("GameController").GetComponent<JSONCreator>();
         createField = GameObject.FindGameObjectWithTag("FloorContainer").GetComponent<CreateField>();
         container = GameObject.FindGameObjectWithTag("ObjectContainer").GetComponent<ObjectContainer>();
+        bombCnt = 3;
     }
 
     void Update()
@@ -150,6 +152,11 @@ public class PlayerBehaviour : MonoBehaviour
 
     public void PutBomb(string direction)
     {
+        if(bombCnt <= 0)
+        {
+            return;
+        }
+        bombCnt--;
         Vector3 targetPos = transform.position;
         switch (direction)
         {
@@ -203,6 +210,37 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
+    public void PickBomb(string direction)
+    {
+        var enumerator = container.GetEnumerator();
+        Vector3 targetPos = transform.position;
+        switch (direction)
+        {
+            case "left":
+                targetPos -= transform.right;
+                break;
+            case "right":
+                targetPos += transform.right;
+                break;
+            case "forward":
+                targetPos += transform.forward;
+                break;
+            case "back":
+                targetPos -= transform.forward;
+                break;
+        }
+        targetPos.y = -0.1f;// 爆弾オブジェクトの高さに合わせる
+        while (enumerator.MoveNext())
+        {
+            if (enumerator.Current.transform.position == targetPos && enumerator.Current.gameObject.CompareTag("Bomb"))
+            {
+                Destroy(enumerator.Current.gameObject);
+                bombCnt++;
+                break;
+            }
+        }
+    }
+
     public void Init()
     {
         targetPosition = transform.position;
@@ -216,6 +254,12 @@ public class PlayerBehaviour : MonoBehaviour
         Running = false;
         transform.position = targetPosition;
         jsonCreator.StopUpdate();
+        if(bombCnt <= 3) bombCnt = 3;
+    }
+
+    public int GetBombCnt()
+    {
+        return bombCnt;
     }
 
 }
