@@ -382,7 +382,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void DoCode()
     {
-        bool _IsMyTurn = IsFirst;
+        //bool _IsMyTurn = IsFirst;//先にプログラミングした方が先に実行する
+        bool _IsMyTurn = !IsFirst;// 後にプログラミングした方が先に実行する
         Debug.Log("実行");
         GameObject obj;
         if (_IsMyTurn)

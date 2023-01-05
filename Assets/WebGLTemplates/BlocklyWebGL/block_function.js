@@ -5,10 +5,10 @@ let data_json;
 let code;
 let myInterpreter;
 let IsMyturn;
-let gameScene = false;
+let game_scene = false;
 
 document.addEventListener('click', function (e) {
-	if(gameScene){
+	if(game_scene){
 		if (e.target.id == "unity-canvas") {
 			// Clicked on canvas 
 			unityInstance.SendMessage("PhotonLogin", "FocusCanvas", "1");
@@ -76,7 +76,6 @@ const initFunc = function (interpreter, scope) {
 }
 
 function highlightBlock(id) {
-	console.log('IsMyturn:'+ IsMyturn);
 	if(IsMyturn){
 		workspace_readOnly.highlightBlock(id);
 	}else{
