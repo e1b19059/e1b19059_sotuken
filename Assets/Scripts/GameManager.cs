@@ -259,12 +259,12 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
         }
         photonView.RPC(nameof(InitMode), RpcTarget.All);// モードの初期化
-        if (PhotonNetwork.CurrentRoom.GetSingleMode())
-        {
+        //if (PhotonNetwork.CurrentRoom.GetSingleMode())
+        //{
             // ペアがいない場合シングルモードをオンにする
             if (Anum == 1) photonView.RPC(nameof(OnSingleModeA), RpcTarget.All);
             if (Bnum == 1) photonView.RPC(nameof(OnSingleModeB), RpcTarget.All);
-        }
+        //}
         PhotonNetwork.CurrentRoom.IsOpen = false;// 途中入室できなくする
         PhotonNetwork.CurrentRoom.SetInit(Anum, Bnum);
         photonView.RPC(nameof(RPCGameStart), RpcTarget.AllViaServer, Anum + Bnum);

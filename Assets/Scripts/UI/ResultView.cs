@@ -61,7 +61,7 @@ public class ResultView : MonoBehaviour
             {
                 if (player.IsLocal)
                 {
-                    ATeamBuilder.AppendLine("<color=#FAFAFA>   " + player.NickName + "</color>");
+                    ATeamBuilder.AppendLine("<color=#646464>   " + player.NickName + "</color>");
                 }
                 else
                 {

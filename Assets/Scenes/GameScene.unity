@@ -2116,7 +2116,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 315, y: 0}
-  m_SizeDelta: {x: 520, y: 50}
+  m_SizeDelta: {x: 530, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &405533669
 MonoBehaviour:
@@ -2138,7 +2138,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u30DA\u30A2\u304C\u3044\u306A\u3044\u5834\u5408\u3001\u30D6\u30ED\u30C3\u30AF\u7DE8\u96C6\u4E2D\u306E\u30D7\u30EC\u30A4\u30E4\u30FC\u3067\u3082\n\u76F8\u624B\u30C1\u30FC\u30E0\u306E\u30D6\u30ED\u30C3\u30AF\u3092\u898B\u3089\u308C\u308B\u30E2\u30FC\u30C9"
+  m_text: "\u30B7\u30F3\u30B0\u30EB\u30E2\u30FC\u30C9(\u30C1\u30FC\u30E0\u30E1\u30F3\u30D0\u30FC\u306E\u3044\u306A\u3044\u30D7\u30EC\u30A4\u30E4\u30FC\u306B\u76F8\u624B\u30C1\u30FC\u30E0\u306E\u30D6\u30ED\u30C3\u30AF\u3092\u5171\u6709\u3059\u308B)"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ccdab7b1128ee384e941361921ee1c1a, type: 2}
   m_sharedMaterial: {fileID: 6351308116114961328, guid: ccdab7b1128ee384e941361921ee1c1a, type: 2}
@@ -3920,7 +3920,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Bomb:0
+  m_text: "Bomb \xD7 0"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ccdab7b1128ee384e941361921ee1c1a, type: 2}
   m_sharedMaterial: {fileID: 6351308116114961328, guid: ccdab7b1128ee384e941361921ee1c1a, type: 2}
@@ -5324,7 +5324,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1093542155
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5344,8 +5344,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000002861, y: -250}
-  m_SizeDelta: {x: 575, y: 50}
+  m_AnchoredPosition: {x: 0, y: -200}
+  m_SizeDelta: {x: 580, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1093542156
 MonoBehaviour:
@@ -6562,7 +6562,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1527103291}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -7235,7 +7235,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 930001602}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -7837,7 +7837,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Bomb:0
+  m_text: "Bomb \xD7 0"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ccdab7b1128ee384e941361921ee1c1a, type: 2}
   m_sharedMaterial: {fileID: 6351308116114961328, guid: ccdab7b1128ee384e941361921ee1c1a, type: 2}

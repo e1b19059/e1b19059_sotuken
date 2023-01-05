@@ -56,7 +56,7 @@ public class ScoreBoard : MonoBehaviour
             {
                 if (player.IsLocal)
                 {
-                    MyBuilder.AppendLine($"<color=#FAFAFA>{player.NickName}({player.ActorNumber})</color>");
+                    MyBuilder.AppendLine($"<color=#646464>{player.NickName}({player.ActorNumber})</color>");
                 }
                 else
                 {
@@ -92,12 +92,12 @@ public class ScoreBoard : MonoBehaviour
 
     public void SetMyBombCnt(int cnt)
     {
-        MyBombCnt.text = "Bomb: " + cnt.ToString();
+        MyBombCnt.text = "Bomb × " + cnt.ToString();
     }
 
     public void SetRivalBombCnt(int cnt)
     {
-        RivalBombCnt.text = "Bomb: " + cnt.ToString();
+        RivalBombCnt.text = "Bomb × " + cnt.ToString();
     }
 
     // チームラベルの文字と色をセットするメソッド
