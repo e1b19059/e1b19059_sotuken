@@ -109,9 +109,11 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
         PlayerPrefs.SetInt("CoinA", 0);
         PlayerPrefs.SetInt("DamageA", 0);
         PlayerPrefs.SetInt("ScoreA", 0);
+        PlayerPrefs.SetInt("MissA", 0);
         PlayerPrefs.SetInt("CoinB", 0);
         PlayerPrefs.SetInt("DamageB", 0);
         PlayerPrefs.SetInt("ScoreB", 0);
+        PlayerPrefs.SetInt("MissB", 0);
         teamSelect.HidePanel();
     }
 

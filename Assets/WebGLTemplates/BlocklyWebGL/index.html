@@ -18,7 +18,7 @@
 		<div class="middle">
 			<div id="blocklyDiv" style="width: 650px; height: 640px;"></div> <!-- ワークスペースを用意 -->
 			<xml id="toolbox" style="display: none">
-				<category name="キャラ操作" colour="230">
+				<category name="キャラ操作" colour="195">
 					<block type="move_left"></block>
 					<block type="move_right"></block>
 					<block type="move_forward"></block>
@@ -26,29 +26,30 @@
 					<block type="turn_left"></block>
 					<block type="turn_right"></block>
 				</category>
-				<category name="設置・破壊" colour="230">
+				<category name="設置・破壊" colour="270">
 					<block type="put_object"></block>
 					<block type="destroy_obstacle"></block>					
 					<block type="pick_bomb"></block>					
 				</category>
-				<category name="値" colour="230">
+				<category name="方向" colour="240">
 					<block type="get_left"></block>
 					<block type="get_right"></block>
 					<block type="get_forward"></block>
-					<block type="get_back"></block>
-					<block type="obstacle"></block>
+					<block type="get_back"></block>				
+				</category>
+				<category name="オブジェクト" colour="235">
 					<block type="wall"></block>
 					<block type="coin"></block>
 					<block type="player"></block>
+					<block type="obstacle"></block>
 					<block type="bomb"></block>
-					<block type="custom_number"></block>
 				</category>
-				<category name="条件分岐" colour="230">
+				<category name="条件分岐" colour="210">
 					<block type="controls_if"></block>
 					<block type="controls_ifelse"></block>
 					<block type="check_point"></block>
 				</category>
-				<category name="繰り返し" colour="230">
+				<category name="繰り返し" colour="120">
 					<block type="controls_repeat_ext">
 						<value name="TIMES">
 							<block type="custom_number">

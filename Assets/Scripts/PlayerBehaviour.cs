@@ -70,7 +70,7 @@ public class PlayerBehaviour : MonoBehaviour
             Debug.Log("”š•—‚É“–‚½‚Á‚Ä‚µ‚Ü‚Á‚½!");
             var team = gameObject.name.Substring(0, 1);
             PlayerPrefs.SetInt($"Damage{team}", PlayerPrefs.GetInt($"Damage{team}") + 1);
-            if (PlayerPrefs.GetInt($"Score{team}") > 0) PlayerPrefs.SetInt($"Score{team}", PlayerPrefs.GetInt($"Score{team}") - 1);
+            SetScore(-50);
         }
     }
 
@@ -82,6 +82,11 @@ public class PlayerBehaviour : MonoBehaviour
         {
             targetPosition -= transform.right;
         }
+        else
+        {
+            SetScore(-10);
+            AddMissCount();
+        }
     }
 
     public void MoveRight()
@@ -91,6 +96,11 @@ public class PlayerBehaviour : MonoBehaviour
         if (Physics.OverlapSphere(targetPos, 0).Length <= 0)
         {
             targetPosition += transform.right;
+        }
+        else
+        {
+            SetScore(-10);
+            AddMissCount();
         }
     }
 
@@ -102,6 +112,11 @@ public class PlayerBehaviour : MonoBehaviour
         {
             targetPosition += transform.forward;
         }
+        else
+        {
+            SetScore(-10);
+            AddMissCount();
+        }
     }
 
     public void MoveBack()
@@ -111,6 +126,11 @@ public class PlayerBehaviour : MonoBehaviour
         if (Physics.OverlapSphere(targetPos, 0).Length <= 0)
         {
             targetPosition -= transform.forward;
+        }
+        else
+        {
+            SetScore(-10);
+            AddMissCount();
         }
     }
 
@@ -148,12 +168,19 @@ public class PlayerBehaviour : MonoBehaviour
         {
             createField.RPCCreateObstacle(targetPos);
         }
+        else
+        {
+            SetScore(-10);
+            AddMissCount();
+        }
     }
 
     public void PutBomb(string direction)
     {
         if(bombCnt <= 0)
         {
+            SetScore(-10);
+            AddMissCount();
             return;
         }
         bombCnt--;
@@ -177,6 +204,11 @@ public class PlayerBehaviour : MonoBehaviour
         if (Physics.OverlapSphere(targetPos, 0.3f).Length <= 0)
         {
             createField.RPCCreateBomb(targetPos);
+        }
+        else
+        {
+            SetScore(-10);
+            AddMissCount();
         }
     }
 
@@ -205,9 +237,12 @@ public class PlayerBehaviour : MonoBehaviour
             if (enumerator.Current.transform.position == targetPos && enumerator.Current.gameObject.CompareTag("Destroyable"))
             {
                 Destroy(enumerator.Current.gameObject);
-                break;
+                return;
             }
         }
+
+        SetScore(-10);
+        AddMissCount();
     }
 
     public void PickBomb(string direction)
@@ -236,9 +271,12 @@ public class PlayerBehaviour : MonoBehaviour
             {
                 Destroy(enumerator.Current.gameObject);
                 bombCnt++;
-                break;
+                return;
             }
         }
+
+        SetScore(-10);
+        AddMissCount();
     }
 
     public void Init()
@@ -260,6 +298,26 @@ public class PlayerBehaviour : MonoBehaviour
     public int GetBombCnt()
     {
         return bombCnt;
+    }
+
+    public void SetScore(int _score)
+    {
+        var team = gameObject.name.Substring(0, 1);
+        int result = PlayerPrefs.GetInt($"Score{team}") + _score;
+        if(result < 0)
+        {
+            PlayerPrefs.SetInt($"Score{team}", 0);
+        }
+        else
+        {
+            PlayerPrefs.SetInt($"Score{team}", result);
+        }
+    }
+
+    public void AddMissCount()
+    {
+        var team = gameObject.name.Substring(0, 1);
+        PlayerPrefs.SetInt($"Miss{team}", PlayerPrefs.GetInt($"Miss{team}") + 1);
     }
 
 }

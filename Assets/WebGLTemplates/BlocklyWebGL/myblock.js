@@ -4,7 +4,7 @@ const move_left = {
     "inputsInline": true,
     "previousStatement": null,
     "nextStatement": null,
-    "colour": 230,
+    "colour": 195,
     "tooltip": "",
     "helpUrl": ""
 };
@@ -15,7 +15,7 @@ const move_right = {
     "inputsInline": true,
     "previousStatement": null,
     "nextStatement": null,
-    "colour": 230,
+    "colour": 195,
     "tooltip": "",
     "helpUrl": ""
 };
@@ -26,7 +26,7 @@ const move_forward = {
     "inputsInline": true,
     "previousStatement": null,
     "nextStatement": null,
-    "colour": 230,
+    "colour": 195,
     "tooltip": "",
     "helpUrl": ""
 };
@@ -37,7 +37,7 @@ const move_back = {
     "inputsInline": true,
     "previousStatement": null,
     "nextStatement": null,
-    "colour": 230,
+    "colour": 195,
     "tooltip": "",
     "helpUrl": ""
 };
@@ -48,7 +48,7 @@ const turn_left = {
     "inputsInline": true,
     "previousStatement": null,
     "nextStatement": null,
-    "colour": 230,
+    "colour": 195,
     "tooltip": "",
     "helpUrl": ""
 };
@@ -59,7 +59,7 @@ const turn_right = {
     "inputsInline": true,
     "previousStatement": null,
     "nextStatement": null,
-    "colour": 230,
+    "colour": 195,
     "tooltip": "",
     "helpUrl": ""
 };
@@ -69,7 +69,7 @@ const get_left = {
     "message0": "左",
     "inputsInline": true,
     "output": "direction",
-    "colour": 230,
+    "colour": 240,
     "tooltip": "",
     "helpUrl": ""
 }
@@ -79,7 +79,7 @@ const get_right = {
     "message0": "右",
     "inputsInline": true,
     "output": "direction",
-    "colour": 230,
+    "colour": 240,
     "tooltip": "",
     "helpUrl": ""
 }
@@ -89,7 +89,7 @@ const get_forward = {
     "message0": "前",
     "inputsInline": true,
     "output": "direction",
-    "colour": 230,
+    "colour": 240,
     "tooltip": "",
     "helpUrl": ""
 }
@@ -99,7 +99,7 @@ const get_back = {
     "message0": "後ろ",
     "inputsInline": true,
     "output": "direction",
-    "colour": 230,
+    "colour": 240,
     "tooltip": "",
     "helpUrl": ""
 }
@@ -134,7 +134,7 @@ const wall = {
     "message0": "壁",
     "inputsInline": true,
     "output": "object1",
-    "colour": 230,
+    "colour": 240,
     "tooltip": "",
     "helpUrl": ""
 }
@@ -144,7 +144,7 @@ const coin = {
     "message0": "コイン",
     "inputsInline": true,
     "output": "object1",
-    "colour": 230,
+    "colour": 240,
     "tooltip": "",
     "helpUrl": ""
 }
@@ -154,7 +154,7 @@ const player = {
     "message0": "プレイヤー",
     "inputsInline": true,
     "output": "object1",
-    "colour": 230,
+    "colour": 240,
     "tooltip": "",
     "helpUrl": ""
 }
@@ -164,7 +164,7 @@ const obstacle = {
     "message0": "障害物",
     "inputsInline": true,
     "output": "object2",
-    "colour": 230,
+    "colour": 250,
     "tooltip": "",
     "helpUrl": ""
 }
@@ -174,7 +174,7 @@ const bomb = {
     "message0": "爆弾",
     "inputsInline": true,
     "output": "object2",
-    "colour": 230,
+    "colour": 250,
     "tooltip": "",
     "helpUrl": ""
 }
