@@ -159,6 +159,26 @@ const player = {
     "helpUrl": ""
 }
 
+const anything = {
+    "type": "anything",
+    "message0": "何らかのオブジェクト",
+    "inputsInline": true,
+    "output": "object1",
+    "colour": 240,
+    "tooltip": "",
+    "helpUrl": ""
+}
+
+const empty = {
+    "type": "empty",
+    "message0": "何もない空間",
+    "inputsInline": true,
+    "output": "object1",
+    "colour": 240,
+    "tooltip": "",
+    "helpUrl": ""
+}
+
 const obstacle = {
     "type": "obstacle",
     "message0": "障害物",
@@ -198,7 +218,7 @@ const put_object = {
     "previousStatement": null,
     "nextStatement": null,
     "colour": 270,
-    "tooltip": "爆弾変数または障害物を設置できる"
+    "tooltip": "爆弾または障害物を設置できる"
 };
 
 const destroy_obstacle = {
@@ -339,6 +359,18 @@ Blockly.Blocks['player'] = {
     }
 };
 
+Blockly.Blocks['anything'] = {
+    init: function () {
+        this.jsonInit(anything);
+    }
+};
+
+Blockly.Blocks['empty'] = {
+    init: function () {
+        this.jsonInit(empty);
+    }
+};
+
 Blockly.Blocks['obstacle'] = {
     init: function () {
         this.jsonInit(obstacle);
@@ -449,6 +481,16 @@ Blockly.JavaScript['coin'] = function () {
 
 Blockly.JavaScript['player'] = function () {
     let code = '\'Player\'';
+    return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['anything'] = function () {
+    let code = '\'anything\'';
+    return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['empty'] = function () {
+    let code = '\'empty\'';
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 

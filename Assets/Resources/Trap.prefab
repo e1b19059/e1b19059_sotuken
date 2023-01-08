@@ -185,6 +185,7 @@ GameObject:
   - component: {fileID: 7221132491063750307}
   - component: {fileID: 7221132491063750304}
   - component: {fileID: 7699371889385197781}
+  - component: {fileID: -7229292551992733131}
   m_Layer: 0
   m_Name: Trap
   m_TagString: Trap
@@ -286,3 +287,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TrapLabel: {fileID: 8289340456303425688}
   trapMaterial: {fileID: 2100000, guid: b31a96faf9f25a941908823bcec3f7f8, type: 2}
+--- !u!114 &-7229292551992733131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7221132491063750319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee26aaddf5488fe409602ff50c83d588, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

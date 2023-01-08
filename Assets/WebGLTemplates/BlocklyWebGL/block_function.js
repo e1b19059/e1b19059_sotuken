@@ -113,11 +113,11 @@ function turn_right_function() {
 	unityInstance.SendMessage(player_character, "TurnRight");
 }
 
-function check_point_function(direction, targetObj){			
+function check_point_function(direction, targetObj){		
 	let check_point;
 	switch(direction){
 		case 'left':
-			check_point = {x: -playerPos.z + playerPos.x, z: playerDir.x + playerPos.z};
+			check_point = {x: -playerDir.z + playerPos.x, z: playerDir.x + playerPos.z};
 			break;
 		case 'right':
 			check_point = {x: playerDir.z + playerPos.x, z: -playerDir.x + playerPos.z};
@@ -129,7 +129,13 @@ function check_point_function(direction, targetObj){
 			check_point = {x: -playerDir.x + playerPos.x, z: -playerDir.z + playerPos.z};
 			break;
 	}
-	return data_json.objectData.find(object => object.position.x == check_point.x && object.position.z == check_point.z && object.name.includes(targetObj));
+	if(targetObj == 'anything'){
+		return data_json.objectData.find(object => object.position.x == check_point.x && object.position.z == check_point.z);
+	}else if(targetObj == 'empty'){
+		return !data_json.objectData.find(object => object.position.x == check_point.x && object.position.z == check_point.z);
+	}else{
+		return data_json.objectData.find(object => object.position.x == check_point.x && object.position.z == check_point.z && object.name.includes(targetObj));
+	}
 }
 
 function put_object_function(direction, object){

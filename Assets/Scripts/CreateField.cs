@@ -19,7 +19,6 @@ public class CreateField : MonoBehaviourPunCallbacks
     public GameObject coin;     //コイン用オブジェクト
     public GameObject trap;     //トラップ用オブジェクト
     public GameObject bomb;     //爆弾用オブジェクト
-    public GameObject trapContainer;
     public Material transparentMaterial;
     /*
     *内部パラメータ
@@ -253,7 +252,6 @@ public class CreateField : MonoBehaviourPunCallbacks
         if (Physics.OverlapSphere(new Vector3(posX, -0.3f, posZ), 0).Length <= 0)
         {
             GameObject trapObj = Instantiate(trap, new Vector3(posX, -0.45f, posZ), Quaternion.identity) as GameObject;
-            trapObj.transform.parent = trapContainer.transform;
 
             if (trapType == 0) trapObj.GetComponentInChildren<TextMeshPro>().text = "R";
             if (transparent)
