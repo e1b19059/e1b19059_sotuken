@@ -83,7 +83,7 @@
 		}).then(x => unityInstance = x);
 	</script>
 	<script>
-		let workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox'), scrollbars: true, trashcan: true, maxBlocks: 20, maxInstances: {'move_left': 3, 'move_right': 3, 'move_forward': 3, 'move_back': 3, 'controls_repeat_ext': 2, 'pick_bomb' : 2 }});
+		let workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox'), scrollbars: true, trashcan: true, maxInstances: {'move_left': 3, 'move_right': 3, 'move_forward': 3, 'move_back': 3, 'controls_repeat_ext': 2, 'pick_bomb' : 2 }});
 		let workspace_readOnly = Blockly.inject('blocklyDiv_readOnly', { readOnly:true, scrollbars: true });
 		let workspace_rival = Blockly.inject('blocklyDiv_rival', { readOnly:true, scrollbars: true });
 	</script>

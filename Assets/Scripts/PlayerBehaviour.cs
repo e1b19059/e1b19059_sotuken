@@ -10,6 +10,7 @@ public class PlayerBehaviour : MonoBehaviour
     int speed = 3;
     int bombCnt;
     bool moving;
+    string team;
     Vector3 targetPosition;
     JSONCreator jsonCreator;
     CreateField createField;
@@ -43,6 +44,7 @@ public class PlayerBehaviour : MonoBehaviour
         createField = GameObject.FindGameObjectWithTag("FloorContainer").GetComponent<CreateField>();
         container = GameObject.FindGameObjectWithTag("ObjectContainer").GetComponent<ObjectContainer>();
         bombCnt = 3;
+        team = gameObject.name.Substring(0, 1);
     }
 
     void Update()
@@ -68,7 +70,6 @@ public class PlayerBehaviour : MonoBehaviour
         if (other.CompareTag("Explosion"))
         {
             Debug.Log("”š•—‚É“–‚½‚Á‚Ä‚µ‚Ü‚Á‚½!");
-            var team = gameObject.name.Substring(0, 1);
             PlayerPrefs.SetInt($"Damage{team}", PlayerPrefs.GetInt($"Damage{team}") + 1);
             SetScore(-50);
         }
@@ -240,7 +241,6 @@ public class PlayerBehaviour : MonoBehaviour
                 return;
             }
         }
-
         SetScore(-10);
         AddMissCount();
     }
@@ -274,7 +274,6 @@ public class PlayerBehaviour : MonoBehaviour
                 return;
             }
         }
-
         SetScore(-10);
         AddMissCount();
     }
@@ -302,7 +301,6 @@ public class PlayerBehaviour : MonoBehaviour
 
     public void SetScore(int _score)
     {
-        var team = gameObject.name.Substring(0, 1);
         int result = PlayerPrefs.GetInt($"Score{team}") + _score;
         if(result < 0)
         {
@@ -316,7 +314,6 @@ public class PlayerBehaviour : MonoBehaviour
 
     public void AddMissCount()
     {
-        var team = gameObject.name.Substring(0, 1);
         PlayerPrefs.SetInt($"Miss{team}", PlayerPrefs.GetInt($"Miss{team}") + 1);
     }
 

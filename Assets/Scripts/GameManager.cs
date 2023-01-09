@@ -35,6 +35,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     [DllImport("__Internal")]
     private static extern bool doCode(bool IsMyturn);
+    
+    [DllImport("__Internal")]
+    private static extern bool setMaxBlocks(bool _isFirst);
 
     [DllImport("__Internal")]
     private static extern void setPlayerCharacter(string str);
@@ -121,6 +124,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 {
                     IsShare = true;
                     switchEditable();
+                    setMaxBlocks(IsFirst);
                 }
                 else
                 {

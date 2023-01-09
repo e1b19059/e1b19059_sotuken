@@ -19,6 +19,14 @@ mergeInto(LibraryManager.library, {
 		stepCode();
 	},
 
+	setMaxBlocks: function(_isFirst){
+		if(_isFirst){
+			workspace.options.maxBlocks = Infinity;
+		}else{
+			workspace.options.maxBlocks = 15;
+		}
+	},
+
 	setPlayerCharacter: function(obj){
 		player_character = UTF8ToString(obj);
 	},
