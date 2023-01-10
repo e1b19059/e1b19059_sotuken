@@ -4,6 +4,7 @@ mergeInto(LibraryManager.library, {
 	},
 
 	doCode: function(turn){
+		workspace.trashcan.flyout.hide();
 		IsMyturn = turn;
 		if(IsMyturn){
 			code = 'initiate();\n' + Blockly.JavaScript.workspaceToCode(workspace_readOnly) + 'terminate();\n';
