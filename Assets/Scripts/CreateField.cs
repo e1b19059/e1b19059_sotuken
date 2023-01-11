@@ -51,7 +51,7 @@ public class CreateField : MonoBehaviourPunCallbacks
             for (int j = 0; j < max; j++)
             {
                 // ƒ‰ƒ“ƒ_ƒ€‚É•Ç‚ðÁ‚·
-                if (Random.Range(0, 2) == 0) walls[i, j] = 1;
+                if (Random.Range(0, 3) != 0) walls[i, j] = 1;
                 // ƒ‰ƒ“ƒ_ƒ€‚É2Ží—Þ–Ú‚Ì•Ç‚ð’u‚­
                 if (Random.Range(0, 10) == 0) walls[i, j] = 2;
             }
