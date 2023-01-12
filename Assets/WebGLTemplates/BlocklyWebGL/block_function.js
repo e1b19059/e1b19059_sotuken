@@ -5,14 +5,17 @@ let data_json;
 let code;
 let myInterpreter;
 let IsMyturn;
+let game_scene = false;
 
 document.addEventListener('click', function (e) {
-	if (e.target.id == "unity-canvas") {
-		// Clicked on canvas 
-		unityInstance.SendMessage("PhotonLogin", "FocusCanvas", "1");
-	} else {
-		// Clicked outside of canvas 
-		unityInstance.SendMessage("PhotonLogin", "FocusCanvas", "0");
+	if(game_scene){
+		if (e.target.id == "unity-canvas") {
+			// Clicked on canvas 
+			unityInstance.SendMessage("PhotonLogin", "FocusCanvas", "1");
+		} else {
+			// Clicked outside of canvas 
+			unityInstance.SendMessage("PhotonLogin", "FocusCanvas", "0");
+		}
 	}
 });
 
@@ -48,6 +51,9 @@ const initFunc = function (interpreter, scope) {
 	let destroy_wrapper = function (direction) {
 		return destroy_obstacle_function(direction);
 	};
+	let pick_bomb_wrapper = function (direction) {
+		return pick_bomb_function(direction);
+	};
 	let initiate_wrapper = function () {
 		return initiate();
 	};
@@ -64,12 +70,12 @@ const initFunc = function (interpreter, scope) {
 	interpreter.setProperty(scope, 'check_point', interpreter.createNativeFunction(check_wrapper));
 	interpreter.setProperty(scope, 'put_object', interpreter.createNativeFunction(put_object_wrapper));
 	interpreter.setProperty(scope, 'destroy_obstacle', interpreter.createNativeFunction(destroy_wrapper));
+	interpreter.setProperty(scope, 'pick_bomb', interpreter.createNativeFunction(pick_bomb_wrapper));
 	interpreter.setProperty(scope, 'initiate', interpreter.createNativeFunction(initiate_wrapper));
 	interpreter.setProperty(scope, 'terminate', interpreter.createNativeFunction(terminate_wrapper));
 }
 
 function highlightBlock(id) {
-	console.log('IsMyturn:'+ IsMyturn);
 	if(IsMyturn){
 		workspace_readOnly.highlightBlock(id);
 	}else{
@@ -107,11 +113,11 @@ function turn_right_function() {
 	unityInstance.SendMessage(player_character, "TurnRight");
 }
 
-function check_point_function(direction, targetObj){			
+function check_point_function(direction, targetObj){		
 	let check_point;
 	switch(direction){
 		case 'left':
-			check_point = {x: -playerPos.z + playerPos.x, z: playerDir.x + playerPos.z};
+			check_point = {x: -playerDir.z + playerPos.x, z: playerDir.x + playerPos.z};
 			break;
 		case 'right':
 			check_point = {x: playerDir.z + playerPos.x, z: -playerDir.x + playerPos.z};
@@ -123,7 +129,13 @@ function check_point_function(direction, targetObj){
 			check_point = {x: -playerDir.x + playerPos.x, z: -playerDir.z + playerPos.z};
 			break;
 	}
-	return data_json.objectData.find(object => object.position.x == check_point.x && object.position.z == check_point.z && object.name.includes(targetObj));
+	if(targetObj == 'anything'){
+		return data_json.objectData.find(object => object.position.x == check_point.x && object.position.z == check_point.z);
+	}else if(targetObj == 'empty'){
+		return !data_json.objectData.find(object => object.position.x == check_point.x && object.position.z == check_point.z);
+	}else{
+		return data_json.objectData.find(object => object.position.x == check_point.x && object.position.z == check_point.z && object.name.includes(targetObj));
+	}
 }
 
 function put_object_function(direction, object){
@@ -135,7 +147,11 @@ function put_object_function(direction, object){
 }
 
 function destroy_obstacle_function(direction){
-	unityInstance.SendMessage(player_character, "DestroyObstacle", direction);
+	if(direction != null)unityInstance.SendMessage(player_character, "DestroyObstacle", direction);
+}
+
+function pick_bomb_function(direction){
+	if(direction != null)unityInstance.SendMessage(player_character, "PickBomb", direction);
 }
 
 function initiate(){

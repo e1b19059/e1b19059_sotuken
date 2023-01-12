@@ -4,7 +4,7 @@ const move_left = {
     "inputsInline": true,
     "previousStatement": null,
     "nextStatement": null,
-    "colour": 230,
+    "colour": 195,
     "tooltip": "",
     "helpUrl": ""
 };
@@ -15,7 +15,7 @@ const move_right = {
     "inputsInline": true,
     "previousStatement": null,
     "nextStatement": null,
-    "colour": 230,
+    "colour": 195,
     "tooltip": "",
     "helpUrl": ""
 };
@@ -26,7 +26,7 @@ const move_forward = {
     "inputsInline": true,
     "previousStatement": null,
     "nextStatement": null,
-    "colour": 230,
+    "colour": 195,
     "tooltip": "",
     "helpUrl": ""
 };
@@ -37,7 +37,7 @@ const move_back = {
     "inputsInline": true,
     "previousStatement": null,
     "nextStatement": null,
-    "colour": 230,
+    "colour": 195,
     "tooltip": "",
     "helpUrl": ""
 };
@@ -48,7 +48,7 @@ const turn_left = {
     "inputsInline": true,
     "previousStatement": null,
     "nextStatement": null,
-    "colour": 230,
+    "colour": 195,
     "tooltip": "",
     "helpUrl": ""
 };
@@ -59,7 +59,7 @@ const turn_right = {
     "inputsInline": true,
     "previousStatement": null,
     "nextStatement": null,
-    "colour": 230,
+    "colour": 195,
     "tooltip": "",
     "helpUrl": ""
 };
@@ -69,7 +69,7 @@ const get_left = {
     "message0": "左",
     "inputsInline": true,
     "output": "direction",
-    "colour": 230,
+    "colour": 240,
     "tooltip": "",
     "helpUrl": ""
 }
@@ -79,7 +79,7 @@ const get_right = {
     "message0": "右",
     "inputsInline": true,
     "output": "direction",
-    "colour": 230,
+    "colour": 240,
     "tooltip": "",
     "helpUrl": ""
 }
@@ -89,7 +89,7 @@ const get_forward = {
     "message0": "前",
     "inputsInline": true,
     "output": "direction",
-    "colour": 230,
+    "colour": 240,
     "tooltip": "",
     "helpUrl": ""
 }
@@ -99,7 +99,7 @@ const get_back = {
     "message0": "後ろ",
     "inputsInline": true,
     "output": "direction",
-    "colour": 230,
+    "colour": 240,
     "tooltip": "",
     "helpUrl": ""
 }
@@ -134,7 +134,7 @@ const wall = {
     "message0": "壁",
     "inputsInline": true,
     "output": "object1",
-    "colour": 230,
+    "colour": 240,
     "tooltip": "",
     "helpUrl": ""
 }
@@ -144,7 +144,7 @@ const coin = {
     "message0": "コイン",
     "inputsInline": true,
     "output": "object1",
-    "colour": 230,
+    "colour": 240,
     "tooltip": "",
     "helpUrl": ""
 }
@@ -154,7 +154,27 @@ const player = {
     "message0": "プレイヤー",
     "inputsInline": true,
     "output": "object1",
-    "colour": 230,
+    "colour": 240,
+    "tooltip": "",
+    "helpUrl": ""
+}
+
+const anything = {
+    "type": "anything",
+    "message0": "何らかのオブジェクト",
+    "inputsInline": true,
+    "output": "object1",
+    "colour": 240,
+    "tooltip": "",
+    "helpUrl": ""
+}
+
+const empty = {
+    "type": "empty",
+    "message0": "何もない空間",
+    "inputsInline": true,
+    "output": "object1",
+    "colour": 240,
     "tooltip": "",
     "helpUrl": ""
 }
@@ -164,7 +184,7 @@ const obstacle = {
     "message0": "障害物",
     "inputsInline": true,
     "output": "object2",
-    "colour": 230,
+    "colour": 250,
     "tooltip": "",
     "helpUrl": ""
 }
@@ -174,7 +194,7 @@ const bomb = {
     "message0": "爆弾",
     "inputsInline": true,
     "output": "object2",
-    "colour": 230,
+    "colour": 250,
     "tooltip": "",
     "helpUrl": ""
 }
@@ -198,12 +218,30 @@ const put_object = {
     "previousStatement": null,
     "nextStatement": null,
     "colour": 270,
-    "tooltip": "爆弾変数または障害物を設置できる"
+    "tooltip": "爆弾または障害物を設置できる"
 };
 
 const destroy_obstacle = {
     "type": "destroy_obstacle",
     "message0": "%1 方向の障害物を破壊",
+    "args0": [
+        {
+            "type": "input_value",
+            "name": "direction",
+            "check": "direction",
+        }
+    ],
+    "inputsInline": true,
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 270,
+    "tooltip": "",
+    "helpUrl": ""
+};
+
+const pick_bomb = {
+    "type": "pick_bomb",
+    "message0": "%1 方向の爆弾を回収",
     "args0": [
         {
             "type": "input_value",
@@ -321,6 +359,18 @@ Blockly.Blocks['player'] = {
     }
 };
 
+Blockly.Blocks['anything'] = {
+    init: function () {
+        this.jsonInit(anything);
+    }
+};
+
+Blockly.Blocks['empty'] = {
+    init: function () {
+        this.jsonInit(empty);
+    }
+};
+
 Blockly.Blocks['obstacle'] = {
     init: function () {
         this.jsonInit(obstacle);
@@ -342,6 +392,12 @@ Blockly.Blocks['put_object'] = {
 Blockly.Blocks['destroy_obstacle'] = {
     init: function () {
         this.jsonInit(destroy_obstacle);
+    }
+};
+
+Blockly.Blocks['pick_bomb'] = {
+    init: function () {
+        this.jsonInit(pick_bomb);
     }
 };
 
@@ -428,6 +484,16 @@ Blockly.JavaScript['player'] = function () {
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
+Blockly.JavaScript['anything'] = function () {
+    let code = '\'anything\'';
+    return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['empty'] = function () {
+    let code = '\'empty\'';
+    return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
 Blockly.JavaScript['obstacle'] = function () {
     let code = '\'\Obstacle\'';
     return [code, Blockly.JavaScript.ORDER_NONE];
@@ -441,8 +507,7 @@ Blockly.JavaScript['bomb'] = function () {
 Blockly.JavaScript['put_object'] = function (block) {
     var direction = Blockly.JavaScript.valueToCode(block, 'direction', Blockly.JavaScript.ORDER_ATOMIC) || null;
     var object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_ATOMIC) || null;
-    console.log("object: " + object);
-    if(direction == null){
+    if(direction == null || object == null){
         return '\n';
     }else{
         return 'put_object(' + direction + ', ' + object + ');\n';
@@ -450,8 +515,14 @@ Blockly.JavaScript['put_object'] = function (block) {
 };
 
 Blockly.JavaScript['destroy_obstacle'] = function (block) {
-    var value_name = Blockly.JavaScript.valueToCode(block, 'direction', Blockly.JavaScript.ORDER_ATOMIC);
+    var value_name = Blockly.JavaScript.valueToCode(block, 'direction', Blockly.JavaScript.ORDER_ATOMIC) || null;
     let code = 'destroy_obstacle(' + value_name + ');\n';
+    return code;
+};
+
+Blockly.JavaScript['pick_bomb'] = function (block) {
+    var value_name = Blockly.JavaScript.valueToCode(block, 'direction', Blockly.JavaScript.ORDER_ATOMIC) || null;
+    let code = 'pick_bomb(' + value_name + ');\n';
     return code;
 };
 

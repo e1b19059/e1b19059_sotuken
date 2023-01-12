@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Runtime.InteropServices;
 using TMPro;
 
 public class TitleScene : MonoBehaviour
 {
     public TMP_InputField inputField;
+
+    [DllImport("__Internal")]
+    private static extern void  transScene();
 
     void Start()
     {
@@ -33,6 +37,7 @@ public class TitleScene : MonoBehaviour
         {
             PlayerPrefs.SetString("PlayerName", _playerName);
             SceneManager.LoadScene("GameScene");
+            transScene();
         }
     }
 }

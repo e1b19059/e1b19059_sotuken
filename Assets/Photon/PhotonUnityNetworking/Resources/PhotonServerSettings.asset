@@ -54,6 +54,9 @@ MonoBehaviour:
   - SetBlockAndDoCode
   - SetOthersBlock
   - StartTurn
+  - OnSingleModeA
+  - OnSingleModeB
+  - InitMode
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

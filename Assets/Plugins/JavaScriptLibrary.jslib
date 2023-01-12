@@ -4,6 +4,7 @@ mergeInto(LibraryManager.library, {
 	},
 
 	doCode: function(turn){
+		workspace.trashcan.flyout.hide();
 		IsMyturn = turn;
 		if(IsMyturn){
 			code = 'initiate();\n' + Blockly.JavaScript.workspaceToCode(workspace_readOnly) + 'terminate();\n';
@@ -17,6 +18,14 @@ mergeInto(LibraryManager.library, {
 			}
 		}
 		stepCode();
+	},
+
+	setMaxBlocks: function(_isFirst){
+		if(_isFirst){
+			workspace.options.maxBlocks = Infinity;
+		}else{
+			workspace.options.maxBlocks = 15;
+		}
 	},
 
 	setPlayerCharacter: function(obj){
@@ -89,6 +98,10 @@ mergeInto(LibraryManager.library, {
 
 	leaveAlert: function(){
 		alert('Master Client disconnected!');
-	}
+	},
 
+	transScene: function(){
+		game_scene = true;
+	}
+	
 });

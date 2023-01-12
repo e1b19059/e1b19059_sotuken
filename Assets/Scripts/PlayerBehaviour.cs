@@ -8,7 +8,9 @@ using Photon.Pun;
 public class PlayerBehaviour : MonoBehaviour
 {
     int speed = 3;
+    int bombCnt;
     bool moving;
+    string team;
     Vector3 targetPosition;
     JSONCreator jsonCreator;
     CreateField createField;
@@ -41,6 +43,8 @@ public class PlayerBehaviour : MonoBehaviour
         jsonCreator = GameObject.FindGameObjectWithTag("GameController").GetComponent<JSONCreator>();
         createField = GameObject.FindGameObjectWithTag("FloorContainer").GetComponent<CreateField>();
         container = GameObject.FindGameObjectWithTag("ObjectContainer").GetComponent<ObjectContainer>();
+        bombCnt = 3;
+        team = gameObject.name.Substring(0, 1);
     }
 
     void Update()
@@ -66,9 +70,8 @@ public class PlayerBehaviour : MonoBehaviour
         if (other.CompareTag("Explosion"))
         {
             Debug.Log("爆風に当たってしまった!");
-            var team = gameObject.name.Substring(0, 1);
             PlayerPrefs.SetInt($"Damage{team}", PlayerPrefs.GetInt($"Damage{team}") + 1);
-            if (PlayerPrefs.GetInt($"Score{team}") > 0) PlayerPrefs.SetInt($"Score{team}", PlayerPrefs.GetInt($"Score{team}") - 1);
+            SetScore(-50);
         }
     }
 
@@ -80,6 +83,11 @@ public class PlayerBehaviour : MonoBehaviour
         {
             targetPosition -= transform.right;
         }
+        else
+        {
+            SetScore(-10);
+            AddMissCount();
+        }
     }
 
     public void MoveRight()
@@ -89,6 +97,11 @@ public class PlayerBehaviour : MonoBehaviour
         if (Physics.OverlapSphere(targetPos, 0).Length <= 0)
         {
             targetPosition += transform.right;
+        }
+        else
+        {
+            SetScore(-10);
+            AddMissCount();
         }
     }
 
@@ -100,6 +113,11 @@ public class PlayerBehaviour : MonoBehaviour
         {
             targetPosition += transform.forward;
         }
+        else
+        {
+            SetScore(-10);
+            AddMissCount();
+        }
     }
 
     public void MoveBack()
@@ -109,6 +127,11 @@ public class PlayerBehaviour : MonoBehaviour
         if (Physics.OverlapSphere(targetPos, 0).Length <= 0)
         {
             targetPosition -= transform.forward;
+        }
+        else
+        {
+            SetScore(-10);
+            AddMissCount();
         }
     }
 
@@ -146,10 +169,22 @@ public class PlayerBehaviour : MonoBehaviour
         {
             createField.RPCCreateObstacle(targetPos);
         }
+        else
+        {
+            SetScore(-10);
+            AddMissCount();
+        }
     }
 
     public void PutBomb(string direction)
     {
+        if(bombCnt <= 0)
+        {
+            SetScore(-10);
+            AddMissCount();
+            return;
+        }
+        bombCnt--;
         Vector3 targetPos = transform.position;
         switch (direction)
         {
@@ -170,6 +205,11 @@ public class PlayerBehaviour : MonoBehaviour
         if (Physics.OverlapSphere(targetPos, 0.3f).Length <= 0)
         {
             createField.RPCCreateBomb(targetPos);
+        }
+        else
+        {
+            SetScore(-10);
+            AddMissCount();
         }
     }
 
@@ -198,9 +238,44 @@ public class PlayerBehaviour : MonoBehaviour
             if (enumerator.Current.transform.position == targetPos && enumerator.Current.gameObject.CompareTag("Destroyable"))
             {
                 Destroy(enumerator.Current.gameObject);
-                break;
+                return;
             }
         }
+        SetScore(-10);
+        AddMissCount();
+    }
+
+    public void PickBomb(string direction)
+    {
+        var enumerator = container.GetEnumerator();
+        Vector3 targetPos = transform.position;
+        switch (direction)
+        {
+            case "left":
+                targetPos -= transform.right;
+                break;
+            case "right":
+                targetPos += transform.right;
+                break;
+            case "forward":
+                targetPos += transform.forward;
+                break;
+            case "back":
+                targetPos -= transform.forward;
+                break;
+        }
+        targetPos.y = -0.1f;// 爆弾オブジェクトの高さに合わせる
+        while (enumerator.MoveNext())
+        {
+            if (enumerator.Current.transform.position == targetPos && enumerator.Current.gameObject.CompareTag("Bomb"))
+            {
+                Destroy(enumerator.Current.gameObject);
+                bombCnt++;
+                return;
+            }
+        }
+        SetScore(-10);
+        AddMissCount();
     }
 
     public void Init()
@@ -216,6 +291,30 @@ public class PlayerBehaviour : MonoBehaviour
         Running = false;
         transform.position = targetPosition;
         jsonCreator.StopUpdate();
+        if(bombCnt <= 3) bombCnt = 3;
+    }
+
+    public int GetBombCnt()
+    {
+        return bombCnt;
+    }
+
+    public void SetScore(int _score)
+    {
+        int result = PlayerPrefs.GetInt($"Score{team}") + _score;
+        if(result < 0)
+        {
+            PlayerPrefs.SetInt($"Score{team}", 0);
+        }
+        else
+        {
+            PlayerPrefs.SetInt($"Score{team}", result);
+        }
+    }
+
+    public void AddMissCount()
+    {
+        PlayerPrefs.SetInt($"Miss{team}", PlayerPrefs.GetInt($"Miss{team}") + 1);
     }
 
 }

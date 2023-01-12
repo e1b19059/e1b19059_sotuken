@@ -32,8 +32,10 @@ public class PhaseUIManager : MonoBehaviour
         }
         phaseUIList[1].SetTeamColor(FirstColor);
         phaseUIList[2].SetTeamColor(SecondColor);
-        phaseUIList[3].SetTeamColor(FirstColor);
-        phaseUIList[4].SetTeamColor(SecondColor);
+        //phaseUIList[3].SetTeamColor(FirstColor);// 先にプログラミングした方が先に実行
+        //phaseUIList[4].SetTeamColor(SecondColor);
+        phaseUIList[3].SetTeamColor(SecondColor);// 後にプログラミングした方が先に実行
+        phaseUIList[4].SetTeamColor(FirstColor);
     }
 
     public void SetHighLight(int _phase)
