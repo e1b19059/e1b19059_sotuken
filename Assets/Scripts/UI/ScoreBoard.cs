@@ -56,7 +56,7 @@ public class ScoreBoard : MonoBehaviour
             {
                 if (player.IsLocal)
                 {
-                    MyBuilder.AppendLine($"<color=#646464>{player.NickName}({player.ActorNumber})</color>");
+                    MyBuilder.AppendLine($"<color=#FFFFFF>{player.NickName}({player.ActorNumber})</color>");
                 }
                 else
                 {
@@ -81,13 +81,13 @@ public class ScoreBoard : MonoBehaviour
     public void SetMyScore(int score)
     {
         MyScore = score;
-        MyScoreLabel.text = "Score: " + score.ToString();
+        MyScoreLabel.text = "Score:" + score.ToString();
     }
 
     public void SetRivalScore(int score)
     {
         RivalScore = score;
-        RivalScoreLabel.text = "Score: " + score.ToString();
+        RivalScoreLabel.text = "Score:" + score.ToString();
     }
 
     public void SetMyBombCnt(int cnt)

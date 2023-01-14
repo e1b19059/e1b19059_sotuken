@@ -47,8 +47,9 @@ public class PhaseUIManager : MonoBehaviour
         else
         {
             phaseUIList[_phase - 2].OffHighLight();// 前のフェーズの分をoffにする
+            phaseUIList[_phase - 1].OnHighLight();// リストは0番目から数えるので添え字は-1する
         }
-        phaseUIList[_phase - 1].OnHighLight();// リストは0番目から数えるので添え字は-1する
+        //phaseUIList[_phase - 1].OnHighLight();// リストは0番目から数えるので添え字は-1する
     }
 
     public void Finished()

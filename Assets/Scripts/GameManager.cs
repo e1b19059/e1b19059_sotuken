@@ -24,18 +24,21 @@ public class GameManager : MonoBehaviourPunCallbacks
     int playerCnt;
     int codeFinPlayer;
     float InitFillAmount;
-    float TurnDuration = 60f;
+    float TurnDuration = 10f;
     float elapsedTime;
+    float timeCounterA;
+    float timeCounterB;
+    bool counterFlagA = false;
+    bool counterFlagB = false;
     bool IsShowingResults;
     bool IsDriver;
     bool IsFirst;
-    bool IsFinished;
     bool IsShare;
-    bool singleMode;
+    bool soloMode;
 
     [DllImport("__Internal")]
     private static extern bool doCode(bool IsMyturn);
-    
+
     [DllImport("__Internal")]
     private static extern bool setMaxBlocks(bool _isFirst);
 
@@ -70,20 +73,28 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         elapsedTime = 0f;
         TrapNumber = 3;
-        MaxTurn = 8;
+        MaxTurn = 2;
         ShowResultButton.transform.localScale = Vector3.zero;
     }
 
     private void Update()
     {
         if (!photonLogin.GetPlayingFlag()) { return; }
-        if (this.TurnCount > 0 && this.timer != null && !IsShowingResults && !IsFinished)
+        if (this.TurnCount > 0 && this.timer != null && !IsShowingResults && (counterFlagA || counterFlagB))
         {
             //経過時間から移動量の計算
             float amount = Time.deltaTime / TurnDuration;
 
             //スライダーの移動量を代入
             timer.value -= amount;
+        }
+        if (counterFlagA)
+        {
+            timeCounterA += Time.deltaTime;
+        }
+        if (counterFlagB)
+        {
+            timeCounterB += Time.deltaTime;
         }
         if (IsShare)// ドライバーならブロックを送信する
         {
@@ -100,7 +111,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             codeFinPlayer = 0;
             photonView.RPC(nameof(FinishPhase), RpcTarget.AllViaServer);
         }
-        if (!IsFinished && timer.value == 0)// タイムアウト
+        if ((counterFlagA || counterFlagB) && timer.value == 0)// タイムアウト
         {
             Debug.Log("タイムアウト");
             FinishPhase();
@@ -113,16 +124,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         phase = _phase;
         phaseUIManager.SetHighLight(_phase);
-        // phaseは1,2,3はタイムアウト時のRPC、4,5はブロックの末尾で進行させるようになっている
         switch (_phase)
         {
             case 1:
-                // 先攻後攻にかかわらず両方のチームがプログラミングを行う。相手チームへのブロック共有はなし
-                StartTimer();
+                // ワークスペース、役割のセットとトラップの生成
                 initWorkspace();
                 if (IsDriver = AmIDriver(TurnCount))
                 {
-                    IsShare = true;
                     switchEditable();
                     setMaxBlocks(IsFirst);
                 }
@@ -137,12 +145,12 @@ public class GameManager : MonoBehaviourPunCallbacks
                         var point = createField.CreatePoint();
                         photonView.RPC(nameof(CreateTrap), RpcTarget.AllViaServer, point.x, point.z, point.type);
                     }
+                    PhaseProgress(phase);
                 }
                 break;
             case 2:
-                // 先攻チームがプログラミングを行う。ブロック共有はあり(双方向)
-                // 自分のチームが先攻か確認して、ワークスペースの切り替え
-                StartTimer();
+                // 後攻チームがプログラミングを行う
+                StartTimer(IsFirst);
                 if (IsDriver)
                 {
                     if (!IsFirst)
@@ -152,12 +160,15 @@ public class GameManager : MonoBehaviourPunCallbacks
                         SendMyBlock();
                         IsShare = false;
                     }
+                    else
+                    {
+                        IsShare = true;
+                    }
                 }
                 break;
             case 3:
-                // 後攻チームがプログラミングを行う。ブロック共有はあり(双方向)
-                // 自分のチームが後攻か確認して、ワークスペースの切り替え
-                StartTimer();
+                // 先攻チームがプログラミングを行う
+                StartTimer(!IsFirst);
                 if (IsDriver)
                 {
                     if (!IsFirst)
@@ -175,6 +186,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 }
                 break;
             case 4:
+                // 先攻チームのブロックが実行される
                 if (IsDriver)
                 {
                     if (!IsFirst)
@@ -187,6 +199,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 IsShare = false;
                 break;
             case 5:
+                // 後攻チームのブロックが実行される
                 IsFirst = !IsFirst;
                 DoCode();
                 break;
@@ -196,10 +209,41 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
     // タイマーを開始するメソッド
-    public void StartTimer()
+    public void StartTimer(bool _flag)
     {
         timer.value = 1.0f;// タイマー初期化
-        IsFinished = false;// タイマー開始
+
+        if (scoreBoard.GetMyTeam() == "A")
+        {
+            if (_flag)
+            {
+                counterFlagA = true;
+                if (IsDriver) FinishTurnButton.interactable = true;
+            }
+            else
+            {
+                counterFlagB = true;
+            }
+        }
+        else
+        {
+            if (_flag)
+            {
+                counterFlagB = true;
+                if (IsDriver) FinishTurnButton.interactable = true;
+            }
+            else
+            {
+                counterFlagA = true;
+            }
+        }
+    }
+
+    public void StopTimer()
+    {
+        counterFlagA = false;
+        counterFlagB = false;
+        FinishTurnButton.interactable = false;
     }
 
     // フェーズを進行させるメソッド
@@ -212,7 +256,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            Debug.Log("PhaseProgress: " + _phase + ">>" + (_phase + 1));
             photonView.RPC(nameof(RPCPhaseChange), RpcTarget.AllViaServer, _phase + 1);
         }
     }
@@ -220,8 +263,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void FinishPhase()
     {
-        Debug.Log("FinishPhase");
-        IsFinished = true;// タイマーを止める
+        StopTimer();
         if (PhotonNetwork.IsMasterClient) PhaseProgress(phase);
     }
 
@@ -263,12 +305,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
         }
         photonView.RPC(nameof(InitMode), RpcTarget.All);// モードの初期化
-        //if (PhotonNetwork.CurrentRoom.GetSingleMode())
-        //{
-            // ペアがいない場合シングルモードをオンにする
-            if (Anum == 1) photonView.RPC(nameof(OnSingleModeA), RpcTarget.All);
-            if (Bnum == 1) photonView.RPC(nameof(OnSingleModeB), RpcTarget.All);
-        //}
+        if (Anum == 1) photonView.RPC(nameof(OnSoloModeA), RpcTarget.All);
+        if (Bnum == 1) photonView.RPC(nameof(OnSoloModeB), RpcTarget.All);
         PhotonNetwork.CurrentRoom.IsOpen = false;// 途中入室できなくする
         PhotonNetwork.CurrentRoom.SetInit(Anum, Bnum);
         photonView.RPC(nameof(RPCGameStart), RpcTarget.AllViaServer, Anum + Bnum);
@@ -281,6 +319,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         photonLogin.GameInit();
         initWorkspace();
         ShowResultButton.transform.localScale = Vector3.zero;
+        FinishTurnButton.interactable = false;
+        counterFlagA = false;
+        counterFlagB = false;
+        timeCounterA = 0;
+        timeCounterB = 0;
         TurnCount = 0;
         codeFinPlayer = 0;
         playerCnt = _playerCnt;
@@ -295,6 +338,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.Log("ゲーム終了");
         photonLogin.Finished();
         phaseUIManager.Finished();
+        PlayerPrefs.SetFloat("TimeA", timeCounterA);
+        PlayerPrefs.SetFloat("TimeB", timeCounterB);
         resultView.SetResult();
         ShowResultButton.transform.localScale = Vector3.one;
     }
@@ -302,24 +347,24 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void InitMode()
     {
-        singleMode = false;
+        soloMode = false;
     }
 
     [PunRPC]
-    public void OnSingleModeA()
+    public void OnSoloModeA()
     {
-        if(scoreBoard.GetMyTeam() == "A")
+        if (scoreBoard.GetMyTeam() == "A")
         {
-            singleMode = true;
+            soloMode = true;
         }
     }
 
     [PunRPC]
-    public void OnSingleModeB()
+    public void OnSoloModeB()
     {
         if (scoreBoard.GetMyTeam() == "B")
         {
-            singleMode = true;
+            soloMode = true;
         }
     }
 
@@ -355,7 +400,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void SetOthersBlock(string block, PhotonMessageInfo info)
     {
         // ナビゲーターなら、敵味方を判別してブロックをセットする
-        if (!IsDriver || (IsDriver && singleMode))
+        if (!IsDriver || (IsDriver && soloMode))
         {
             if (scoreBoard.GetMyTeam() == info.Sender.GetTeam())
             {
@@ -386,7 +431,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void DoCode()
     {
-        //bool _IsMyTurn = IsFirst;//先にプログラミングした方が先に実行する
         bool _IsMyTurn = !IsFirst;// 後にプログラミングした方が先に実行する
         Debug.Log("実行");
         GameObject obj;
@@ -443,8 +487,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    // フェーズが終わるかテストする
-    public void FinTest()
+    // ブロックの編集を終える
+    public void FinEdit()
     {
         photonView.RPC(nameof(FinishPhase), RpcTarget.AllViaServer);
     }

@@ -8,6 +8,7 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
     [SerializeField] CreateField createField;
     [SerializeField] TeamSelect teamSelect;
     [SerializeField] ObjectContainer container;
+    [SerializeField] GameObject mainCamera;
     bool finished;
     bool PlayingFlag;
     bool Joined;
@@ -56,6 +57,8 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
             createField.CreateWallAndCharacter();
         }
         finished = false;
+        mainCamera.transform.position = new Vector3(4, 12, 4);
+        mainCamera.transform.rotation = Quaternion.Euler(90, 0, 0);
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
