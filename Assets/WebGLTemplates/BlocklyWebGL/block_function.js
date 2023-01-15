@@ -54,6 +54,9 @@ const initFunc = function (interpreter, scope) {
 	let pick_bomb_wrapper = function (direction) {
 		return pick_bomb_function(direction);
 	};
+	let increase_miss_wrapper = function () {
+		return increase_miss();
+	};
 	let initiate_wrapper = function () {
 		return initiate();
 	};
@@ -71,6 +74,7 @@ const initFunc = function (interpreter, scope) {
 	interpreter.setProperty(scope, 'put_object', interpreter.createNativeFunction(put_object_wrapper));
 	interpreter.setProperty(scope, 'destroy_obstacle', interpreter.createNativeFunction(destroy_wrapper));
 	interpreter.setProperty(scope, 'pick_bomb', interpreter.createNativeFunction(pick_bomb_wrapper));
+	interpreter.setProperty(scope, 'increase_miss', interpreter.createNativeFunction(increase_miss_wrapper));
 	interpreter.setProperty(scope, 'initiate', interpreter.createNativeFunction(initiate_wrapper));
 	interpreter.setProperty(scope, 'terminate', interpreter.createNativeFunction(terminate_wrapper));
 }
@@ -147,11 +151,16 @@ function put_object_function(direction, object){
 }
 
 function destroy_obstacle_function(direction){
-	if(direction != null)unityInstance.SendMessage(player_character, "DestroyObstacle", direction);
+	unityInstance.SendMessage(player_character, "DestroyObstacle", direction);
 }
 
 function pick_bomb_function(direction){
-	if(direction != null)unityInstance.SendMessage(player_character, "PickBomb", direction);
+	unityInstance.SendMessage(player_character, "PickBomb", direction);
+}
+
+function increase_miss(){
+	console.log("increase_miss");
+	unityInstance.SendMessage(player_character, "IncreaseMissCnt", -10);
 }
 
 function initiate(){

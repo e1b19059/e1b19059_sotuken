@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     int playerCnt;
     int codeFinPlayer;
     float InitFillAmount;
-    float TurnDuration = 10f;
+    float TurnDuration = 180f;
     float elapsedTime;
     float timeCounterA;
     float timeCounterB;
@@ -69,11 +69,14 @@ public class GameManager : MonoBehaviourPunCallbacks
     [DllImport("__Internal")]
     private static extern void initWorkspace();
 
+    [DllImport("__Internal")]
+    private static extern void initTrash();
+
     private void Awake()
     {
         elapsedTime = 0f;
         TrapNumber = 3;
-        MaxTurn = 2;
+        MaxTurn = 8;
         ShowResultButton.transform.localScale = Vector3.zero;
     }
 
@@ -318,6 +321,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.Log("ÉQÅ[ÉÄäJén");
         photonLogin.GameInit();
         initWorkspace();
+        initTrash();
         ShowResultButton.transform.localScale = Vector3.zero;
         FinishTurnButton.interactable = false;
         counterFlagA = false;

@@ -508,7 +508,7 @@ Blockly.JavaScript['put_object'] = function (block) {
     var direction = Blockly.JavaScript.valueToCode(block, 'direction', Blockly.JavaScript.ORDER_ATOMIC) || null;
     var object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_ATOMIC) || null;
     if(direction == null || object == null){
-        return '\n';
+        return 'increase_miss();\n';
     }else{
         return 'put_object(' + direction + ', ' + object + ');\n';
     }
@@ -516,14 +516,20 @@ Blockly.JavaScript['put_object'] = function (block) {
 
 Blockly.JavaScript['destroy_obstacle'] = function (block) {
     var value_name = Blockly.JavaScript.valueToCode(block, 'direction', Blockly.JavaScript.ORDER_ATOMIC) || null;
-    let code = 'destroy_obstacle(' + value_name + ');\n';
-    return code;
+    if(value_name == null){
+        return 'increase_miss();\n';
+    }else{
+        return 'destroy_obstacle(' + value_name + ');\n';
+    }
 };
 
 Blockly.JavaScript['pick_bomb'] = function (block) {
     var value_name = Blockly.JavaScript.valueToCode(block, 'direction', Blockly.JavaScript.ORDER_ATOMIC) || null;
-    let code = 'pick_bomb(' + value_name + ');\n';
-    return code;
+    if(value_name == null){
+        return 'increase_miss();\n';
+    }else{
+        return 'pick_bomb(' + value_name + ');\n';
+    }
 };
 
 Blockly.JavaScript['custom_number'] = function(block) {
