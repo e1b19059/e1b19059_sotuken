@@ -5,8 +5,7 @@ const move_left = {
     "previousStatement": null,
     "nextStatement": null,
     "colour": 195,
-    "tooltip": "",
-    "helpUrl": ""
+    "tooltip": "1マス左に移動。3個まで使用可能"
 };
 
 const move_right = {
@@ -16,8 +15,7 @@ const move_right = {
     "previousStatement": null,
     "nextStatement": null,
     "colour": 195,
-    "tooltip": "",
-    "helpUrl": ""
+    "tooltip": "1マス右に移動。3個まで使用可能"
 };
 
 const move_forward = {
@@ -27,8 +25,7 @@ const move_forward = {
     "previousStatement": null,
     "nextStatement": null,
     "colour": 195,
-    "tooltip": "",
-    "helpUrl": ""
+    "tooltip": "1マス前に移動。3個まで使用可能"
 };
 
 const move_back = {
@@ -38,8 +35,7 @@ const move_back = {
     "previousStatement": null,
     "nextStatement": null,
     "colour": 195,
-    "tooltip": "",
-    "helpUrl": ""
+    "tooltip": "1マス後ろに移動。3個まで使用可能"
 };
 
 const turn_left = {
@@ -49,8 +45,7 @@ const turn_left = {
     "previousStatement": null,
     "nextStatement": null,
     "colour": 195,
-    "tooltip": "",
-    "helpUrl": ""
+    "tooltip": "その場で左に方向転換"
 };
 
 const turn_right = {
@@ -60,8 +55,7 @@ const turn_right = {
     "previousStatement": null,
     "nextStatement": null,
     "colour": 195,
-    "tooltip": "",
-    "helpUrl": ""
+    "tooltip": "その場で右に方向転換"
 };
 
 const get_left = {
@@ -69,9 +63,7 @@ const get_left = {
     "message0": "左",
     "inputsInline": true,
     "output": "direction",
-    "colour": 240,
-    "tooltip": "",
-    "helpUrl": ""
+    "colour": 240
 }
 
 const get_right = {
@@ -79,9 +71,7 @@ const get_right = {
     "message0": "右",
     "inputsInline": true,
     "output": "direction",
-    "colour": 240,
-    "tooltip": "",
-    "helpUrl": ""
+    "colour": 240
 }
 
 const get_forward = {
@@ -89,9 +79,7 @@ const get_forward = {
     "message0": "前",
     "inputsInline": true,
     "output": "direction",
-    "colour": 240,
-    "tooltip": "",
-    "helpUrl": ""
+    "colour": 240
 }
 
 const get_back = {
@@ -99,9 +87,7 @@ const get_back = {
     "message0": "後ろ",
     "inputsInline": true,
     "output": "direction",
-    "colour": 240,
-    "tooltip": "",
-    "helpUrl": ""
+    "colour": 240
 }
 
 const check_point = {
@@ -125,8 +111,7 @@ const check_point = {
     "inputsInline": true,
     "output": "Boolean",
     "colour": 230,
-    "tooltip": "",
-    "helpUrl": ""
+    "tooltip": "真か偽を返す"
 }
 
 const wall = {
@@ -134,9 +119,7 @@ const wall = {
     "message0": "壁",
     "inputsInline": true,
     "output": "object1",
-    "colour": 240,
-    "tooltip": "",
-    "helpUrl": ""
+    "colour": 240
 }
 
 const coin = {
@@ -144,9 +127,7 @@ const coin = {
     "message0": "コイン",
     "inputsInline": true,
     "output": "object1",
-    "colour": 240,
-    "tooltip": "",
-    "helpUrl": ""
+    "colour": 240
 }
 
 const player = {
@@ -154,9 +135,7 @@ const player = {
     "message0": "プレイヤー",
     "inputsInline": true,
     "output": "object1",
-    "colour": 240,
-    "tooltip": "",
-    "helpUrl": ""
+    "colour": 240
 }
 
 const anything = {
@@ -164,9 +143,7 @@ const anything = {
     "message0": "何らかのオブジェクト",
     "inputsInline": true,
     "output": "object1",
-    "colour": 240,
-    "tooltip": "",
-    "helpUrl": ""
+    "colour": 240
 }
 
 const empty = {
@@ -174,9 +151,7 @@ const empty = {
     "message0": "何もない空間",
     "inputsInline": true,
     "output": "object1",
-    "colour": 240,
-    "tooltip": "",
-    "helpUrl": ""
+    "colour": 240
 }
 
 const obstacle = {
@@ -185,8 +160,7 @@ const obstacle = {
     "inputsInline": true,
     "output": "object2",
     "colour": 250,
-    "tooltip": "",
-    "helpUrl": ""
+    "tooltip": "設置できる"
 }
 
 const bomb = {
@@ -195,8 +169,7 @@ const bomb = {
     "inputsInline": true,
     "output": "object2",
     "colour": 250,
-    "tooltip": "",
-    "helpUrl": ""
+    "tooltip": "設置できる"
 }
 
 const put_object = {
@@ -235,8 +208,7 @@ const destroy_obstacle = {
     "previousStatement": null,
     "nextStatement": null,
     "colour": 270,
-    "tooltip": "",
-    "helpUrl": ""
+    "tooltip": "指定方向の障害物を破壊できる"
 };
 
 const pick_bomb = {
@@ -253,8 +225,7 @@ const pick_bomb = {
     "previousStatement": null,
     "nextStatement": null,
     "colour": 270,
-    "tooltip": "",
-    "helpUrl": ""
+    "tooltip": "指定方向の爆弾を回収できる"
 };
 
 const custom_number = {
@@ -271,8 +242,7 @@ const custom_number = {
   ],
   "output": "Number",
   "colour": 230,
-  "tooltip": "",
-  "helpUrl": ""
+  "tooltip": "0以上5未満の整数"
 }
 
 Blockly.Blocks['move_left'] = {

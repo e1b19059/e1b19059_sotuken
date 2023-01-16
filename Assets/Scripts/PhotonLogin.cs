@@ -57,7 +57,7 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
             createField.CreateWallAndCharacter();
         }
         finished = false;
-        mainCamera.transform.position = new Vector3(4, 12, 4);
+        mainCamera.transform.position = new Vector3(3, 10, 3);
         mainCamera.transform.rotation = Quaternion.Euler(90, 0, 0);
     }
 

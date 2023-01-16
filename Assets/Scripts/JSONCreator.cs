@@ -92,13 +92,11 @@ public class JSONCreator : MonoBehaviourPunCallbacks
 
     public void StartUpdate()
     {
-        Debug.Log("start!");
         updateFlag = true;
     }
 
     public void StopUpdate()
     {
-        Debug.Log("stop!");
         updateFlag = false;
         photonView.RPC(nameof(gameManager.RPCTellFinished), RpcTarget.MasterClient);// 実行し終えたことをマスタークライアントに知らせる
     }

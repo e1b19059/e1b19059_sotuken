@@ -116,7 +116,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         if ((counterFlagA || counterFlagB) && timer.value == 0)// タイムアウト
         {
-            Debug.Log("タイムアウト");
             FinishPhase();
         }
     }
@@ -436,7 +435,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void DoCode()
     {
         bool _IsMyTurn = !IsFirst;// 後にプログラミングした方が先に実行する
-        Debug.Log("実行");
         GameObject obj;
         if (_IsMyTurn)
         {

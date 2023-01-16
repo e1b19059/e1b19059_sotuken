@@ -25,7 +25,7 @@ public class CustomPropertiesCallbacks : MonoBehaviourPunCallbacks
         // 更新されたルームのカスタムプロパティのペアをコンソールに出力する
         foreach (var prop in propertiesThatChanged)
         {
-            Debug.Log($"{prop.Key}: {prop.Value}");
+            //Debug.Log($"{prop.Key}: {prop.Value}");
         }
     }
 }

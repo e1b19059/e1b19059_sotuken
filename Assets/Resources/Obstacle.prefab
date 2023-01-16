@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6530218082529804670}
   - component: {fileID: -6933361028574546108}
   - component: {fileID: 5038984890177720652}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Obstacle
   m_TagString: Destroyable
   m_Icon: {fileID: 0}

@@ -3227,6 +3227,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layerMask:
     serializedVersion: 2
+    m_Bits: 512
+  bombcoinLayer:
+    serializedVersion: 2
     m_Bits: 256
 --- !u!114 &935608538624237040
 MonoBehaviour:

@@ -8,6 +8,7 @@ using Photon.Pun;
 public class PlayerBehaviour : MonoBehaviour
 {
     public LayerMask layerMask;
+    public LayerMask bombcoinLayer;
     int speed = 3;
     int bombCnt;
     bool moving;
@@ -86,7 +87,7 @@ public class PlayerBehaviour : MonoBehaviour
         }
         else
         {
-            IncreaseMissCnt(-10);
+            IncreaseMissCnt(-5);
         }
     }
 
@@ -100,7 +101,7 @@ public class PlayerBehaviour : MonoBehaviour
         }
         else
         {
-            IncreaseMissCnt(-10);
+            IncreaseMissCnt(-5);
         }
     }
 
@@ -114,7 +115,7 @@ public class PlayerBehaviour : MonoBehaviour
         }
         else
         {
-            IncreaseMissCnt(-10);
+            IncreaseMissCnt(-5);
         }
     }
 
@@ -128,7 +129,7 @@ public class PlayerBehaviour : MonoBehaviour
         }
         else
         {
-            IncreaseMissCnt(-10);
+            IncreaseMissCnt(-5);
         }
     }
 
@@ -162,13 +163,13 @@ public class PlayerBehaviour : MonoBehaviour
         }
         targetPos.y = 0;// プレイヤーキャラクターのy座標は足元にあるため他のオブジェクトに合わせる
 
-        if (Physics.OverlapSphere(targetPos, 0.3f).Length <= 0)
+        if (Physics.OverlapSphere(targetPos, 0.3f, bombcoinLayer).Length <= 0)
         {
             createField.RPCCreateObstacle(targetPos);
         }
         else
         {
-            IncreaseMissCnt(-10);
+            IncreaseMissCnt(-5);
         }
     }
 
@@ -176,10 +177,9 @@ public class PlayerBehaviour : MonoBehaviour
     {
         if(bombCnt <= 0)
         {
-            IncreaseMissCnt(-10);
+            IncreaseMissCnt(-5);
             return;
         }
-        bombCnt--;
         Vector3 targetPos = transform.position;
         switch (direction)
         {
@@ -197,13 +197,14 @@ public class PlayerBehaviour : MonoBehaviour
                 break;
         }
         targetPos.y = 0;// プレイヤーキャラクターのy座標は足元にあるため他のオブジェクトに合わせる
-        if (Physics.OverlapSphere(targetPos, 0.3f, layerMask).Length <= 0)
+        if (Physics.OverlapSphere(targetPos, 0.3f, bombcoinLayer).Length <= 0)
         {
             createField.RPCCreateBomb(targetPos);
+            bombCnt--;
         }
         else
         {
-            IncreaseMissCnt(-10);
+            IncreaseMissCnt(-5);
         }
     }
 
@@ -235,7 +236,7 @@ public class PlayerBehaviour : MonoBehaviour
                 return;
             }
         }
-        IncreaseMissCnt(-10);
+        IncreaseMissCnt(-5);
     }
 
     public void PickBomb(string direction)
@@ -267,7 +268,7 @@ public class PlayerBehaviour : MonoBehaviour
                 return;
             }
         }
-        IncreaseMissCnt(-10);
+        IncreaseMissCnt(-5);
     }
 
     public void Init()

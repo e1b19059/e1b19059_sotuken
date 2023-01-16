@@ -159,8 +159,7 @@ function pick_bomb_function(direction){
 }
 
 function increase_miss(){
-	console.log("increase_miss");
-	unityInstance.SendMessage(player_character, "IncreaseMissCnt", -10);
+	unityInstance.SendMessage(player_character, "IncreaseMissCnt", -5);
 }
 
 function initiate(){
