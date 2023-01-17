@@ -3228,9 +3228,12 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 512
-  bombcoinLayer:
+  putobstacleLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 960
+  putbombLayer:
+    serializedVersion: 2
+    m_Bits: 768
 --- !u!114 &935608538624237040
 MonoBehaviour:
   m_ObjectHideFlags: 0

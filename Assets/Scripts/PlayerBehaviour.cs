@@ -8,7 +8,8 @@ using Photon.Pun;
 public class PlayerBehaviour : MonoBehaviour
 {
     public LayerMask layerMask;
-    public LayerMask bombcoinLayer;
+    public LayerMask putobstacleLayer;
+    public LayerMask putbombLayer;
     int speed = 3;
     int bombCnt;
     bool moving;
@@ -163,7 +164,7 @@ public class PlayerBehaviour : MonoBehaviour
         }
         targetPos.y = 0;// プレイヤーキャラクターのy座標は足元にあるため他のオブジェクトに合わせる
 
-        if (Physics.OverlapSphere(targetPos, 0.3f, bombcoinLayer).Length <= 0)
+        if (Physics.OverlapSphere(targetPos, 0.3f, putobstacleLayer).Length <= 0)
         {
             createField.RPCCreateObstacle(targetPos);
         }
@@ -197,7 +198,7 @@ public class PlayerBehaviour : MonoBehaviour
                 break;
         }
         targetPos.y = 0;// プレイヤーキャラクターのy座標は足元にあるため他のオブジェクトに合わせる
-        if (Physics.OverlapSphere(targetPos, 0.3f, bombcoinLayer).Length <= 0)
+        if (Physics.OverlapSphere(targetPos, 0.3f, putbombLayer).Length <= 0)
         {
             createField.RPCCreateBomb(targetPos);
             bombCnt--;
