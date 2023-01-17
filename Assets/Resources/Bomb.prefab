@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3986315449960048766}
   - component: {fileID: 3986315449960048763}
   - component: {fileID: 3986315449960048760}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 3986315450222605359}
   - component: {fileID: 3986315450222605356}
   - component: {fileID: 3986315450222605357}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 3986315451880020454}
   - component: {fileID: -2524868361314027025}
   - component: {fileID: 5844797126751157185}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bomb
   m_TagString: Bomb
   m_Icon: {fileID: 0}
@@ -294,4 +294,4 @@ MonoBehaviour:
   explosionPrefab: {fileID: 177540, guid: d4b4bdbac96b6ba4cb5e4e50c1792b65, type: 3}
   levelMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 512

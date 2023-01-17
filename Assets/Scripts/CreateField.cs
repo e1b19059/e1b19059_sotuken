@@ -9,7 +9,7 @@ public class CreateField : MonoBehaviourPunCallbacks
     /*
     *設定する値
     */
-    public int max = 9;        //縦横のサイズ ※必ず奇数にすること
+    public int max = 7;        //縦横のサイズ ※必ず奇数にすること
     public GameObject wall;    //壁用オブジェクト
     public GameObject wall_destroyable;    //壁用オブジェクト
     public GameObject floor_black;    //床用オブジェクト

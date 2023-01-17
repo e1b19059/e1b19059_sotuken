@@ -41,6 +41,9 @@ MonoBehaviour:
   - DestroyRpc
   - DoCode
   - FinishPhase
+  - InitMode
+  - OnSoloModeA
+  - OnSoloModeB
   - RPCCreateBomb
   - RPCCreateCoin
   - RPCCreateObstacle
@@ -54,9 +57,6 @@ MonoBehaviour:
   - SetBlockAndDoCode
   - SetOthersBlock
   - StartTurn
-  - OnSingleModeA
-  - OnSingleModeB
-  - InitMode
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

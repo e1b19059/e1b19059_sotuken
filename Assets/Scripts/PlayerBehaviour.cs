@@ -7,6 +7,9 @@ using Photon.Pun;
 
 public class PlayerBehaviour : MonoBehaviour
 {
+    public LayerMask layerMask;
+    public LayerMask putobstacleLayer;
+    public LayerMask putbombLayer;
     int speed = 3;
     int bombCnt;
     bool moving;
@@ -79,14 +82,13 @@ public class PlayerBehaviour : MonoBehaviour
     {
         var targetPos = transform.position - transform.right;
         targetPos.y = 0;
-        if (Physics.OverlapSphere(targetPos, 0).Length <= 0)
+        if (Physics.OverlapSphere(targetPos, 0, layerMask).Length <= 0)
         {
             targetPosition -= transform.right;
         }
         else
         {
-            SetScore(-10);
-            AddMissCount();
+            IncreaseMissCnt(-5);
         }
     }
 
@@ -94,14 +96,13 @@ public class PlayerBehaviour : MonoBehaviour
     {
         var targetPos = transform.position + transform.right;
         targetPos.y = 0;
-        if (Physics.OverlapSphere(targetPos, 0).Length <= 0)
+        if (Physics.OverlapSphere(targetPos, 0, layerMask).Length <= 0)
         {
             targetPosition += transform.right;
         }
         else
         {
-            SetScore(-10);
-            AddMissCount();
+            IncreaseMissCnt(-5);
         }
     }
 
@@ -109,14 +110,13 @@ public class PlayerBehaviour : MonoBehaviour
     {
         var targetPos = transform.position + transform.forward;
         targetPos.y = 0;
-        if (Physics.OverlapSphere(targetPos, 0).Length <= 0)
+        if (Physics.OverlapSphere(targetPos, 0, layerMask).Length <= 0)
         {
             targetPosition += transform.forward;
         }
         else
         {
-            SetScore(-10);
-            AddMissCount();
+            IncreaseMissCnt(-5);
         }
     }
 
@@ -124,14 +124,13 @@ public class PlayerBehaviour : MonoBehaviour
     {
         var targetPos = transform.position - transform.forward;
         targetPos.y = 0;
-        if (Physics.OverlapSphere(targetPos, 0).Length <= 0)
+        if (Physics.OverlapSphere(targetPos, 0, layerMask).Length <= 0)
         {
             targetPosition -= transform.forward;
         }
         else
         {
-            SetScore(-10);
-            AddMissCount();
+            IncreaseMissCnt(-5);
         }
     }
 
@@ -165,14 +164,13 @@ public class PlayerBehaviour : MonoBehaviour
         }
         targetPos.y = 0;// プレイヤーキャラクターのy座標は足元にあるため他のオブジェクトに合わせる
 
-        if (Physics.OverlapSphere(targetPos, 0.3f).Length <= 0)
+        if (Physics.OverlapSphere(targetPos, 0.3f, putobstacleLayer).Length <= 0)
         {
             createField.RPCCreateObstacle(targetPos);
         }
         else
         {
-            SetScore(-10);
-            AddMissCount();
+            IncreaseMissCnt(-5);
         }
     }
 
@@ -180,11 +178,9 @@ public class PlayerBehaviour : MonoBehaviour
     {
         if(bombCnt <= 0)
         {
-            SetScore(-10);
-            AddMissCount();
+            IncreaseMissCnt(-5);
             return;
         }
-        bombCnt--;
         Vector3 targetPos = transform.position;
         switch (direction)
         {
@@ -202,14 +198,14 @@ public class PlayerBehaviour : MonoBehaviour
                 break;
         }
         targetPos.y = 0;// プレイヤーキャラクターのy座標は足元にあるため他のオブジェクトに合わせる
-        if (Physics.OverlapSphere(targetPos, 0.3f).Length <= 0)
+        if (Physics.OverlapSphere(targetPos, 0.3f, putbombLayer).Length <= 0)
         {
             createField.RPCCreateBomb(targetPos);
+            bombCnt--;
         }
         else
         {
-            SetScore(-10);
-            AddMissCount();
+            IncreaseMissCnt(-5);
         }
     }
 
@@ -241,8 +237,7 @@ public class PlayerBehaviour : MonoBehaviour
                 return;
             }
         }
-        SetScore(-10);
-        AddMissCount();
+        IncreaseMissCnt(-5);
     }
 
     public void PickBomb(string direction)
@@ -274,8 +269,7 @@ public class PlayerBehaviour : MonoBehaviour
                 return;
             }
         }
-        SetScore(-10);
-        AddMissCount();
+        IncreaseMissCnt(-5);
     }
 
     public void Init()
@@ -312,8 +306,9 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
-    public void AddMissCount()
+    public void IncreaseMissCnt(int _score)
     {
+        SetScore(_score);
         PlayerPrefs.SetInt($"Miss{team}", PlayerPrefs.GetInt($"Miss{team}") + 1);
     }
 

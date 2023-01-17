@@ -8,7 +8,6 @@ public static class PlayerPropertiesExtensions
 
     private static readonly Hashtable propsToSet = new Hashtable();
 
-    // プレイヤーのブロックを取得する
     public static string GetTeam(this Player player)
     {
         return (player.CustomProperties[GrovalConst.TeamKey] is string team) ? team : string.Empty;
@@ -19,7 +18,6 @@ public static class PlayerPropertiesExtensions
         return (player.CustomProperties[OrderKey] is int order) ? order : 0;
     }
 
-    // プレイヤーのブロックを設定する
     public static void SetTeam(this Player player, string team)
     {
         propsToSet[GrovalConst.TeamKey] = team;

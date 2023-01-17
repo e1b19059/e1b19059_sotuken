@@ -22,7 +22,7 @@ mergeInto(LibraryManager.library, {
 
 	setMaxBlocks: function(_isFirst){
 		if(_isFirst){
-			workspace.options.maxBlocks = Infinity;
+			workspace.options.maxBlocks = 30;
 		}else{
 			workspace.options.maxBlocks = 15;
 		}
@@ -102,6 +102,10 @@ mergeInto(LibraryManager.library, {
 
 	transScene: function(){
 		game_scene = true;
-	}
+	},
 	
+	initTrash: function(){
+		workspace.trashcan.contents_.length = 0;
+	},
+
 });
