@@ -36,7 +36,7 @@ UnityHubのインストール画面で`リストに追加`からインストー�
 ### ビルド
 `File`>`Build Settings`から`Build Settings`ウインドウを開き`WebGL`を選択して`Switch Platform`を押す．
 ![unity6](https://user-images.githubusercontent.com/73092824/218967488-5699d7d7-5099-4111-864a-fea46bed2546.png)
-切り替えが完了すると`Switch Platform`が`Build`に変わるのでクリックしてビルドする．
+切り替えが完了すると`Switch Platform`が`Build`に変わるのでクリックしてビルドする．この時，ビルドファイルの名前は`web`でなければならない．
 
 ### Netlifyでサイトを公開
 GitHubで新しいリポジトリを作成し、ビルドで生成されたフォルダの中身をすべてpushする．その後，[こちら](https://app.netlify.com/)からNetlifyにアクセスし，GitHubを選択して手順に従い登録する．
